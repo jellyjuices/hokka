@@ -6,7 +6,7 @@ import { categoriesFor } from "@/src/data/categories";
 import type { ParsedReceipt } from "@/src/lib/ocr";
 import type { CategoryClaimablePct, TransactionDirection } from "@/src/data/domain.types";
 import { todayIsoDate } from "@/src/lib/dates";
-import { sanitizeAmount } from "@/src/lib/money";
+import { sanitizeAmount, sanitizePercent } from "@/src/lib/money";
 import { newId } from "@/src/lib/platform/id";
 import { computeTotals, defaultClaimablePct, hasContent } from "./TransactionForm.totals";
 import type { TransactionFormState, TransactionItem } from "./TransactionForm.types";
@@ -136,7 +136,8 @@ export function useTransactionForm() {
     setCounterparty: (counterparty: string) => patch({ counterparty }),
     setTaxed: (isTaxed: boolean) => patch({ isTaxed }),
     setTips: (tips: string) => patch({ tips: sanitizeAmount(tips) }),
-    setClaimablePct: (claimablePct: string) => patch({ claimablePct }),
+    setClaimablePct: (claimablePct: string) =>
+      patch({ claimablePct: sanitizePercent(claimablePct) }),
     setDirection,
     setCategory,
     setItem,

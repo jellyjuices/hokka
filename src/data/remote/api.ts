@@ -1,4 +1,5 @@
-import type { Filing, StoredDocument, TaxPeriod, TaxSettings, Transaction } from "../domain.types";
+import { ENTITIES } from "../entities";
+import type { EntityName, EntityRecord } from "../entities";
 import { apiRequest, putBinary } from "./apiClient";
 import type { SyncPullResult, UploadTicket } from "./sync.types";
 
@@ -7,34 +8,13 @@ export function pullChanges(since: string | null) {
   return apiRequest<SyncPullResult>(`/sync${query}`);
 }
 
-export function pushTransaction(transaction: Transaction) {
-  return apiRequest<Transaction>("/transactions", {
-    method: "POST",
-    body: JSON.stringify(transaction),
-  });
+export function pushEntity<Name extends EntityName>(entity: Name, record: EntityRecord[Name]) {
+  const { path, method } = ENTITIES[entity];
+  return apiRequest<EntityRecord[Name]>(path, { method, body: JSON.stringify(record) });
 }
 
 export function pushTransactionDeletion(id: string) {
   return apiRequest<void>(`/transactions/${encodeURIComponent(id)}`, { method: "DELETE" });
-}
-
-export function pushFiling(filing: Filing) {
-  return apiRequest<Filing>("/filings", { method: "POST", body: JSON.stringify(filing) });
-}
-
-export function pushPeriod(period: TaxPeriod) {
-  return apiRequest<TaxPeriod>("/periods", { method: "POST", body: JSON.stringify(period) });
-}
-
-export function pushDocument(document: StoredDocument) {
-  return apiRequest<StoredDocument>("/documents", {
-    method: "POST",
-    body: JSON.stringify(document),
-  });
-}
-
-export function pushSettings(settings: TaxSettings) {
-  return apiRequest<TaxSettings>("/settings", { method: "PUT", body: JSON.stringify(settings) });
 }
 
 export function requestUploadTicket(fileKey: string, contentType: string) {

@@ -22,14 +22,14 @@ export function AutofillPrompt({
             Add as reference
           </Button>
           <Button tone="accent" onClick={onAutofill}>
-            Auto-fill transaction
+            Overwrite
           </Button>
         </>
       }
     >
       <PromptBody>
-        This transaction already has details. Auto-filling replaces the amounts and the vendor with
-        what the image says.
+        This transaction already has details. Overwriting will replace the amounts and the vendor
+        with what the image says.
       </PromptBody>
     </Modal>
   );

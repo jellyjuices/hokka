@@ -5,6 +5,7 @@ import { Select } from "@/src/components/Select";
 import { CATEGORIES } from "@/src/data/categories";
 import type { TransactionDirection } from "@/src/data/domain.types";
 import { ANY, NO_FILTER, isFiltered } from "@/src/lib/filters";
+import { RangeFilter } from "./_components/RangeFilter";
 import {
   FilterBar,
   FilterCount,
@@ -25,17 +26,13 @@ const SEGMENTS: { value: TransactionDirection | typeof ANY; label: string }[] = 
 
 export function TransactionFilters({
   filter,
-  years,
   resultCount,
   onChange,
+  action,
 }: TransactionFiltersProps) {
   const categoryOptions = [
     { value: ALL, label: "All categories" },
     ...CATEGORIES.map((category) => ({ value: category.id, label: category.label })),
-  ];
-  const yearOptions = [
-    { value: ALL, label: "All years" },
-    ...years.map((year) => ({ value: year, label: year })),
   ];
 
   return (
@@ -61,13 +58,7 @@ export function TransactionFilters({
         options={categoryOptions}
         onChange={(value) => onChange({ ...filter, category: value === ALL ? ANY : value })}
       />
-      <Select
-        label="Year"
-        placeholder="All years"
-        value={filter.year}
-        options={yearOptions}
-        onChange={(value) => onChange({ ...filter, year: value === ALL ? ANY : value })}
-      />
+      <RangeFilter range={filter.range} onChange={(range) => onChange({ ...filter, range })} />
       <FilterSpacer />
       <FilterCount>
         <Icon name="filter" size={16} />
@@ -79,6 +70,7 @@ export function TransactionFilters({
           Clear
         </FilterReset>
       )}
+      {action}
     </FilterBar>
   );
 }

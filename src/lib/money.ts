@@ -26,3 +26,8 @@ export function sanitizeAmount(value: string) {
   const [whole, ...rest] = cleaned.split(".");
   return rest.length === 0 ? whole : `${whole}.${rest.join("").slice(0, 2)}`;
 }
+
+export function sanitizePercent(value: string) {
+  const digits = value.replace(/[^0-9]/g, "").replace(/^0+(?=\d)/, "");
+  return digits === "" ? "" : String(Math.min(Number(digits), 100));
+}

@@ -1,4 +1,4 @@
-import type { Filing, TaxSettings, Transaction } from "@/src/data/domain.types";
+import type { Filing, FilingType, TaxSettings, Transaction } from "@/src/data/domain.types";
 import { resolveReservePct } from "@/src/lib/incomeTax";
 
 export type PeriodTotals = {
@@ -14,7 +14,7 @@ export type PeriodTotals = {
   isReserveOverridden: boolean;
 };
 
-type TransactionSums = {
+export type TransactionSums = {
   incomeTotal: number;
   expenseTotal: number;
   hstCollected: number;
@@ -22,7 +22,7 @@ type TransactionSums = {
   netIncome: number;
 };
 
-function sumTransactions(transactions: Transaction[]): TransactionSums {
+export function summarizeTransactions(transactions: Transaction[]): TransactionSums {
   const sums: TransactionSums = {
     incomeTotal: 0,
     expenseTotal: 0,
@@ -47,9 +47,9 @@ function sumTransactions(transactions: Transaction[]): TransactionSums {
   return sums;
 }
 
-function hstRemitted(filings: Filing[]) {
+export function sumFilings(filings: Filing[], filingType: FilingType) {
   return filings
-    .filter((filing) => filing.filingType === "hst")
+    .filter((filing) => filing.filingType === filingType)
     .reduce((total, filing) => total + filing.amountFiled, 0);
 }
 
@@ -67,8 +67,8 @@ export function calculatePeriodTotals(
   filings: Filing[],
   settings: TaxSettings,
 ): PeriodTotals {
-  const sums = sumTransactions(transactions);
-  const remitted = hstRemitted(filings);
+  const sums = summarizeTransactions(transactions);
+  const remitted = sumFilings(filings, "hst");
   const reserve = incomeTaxReserve(sums.netIncome, settings.incomeTaxReservePct);
 
   return {

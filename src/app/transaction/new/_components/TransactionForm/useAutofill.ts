@@ -3,18 +3,34 @@
 import { useRef, useState } from "react";
 import { readReceipt } from "@/src/data/capture";
 import type { ReceiptReading } from "@/src/lib/ocr";
-import type { Attachment } from "./TransactionForm.types";
+import type { Attachment, AutofillNotice } from "./TransactionForm.types";
 import type { TransactionFormApi } from "./useTransactionForm";
 
-const READING = "Reading the receipt on this device…";
-const UNREADABLE = "Nothing readable in that file yet, so it is attached as a reference.";
-const UNSURE = "Read with low confidence, so check the vendor, date and amounts before saving.";
-const FAILED = "The reader could not start, so the file is attached as a reference.";
+const READING: AutofillNotice = {
+  tone: "reading",
+  text: "Reading the receipt on this device…",
+};
+const UNREADABLE: AutofillNotice = {
+  tone: "warn",
+  text: "Nothing readable in that file yet, so it is attached as a reference.",
+};
+const UNSURE: AutofillNotice = {
+  tone: "warn",
+  text: "Read with low confidence, so check the vendor, date and amounts before saving.",
+};
+const FAILED: AutofillNotice = {
+  tone: "warn",
+  text: "The reader could not start, so the file is attached as a reference.",
+};
+const SURE: AutofillNotice = {
+  tone: "good",
+  text: "Read with high confidence, so the amounts below came off the receipt.",
+};
 const SURE_ENOUGH = 0.6;
 
 export function useAutofill(form: TransactionFormApi) {
   const [pending, setPending] = useState<Attachment | null>(null);
-  const [notice, setNotice] = useState<string | null>(null);
+  const [notice, setNotice] = useState<AutofillNotice | null>(null);
   const [isReading, setIsReading] = useState(false);
   const readings = useRef(new Map<string, ReceiptReading>());
 
@@ -31,7 +47,7 @@ export function useAutofill(form: TransactionFormApi) {
       }
       readings.current.set(attachment.id, reading);
       form.applyParsed(reading.receipt);
-      setNotice(reading.receipt.confidence >= SURE_ENOUGH ? null : UNSURE);
+      setNotice(reading.receipt.confidence >= SURE_ENOUGH ? SURE : UNSURE);
     } catch {
       setNotice(FAILED);
     } finally {
@@ -57,6 +73,11 @@ export function useAutofill(form: TransactionFormApi) {
     },
     isPromptOpen: pending !== null,
     offer,
+    forget(attachmentId: string) {
+      readings.current.delete(attachmentId);
+      setPending(null);
+      setNotice(null);
+    },
     confirm() {
       if (pending !== null) void readInto(pending);
     },

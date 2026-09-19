@@ -15,9 +15,11 @@ import {
 } from "./PinForm.styles";
 import { verifyPassword } from "./PinForm.verify";
 import { useBiometricUnlock } from "./useBiometricUnlock";
+import { useUnlockWarmup } from "./useUnlockWarmup";
 import type { PinFormProps } from "./PinForm.types";
 
 export function PinForm({ onUnlocked }: PinFormProps) {
+  useUnlockWarmup();
   const biometrics = useBiometricUnlock(onUnlocked);
   const passwordRef = useRef<HTMLInputElement>(null);
   const [password, setPassword] = useState("");

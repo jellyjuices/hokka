@@ -3,9 +3,11 @@
 import { useState, type FormEvent } from "react";
 import { useSearchParams } from "next/navigation";
 import { DatePicker } from "@/src/components/Calendar";
+import { DropZone } from "@/src/components/DropZone";
 import { Icon } from "@/src/components/Icon";
 import { AttachmentBar } from "./_components/AttachmentBar";
 import { AttachmentGallery } from "./_components/AttachmentGallery";
+import { AutofillNotice } from "./_components/AutofillNotice";
 import { AutofillPrompt } from "./_components/AutofillPrompt";
 import { CategoryPicker } from "./_components/CategoryPicker";
 import { DirectionToggle } from "./_components/DirectionToggle";
@@ -38,6 +40,11 @@ export function TransactionForm() {
   const { isSaving, error, save } = useTransactionSave();
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
 
+  function handleRemove(attachmentId: string) {
+    remove(attachmentId);
+    autofill.forget(attachmentId);
+  }
+
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     void save(form.state, form.totals, attachments, autofill.readingFor);
@@ -45,7 +52,9 @@ export function TransactionForm() {
 
   return (
     <FormRoot onSubmit={handleSubmit}>
+      <DropZone onFiles={add} label="Drop to attach a receipt" />
       <DirectionToggle value={form.state.direction} onChange={form.setDirection} />
+      {autofill.notice !== null && <AutofillNotice notice={autofill.notice} />}
       <TitleRow>
         <TitleInput
           value={form.state.title}
@@ -97,7 +106,6 @@ export function TransactionForm() {
         total={form.totals.total}
         claimBack={form.totals.claimBack}
       />
-      {autofill.notice !== null && <FormNotice>{autofill.notice}</FormNotice>}
       {error !== null && <FormNotice role="alert">{error}</FormNotice>}
       <SubmitRow>
         <SubmitButton
@@ -114,7 +122,7 @@ export function TransactionForm() {
         onOpenChange={setIsGalleryOpen}
         attachments={attachments}
         onFilesChosen={add}
-        onRemove={remove}
+        onRemove={handleRemove}
       />
       <AutofillPrompt
         open={autofill.isPromptOpen}

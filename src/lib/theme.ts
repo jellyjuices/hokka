@@ -1,3 +1,4 @@
+import { css } from "@emotion/react";
 import isPropValid from "@emotion/is-prop-valid";
 
 export const theme = {
@@ -83,6 +84,20 @@ export const theme = {
 export type Theme = typeof theme;
 
 export type CategoryColor = keyof typeof theme.categoryColor;
+
+// Every field that shows a number wears this: digits on one column width so a
+// list of amounts lines up, and tracking pulled back under the global 0.02em so
+// a large total does not read as spaced out. The child rule is there because
+// the global `*` selector beats inheritance, so text wrapped in a span would
+// otherwise keep the positive tracking.
+export const numeric = css`
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+
+  & > * {
+    letter-spacing: inherit;
+  }
+`;
 
 export function hoverFill(background: string) {
   return `color-mix(in srgb, ${background}, ${theme.foreground.primary} 5%)`;

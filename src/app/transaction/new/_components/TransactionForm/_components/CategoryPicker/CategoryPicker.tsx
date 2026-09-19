@@ -8,6 +8,7 @@ import {
   CategoryOption,
   CategorySwatch,
   CategoryTrigger,
+  TriggerIcon,
 } from "./CategoryPicker.styles";
 import type { CategoryPickerProps } from "./CategoryPicker.types";
 
@@ -20,9 +21,9 @@ export function CategoryPicker({ value, categories, onChange }: CategoryPickerPr
       <CategoryTrigger aria-label="Category" $color={selected?.color ?? null} {...pointerFocus}>
         {selected === null ? null : <CategorySwatch $color={selected.color} aria-hidden />}
         <Select.Value placeholder="Category" />
-        <Select.Icon>
+        <TriggerIcon>
           <Icon name={value === "" ? "plus" : "caretDown"} size={18} />
-        </Select.Icon>
+        </TriggerIcon>
       </CategoryTrigger>
       <Select.Portal>
         <CategoryMenu position="popper" sideOffset={8} align="start">

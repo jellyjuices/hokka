@@ -1,3 +1,4 @@
+import { downloadBlob } from "@/src/lib/platform/download";
 import { exportUrl } from "./remote";
 
 export type ExportFormat = "csv";
@@ -10,10 +11,5 @@ export async function exportPeriod(taxPeriodId: string, format: ExportFormat): P
 
 export async function downloadPeriodExport(taxPeriodId: string, format: ExportFormat) {
   const blob = await exportPeriod(taxPeriodId, format);
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement("a");
-  link.href = url;
-  link.download = `hokka-${taxPeriodId}.${format}`;
-  link.click();
-  URL.revokeObjectURL(url);
+  downloadBlob(`hokka-${taxPeriodId}.${format}`, blob);
 }

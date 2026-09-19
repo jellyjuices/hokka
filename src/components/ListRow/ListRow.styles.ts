@@ -3,7 +3,7 @@
 import styled from "@emotion/styled";
 import Link from "next/link";
 import { css } from "@emotion/react";
-import { theme, hoverFill } from "@/src/lib/theme";
+import { theme, hoverFill, numeric } from "@/src/lib/theme";
 
 const base = css`
   display: flex;
@@ -57,9 +57,8 @@ export const RowTitle = styled.span`
 `;
 
 export const RowValue = styled.strong`
+  ${numeric}
   flex: 0 0 auto;
   font-size: ${theme.fontSize.md};
   font-weight: 500;
-  font-variant-numeric: tabular-nums;
-  letter-spacing: -0.02em;
 `;

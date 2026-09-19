@@ -1,7 +1,7 @@
 "use client";
 
 import styled from "@emotion/styled";
-import { theme, hoverFill } from "@/src/lib/theme";
+import { theme, hoverFill, numeric } from "@/src/lib/theme";
 
 export const ItemList = styled.div`
   display: flex;
@@ -47,12 +47,12 @@ export const ItemCurrency = styled.span`
 `;
 
 export const ItemAmount = styled.input`
+  ${numeric}
   width: 6rem;
   border: none;
   background: transparent;
   color: ${theme.foreground.primary};
   font-size: ${theme.fontSize.lg};
-  font-variant-numeric: tabular-nums;
   text-align: right;
 
   &::placeholder {

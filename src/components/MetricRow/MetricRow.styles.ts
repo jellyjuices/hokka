@@ -1,7 +1,7 @@
 "use client";
 
 import styled from "@emotion/styled";
-import { theme } from "@/src/lib/theme";
+import { theme, numeric } from "@/src/lib/theme";
 
 export const MetricLayout = styled.div`
   display: flex;
@@ -31,10 +31,9 @@ export const MetricGlyph = styled.span`
 `;
 
 export const MetricValue = styled.strong`
+  ${numeric}
   flex: 0 0 auto;
   font-family: ${theme.fontFamily.display};
   font-size: ${theme.fontSize.xl};
   font-weight: 500;
-  font-variant-numeric: tabular-nums;
-  letter-spacing: -0.02em;
 `;

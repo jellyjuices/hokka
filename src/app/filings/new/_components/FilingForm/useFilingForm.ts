@@ -6,7 +6,7 @@ import type { Filing, FilingType, TaxSettings, Transaction } from "@/src/data/do
 import { todayIsoDate } from "@/src/lib/dates";
 import { sanitizeAmount, toAmount } from "@/src/lib/money";
 import { currentPeriod, periodLabel } from "@/src/lib/periods";
-import { calculatePeriodTotals } from "@/src/lib/tax";
+import { calculatePeriodTotals, sumFilings } from "@/src/lib/tax";
 import type { FilingDefaults, FilingFormState } from "./FilingForm.types";
 
 function initialState(defaults: FilingDefaults, taxPeriodId: string): FilingFormState {
@@ -47,10 +47,7 @@ function incomeTaxOutstanding(
     yearFilings,
     settings,
   );
-  const instalments = yearFilings
-    .filter((filing) => filing.filingType === "income_tax")
-    .reduce((running, filing) => running + filing.amountFiled, 0);
-  return totals.incomeTaxSetAside - instalments;
+  return totals.incomeTaxSetAside - sumFilings(yearFilings, "income_tax");
 }
 
 export function useFilingForm(defaults: FilingDefaults) {

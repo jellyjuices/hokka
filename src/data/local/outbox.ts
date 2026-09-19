@@ -1,3 +1,4 @@
+import { createSubscribers } from "@/src/lib/platform/subscribers";
 import { readValue, writeValue } from "@/src/lib/storage/keyval";
 import type { OutboxAction, OutboxEntity, OutboxOp } from "./outbox.types";
 
@@ -6,7 +7,7 @@ const OUTBOX_KEY = "ledger.outbox.v1";
 let queue: OutboxOp[] = [];
 let snapshot: OutboxOp[] = [];
 let hydration: Promise<void> | null = null;
-const listeners = new Set<() => void>();
+const subscribers = createSubscribers();
 
 export const EMPTY_OUTBOX: OutboxOp[] = [];
 
@@ -16,7 +17,7 @@ function opKey(op: Pick<OutboxOp, "entity" | "id">) {
 
 function publish() {
   snapshot = [...queue];
-  for (const listener of listeners) listener();
+  subscribers.publish();
 }
 
 async function persist() {
@@ -32,9 +33,9 @@ export function getOutboxServerSnapshot() {
 }
 
 export function subscribeOutbox(listener: () => void) {
-  listeners.add(listener);
+  subscribers.add(listener);
   return () => {
-    listeners.delete(listener);
+    subscribers.remove(listener);
   };
 }
 

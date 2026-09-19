@@ -2,7 +2,7 @@
 
 import { css } from "@emotion/react";
 import styled from "@emotion/styled";
-import { theme } from "@/src/lib/theme";
+import { theme, numeric } from "@/src/lib/theme";
 import type { StatTileSize, StatTileTone } from "./StatTile.types";
 
 const tones: Record<StatTileTone, ReturnType<typeof css>> = {
@@ -47,12 +47,11 @@ export const TileLabel = styled.span`
 `;
 
 export const TileValue = styled.strong<{ $size: StatTileSize }>`
+  ${numeric}
   font-family: ${theme.fontFamily.display};
   font-size: ${({ $size }) => ($size === "display" ? theme.fontSize["4xl"] : theme.fontSize["3xl"])};
   font-weight: 500;
   line-height: 1.1;
-  font-variant-numeric: tabular-nums;
-  letter-spacing: -0.02em;
 `;
 
 export const TileCaption = styled.span<{ $tone: StatTileTone }>`

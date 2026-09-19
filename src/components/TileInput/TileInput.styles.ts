@@ -2,7 +2,7 @@
 
 import { css } from "@emotion/react";
 import styled from "@emotion/styled";
-import { theme } from "@/src/lib/theme";
+import { theme, numeric } from "@/src/lib/theme";
 
 const tile = css`
   display: flex;
@@ -50,6 +50,7 @@ export const TileHint = styled.span`
 `;
 
 export const TileValue = styled.input`
+  ${numeric}
   flex: 1 1 auto;
   min-width: 0;
   padding: 0;

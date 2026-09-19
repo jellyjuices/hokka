@@ -1,7 +1,7 @@
 "use client";
 
 import styled from "@emotion/styled";
-import { theme } from "@/src/lib/theme";
+import { theme, numeric } from "@/src/lib/theme";
 import { mediaDown } from "@/src/lib/breakpoints";
 
 export const TaxGroup = styled.div`
@@ -54,6 +54,7 @@ export const ModifierField = styled.label`
 `;
 
 export const ModifierLabel = styled.span`
+  flex: 0 0 auto;
   color: ${theme.foreground.primary};
   font-size: ${theme.fontSize.md};
   white-space: nowrap;
@@ -61,21 +62,46 @@ export const ModifierLabel = styled.span`
 
 export const ModifierValue = styled.span`
   display: inline-flex;
+  flex: 1 1 auto;
+  min-width: 0;
   align-items: center;
+  justify-content: flex-end;
   gap: ${theme.space.xs};
   color: ${theme.foreground.primary};
   font-size: ${theme.fontSize.md};
   font-weight: 500;
 `;
 
+export const InputSizer = styled.span`
+  ${numeric}
+  display: inline-grid;
+  min-width: 2.5rem;
+  max-width: 100%;
+  font-size: ${theme.fontSize.md};
+  font-weight: 500;
+
+  &::after {
+    content: attr(data-value);
+    grid-area: 1 / 1;
+    padding-inline-end: 1px;
+    visibility: hidden;
+    white-space: pre;
+  }
+`;
+
 export const ModifierInput = styled.input`
-  width: 4.5rem;
+  ${numeric}
+  grid-area: 1 / 1;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  padding: 0;
   border: none;
   background: transparent;
   color: ${theme.foreground.primary};
-  font-size: ${theme.fontSize.md};
-  font-weight: 500;
-  font-variant-numeric: tabular-nums;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
   text-align: right;
 
   &::placeholder {

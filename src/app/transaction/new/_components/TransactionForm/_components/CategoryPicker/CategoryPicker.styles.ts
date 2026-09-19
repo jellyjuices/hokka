@@ -41,6 +41,12 @@ export const CategoryTrigger = styled(Select.Trigger, transientProps)<Tinted>`
   }
 `;
 
+export const TriggerIcon = styled(Select.Icon)`
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+`;
+
 export const CategoryMenu = styled(Select.Content)`
   z-index: 40;
   min-width: var(--radix-select-trigger-width);

@@ -1,12 +1,5 @@
-import type { TaxPeriod } from "@/src/data/domain.types";
-import { savePeriod } from "@/src/data/server/ledger";
-import { handleRoute, jsonResponse } from "@/src/lib/http";
+import { upsertRoute } from "@/src/data/server/routes";
 
 export const dynamic = "force-dynamic";
 
-export async function POST(request: Request) {
-  return handleRoute(async () => {
-    const period = (await request.json()) as TaxPeriod;
-    return jsonResponse(await savePeriod(period));
-  });
-}
+export const POST = upsertRoute("period");

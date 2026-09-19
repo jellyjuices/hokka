@@ -1,3 +1,4 @@
+import { createSubscribers } from "@/src/lib/platform/subscribers";
 import { readValue, writeValue } from "@/src/lib/storage/keyval";
 import { DEFAULT_SETTINGS } from "../defaults";
 import type { TaxSettings } from "../domain.types";
@@ -36,7 +37,7 @@ let tables = emptyTables();
 let settings = DEFAULT_SETTINGS;
 let snapshot = EMPTY_SNAPSHOT;
 let hydration: Promise<void> | null = null;
-const listeners = new Set<() => void>();
+const subscribers = createSubscribers();
 
 function byDateDescending(left: string, right: string) {
   return right.localeCompare(left);
@@ -76,7 +77,7 @@ function publish(changed: LocalCollectionName[] = COLLECTION_NAMES) {
   const next: LocalSnapshot = { ...snapshot, settings, isHydrated: true };
   for (const collection of changed) resort(collection, next);
   snapshot = next;
-  for (const listener of listeners) listener();
+  subscribers.publish();
 }
 
 async function persist(collection: LocalCollectionName) {
@@ -92,9 +93,9 @@ export function getServerSnapshot() {
 }
 
 export function subscribeLocalStore(listener: () => void) {
-  listeners.add(listener);
+  subscribers.add(listener);
   return () => {
-    listeners.delete(listener);
+    subscribers.remove(listener);
   };
 }
 

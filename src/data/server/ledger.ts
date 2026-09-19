@@ -1,16 +1,11 @@
 import { DEFAULT_SETTINGS } from "../defaults";
-import type { Filing, StoredDocument, TaxPeriod, TaxSettings, Transaction } from "../domain.types";
+import type { StoredDocument, TaxSettings, Transaction } from "../domain.types";
 import {
   documentFromRow,
-  documentToRow,
   filingFromRow,
-  filingToRow,
   periodFromRow,
-  periodToRow,
   settingsFromRow,
-  settingsToRow,
   transactionFromRow,
-  transactionToRow,
 } from "../remote/mappers";
 import type {
   DocumentRow,
@@ -20,7 +15,7 @@ import type {
   TransactionRow,
 } from "../remote/rows.types";
 import type { SyncCollection, SyncPullResult } from "../remote/sync.types";
-import { TABLES, fetchRowById, fetchSince, softDeleteRow, upsertRow } from "./tables";
+import { TABLES, fetchLiveRowsBy, fetchRowById, fetchSince, softDeleteRow } from "./tables";
 
 const EPOCH = "1970-01-01T00:00:00.000Z";
 
@@ -71,33 +66,8 @@ export async function pullSince(since: string | null): Promise<SyncPullResult> {
   };
 }
 
-export async function saveTransaction(transaction: Transaction): Promise<Transaction> {
-  const row = await upsertRow<TransactionRow>(TABLES.transactions, transactionToRow(transaction));
-  return transactionFromRow(row);
-}
-
 export function removeTransaction(id: string) {
   return softDeleteRow(TABLES.transactions, id);
-}
-
-export async function saveFiling(filing: Filing): Promise<Filing> {
-  const row = await upsertRow<FilingRow>(TABLES.filings, filingToRow(filing));
-  return filingFromRow(row);
-}
-
-export async function savePeriod(period: TaxPeriod): Promise<TaxPeriod> {
-  const row = await upsertRow<TaxPeriodRow>(TABLES.periods, periodToRow(period));
-  return periodFromRow(row);
-}
-
-export async function saveDocument(document: StoredDocument): Promise<StoredDocument> {
-  const row = await upsertRow<DocumentRow>(TABLES.documents, documentToRow(document));
-  return documentFromRow(row);
-}
-
-export async function saveSettings(settings: TaxSettings): Promise<TaxSettings> {
-  const row = await upsertRow<TaxSettingsRow>(TABLES.settings, settingsToRow(settings));
-  return settingsFromRow(row);
 }
 
 export async function getSettings(): Promise<TaxSettings> {
@@ -111,8 +81,10 @@ export async function getDocument(id: string): Promise<StoredDocument | null> {
 }
 
 export async function listPeriodTransactions(taxPeriodId: string): Promise<Transaction[]> {
-  const rows = await fetchSince<TransactionRow>(TABLES.transactions, null);
-  return rows
-    .filter((row) => row.deleted_at === null && row.tax_period_id === taxPeriodId)
-    .map(transactionFromRow);
+  const rows = await fetchLiveRowsBy<TransactionRow>(
+    TABLES.transactions,
+    "tax_period_id",
+    taxPeriodId,
+  );
+  return rows.map(transactionFromRow);
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import { useSyncExternalStore } from "react";
+import { isDevUnlocked } from "@/src/lib/devUnlock";
 import {
   getUnlockedServerSnapshot,
   getUnlockedSnapshot,
@@ -17,6 +18,7 @@ export function LockGate({ children }: LockGateProps) {
     getUnlockedServerSnapshot,
   );
 
+  if (isDevUnlocked()) return <>{children}</>;
   if (isUnlocked === null) return null;
   if (!isUnlocked) return <PinForm onUnlocked={writeUnlocked} />;
   return <>{children}</>;

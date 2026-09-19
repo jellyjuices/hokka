@@ -35,3 +35,10 @@ export type Attachment = {
   file: File | null;
   documentId: string | null;
 };
+
+export type AutofillTone = "reading" | "good" | "warn";
+
+export type AutofillNotice = {
+  tone: AutofillTone;
+  text: string;
+};

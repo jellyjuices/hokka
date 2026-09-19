@@ -1,4 +1,6 @@
-export type OutboxEntity = "transaction" | "filing" | "period" | "document" | "settings";
+import type { EntityName } from "../entities";
+
+export type OutboxEntity = EntityName;
 
 export type OutboxAction = "upsert" | "delete";
 

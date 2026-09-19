@@ -1,18 +1,48 @@
+import {
+  hasDevicePassword,
+  matchesDevicePassword,
+  rememberDevicePassword,
+} from "@/src/lib/devicePassword";
 import { isOnline } from "@/src/lib/platform/connectivity";
 
+async function verifyOnDevice(password: string): Promise<string | null> {
+  if (!hasDevicePassword()) {
+    return isOnline()
+      ? "Could not reach the server"
+      : "Unlock online once before this device can unlock offline";
+  }
+  if (await matchesDevicePassword(password)) return null;
+  return "That password is not right";
+}
+
+// The server owns the password, so it answers whenever it can be reached. When it
+// cannot, the verifier this device kept from its last real unlock answers instead,
+// which keeps the password working when biometrics do not.
 export async function verifyPassword(password: string): Promise<string | null> {
+  if (!isOnline()) return verifyOnDevice(password);
   try {
     const response = await fetch("/api/unlock", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ password }),
     });
-    if (response.ok) return null;
+    if (response.ok) {
+      void rememberDevicePassword(password);
+      return null;
+    }
     const body = (await response.json().catch(() => null)) as { error?: string } | null;
     return body?.error ?? "That password is not right";
   } catch {
-    return "Could not reach the server";
+    return verifyOnDevice(password);
   }
+}
+
+// Hosting puts an idle instance to sleep, and the first request after that pays for
+// waking it. Spending that wait while the password is still being typed is the
+// difference between a gate that opens and a gate that thinks about it.
+export function warmUnlock() {
+  if (!isOnline()) return;
+  void fetch("/api/unlock", { cache: "no-store" }).catch(() => undefined);
 }
 
 // Offline, there is nothing to ask: a biometric check is the whole of what this

@@ -1,7 +1,7 @@
 "use client";
 
 import styled from "@emotion/styled";
-import { theme, hoverFill } from "@/src/lib/theme";
+import { theme, hoverFill, numeric } from "@/src/lib/theme";
 import { mediaDown } from "@/src/lib/breakpoints";
 
 export const FilterBar = styled.div`
@@ -55,12 +55,12 @@ export const FilterSpacer = styled.div`
 `;
 
 export const FilterCount = styled.span`
+  ${numeric}
   display: inline-flex;
   align-items: center;
   gap: ${theme.space.xs};
   color: ${theme.foreground.secondary};
   font-size: ${theme.fontSize.sm};
-  font-variant-numeric: tabular-nums;
   white-space: nowrap;
 `;
 

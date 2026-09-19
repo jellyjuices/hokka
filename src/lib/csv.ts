@@ -1,5 +1,7 @@
 import type { Transaction } from "@/src/data/domain.types";
 
+export type CsvCell = string | number | null;
+
 const COLUMNS = [
   "id",
   "txn_date",
@@ -15,13 +17,17 @@ const COLUMNS = [
   "notes",
 ];
 
-function escapeCell(value: string | number | null) {
+function escapeCell(value: CsvCell) {
   const text = value === null ? "" : String(value);
   if (!/[",\n]/.test(text)) return text;
   return `"${text.replace(/"/g, '""')}"`;
 }
 
-function toRow(transaction: Transaction) {
+export function toCsv(rows: CsvCell[][]) {
+  return rows.map((row) => row.map(escapeCell).join(",")).join("\n");
+}
+
+function toRow(transaction: Transaction): CsvCell[] {
   return [
     transaction.id,
     transaction.txnDate,
@@ -35,11 +41,9 @@ function toRow(transaction: Transaction) {
     transaction.taxPeriodId,
     transaction.documentIds.join(" "),
     transaction.notes,
-  ]
-    .map(escapeCell)
-    .join(",");
+  ];
 }
 
 export function transactionsToCsv(transactions: Transaction[]) {
-  return [COLUMNS.join(","), ...transactions.map(toRow)].join("\n");
+  return toCsv([COLUMNS, ...transactions.map(toRow)]);
 }

@@ -1,3 +1,5 @@
+import { toBase64Url } from "@/src/lib/base64url";
+
 const COOKIE_NAME = "hokka_session";
 const MAX_AGE_SECONDS = 60 * 60 * 24 * 30;
 const encoder = new TextEncoder();
@@ -14,11 +16,6 @@ function password() {
 
 export function isSessionConfigured() {
   return sessionSecret() !== "" && password() !== "";
-}
-
-function toBase64Url(bytes: ArrayBuffer) {
-  const binary = String.fromCharCode(...new Uint8Array(bytes));
-  return btoa(binary).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
 }
 
 async function passwordDigest() {

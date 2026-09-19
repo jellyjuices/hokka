@@ -2,7 +2,7 @@
 
 import styled from "@emotion/styled";
 import { Button } from "@/src/components/Button";
-import { theme } from "@/src/lib/theme";
+import { theme, numeric } from "@/src/lib/theme";
 import { mediaDown } from "@/src/lib/breakpoints";
 
 export const FormRoot = styled.form`
@@ -27,6 +27,7 @@ export const AmountPrefix = styled.span`
 `;
 
 export const AmountInput = styled.input`
+  ${numeric}
   flex: 1 1 auto;
   min-width: 0;
   padding: 0;
@@ -36,7 +37,6 @@ export const AmountInput = styled.input`
   font-family: ${theme.fontFamily.display};
   font-size: ${theme.fontSize["4xl"]};
   font-weight: 400;
-  font-variant-numeric: tabular-nums;
 
   &::placeholder {
     color: ${theme.foreground.disabled};

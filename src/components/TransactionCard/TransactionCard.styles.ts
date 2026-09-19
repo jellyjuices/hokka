@@ -1,7 +1,7 @@
 "use client";
 
 import styled from "@emotion/styled";
-import { theme, hoverFill } from "@/src/lib/theme";
+import { theme, hoverFill, numeric } from "@/src/lib/theme";
 import { mediaDown } from "@/src/lib/breakpoints";
 
 export const CardShell = styled.article`
@@ -96,19 +96,17 @@ export const CardAmounts = styled.div`
 `;
 
 export const CardTotal = styled.strong<{ $isIncome: boolean }>`
+  ${numeric}
   color: ${({ $isIncome }) => ($isIncome ? theme.foreground.accent : theme.foreground.primary)};
   font-family: ${theme.fontFamily.display};
   font-size: ${theme.fontSize.lg};
   font-weight: 500;
-  font-variant-numeric: tabular-nums;
-  letter-spacing: -0.02em;
   white-space: nowrap;
 `;
 
 export const CardSubAmount = styled.span`
+  ${numeric}
   color: ${theme.foreground.secondary};
   font-size: ${theme.fontSize.xs};
-  font-variant-numeric: tabular-nums;
-  letter-spacing: -0.02em;
   white-space: nowrap;
 `;

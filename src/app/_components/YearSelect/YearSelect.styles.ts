@@ -2,9 +2,10 @@
 
 import styled from "@emotion/styled";
 import * as Select from "@radix-ui/react-select";
-import { theme, hoverFill } from "@/src/lib/theme";
+import { theme, hoverFill, numeric } from "@/src/lib/theme";
 
 export const YearTrigger = styled(Select.Trigger)`
+  ${numeric}
   display: inline-flex;
   align-items: center;
   gap: ${theme.space.sm};
@@ -15,13 +16,8 @@ export const YearTrigger = styled(Select.Trigger)`
   background: ${theme.surface.secondary};
   color: ${theme.foreground.primary};
   font-size: ${theme.fontSize.md};
-  font-variant-numeric: tabular-nums;
   cursor: pointer;
   transition: background ${theme.motion.fast} ease;
-
-  & > * {
-    letter-spacing: -0.03em;
-  }
 
   &:hover {
     background: ${hoverFill(theme.surface.secondary)};
@@ -38,6 +34,7 @@ export const YearMenu = styled(Select.Content)`
 `;
 
 export const YearOption = styled(Select.Item)`
+  ${numeric}
   display: flex;
   align-items: center;
   min-height: 40px;
@@ -45,7 +42,6 @@ export const YearOption = styled(Select.Item)`
   border-radius: ${theme.borderRadius.sm};
   color: ${theme.foreground.primary};
   font-size: ${theme.fontSize.md};
-  font-variant-numeric: tabular-nums;
   cursor: pointer;
   outline: none;
 

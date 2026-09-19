@@ -1,7 +1,7 @@
 "use client";
 
 import styled from "@emotion/styled";
-import { theme } from "@/src/lib/theme";
+import { theme, numeric } from "@/src/lib/theme";
 
 export const SummaryBlock = styled.div`
   display: flex;
@@ -28,11 +28,11 @@ export const SummaryLabel = styled.span`
 `;
 
 export const SummaryAmount = styled.span`
+  ${numeric}
   color: ${theme.foreground.primary};
   font-family: ${theme.fontFamily.display};
   font-size: ${theme.fontSize["3xl"]};
   font-weight: 500;
-  font-variant-numeric: tabular-nums;
 `;
 
 export const SummaryNote = styled.p`

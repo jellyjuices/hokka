@@ -2,6 +2,7 @@
 
 import { Switch } from "@/src/components/Switch";
 import {
+  InputSizer,
   ModifierField,
   ModifierInput,
   ModifierLabel,
@@ -38,25 +39,32 @@ export function TaxPanel({
           <ModifierLabel>Modifiers (Tips)</ModifierLabel>
           <ModifierValue>
             <span aria-hidden="true">$</span>
-            <ModifierInput
-              value={tips}
-              placeholder="0.00"
-              inputMode="decimal"
-              aria-label="Tips"
-              onChange={(event) => onTipsChange(event.target.value)}
-            />
+            <InputSizer data-value={tips || "0.00"}>
+              <ModifierInput
+                value={tips}
+                placeholder="0.00"
+                size={1}
+                inputMode="decimal"
+                aria-label="Tips"
+                onChange={(event) => onTipsChange(event.target.value)}
+              />
+            </InputSizer>
           </ModifierValue>
         </ModifierField>
         <ModifierField>
           <ModifierLabel>Claimable</ModifierLabel>
           <ModifierValue>
-            <ModifierInput
-              value={claimablePct}
-              placeholder="100"
-              inputMode="numeric"
-              aria-label="Claimable percent"
-              onChange={(event) => onClaimableChange(event.target.value)}
-            />
+            <InputSizer data-value={claimablePct || "100"}>
+              <ModifierInput
+                value={claimablePct}
+                placeholder="100"
+                size={1}
+                inputMode="numeric"
+                maxLength={3}
+                aria-label="Claimable percent"
+                onChange={(event) => onClaimableChange(event.target.value)}
+              />
+            </InputSizer>
             <span aria-hidden="true">%</span>
           </ModifierValue>
         </ModifierField>

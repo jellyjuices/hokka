@@ -7,8 +7,9 @@ import { Icon } from "@/src/components/Icon";
 import { Menu } from "@/src/components/Menu";
 import { TransactionCard } from "@/src/components/TransactionCard";
 import { useLedger, useSyncState } from "@/src/context/Ledger";
-import { NO_FILTER, filterTransactions, transactionYears } from "@/src/lib/filters";
+import { NO_FILTER, filterTransactions } from "@/src/lib/filters";
 import { ConfirmDelete } from "./_components/ConfirmDelete";
+import { ExportButton } from "./_components/ExportButton";
 import { TransactionFilters } from "./_components/TransactionFilters";
 import { ListItems, ListLayout, ListNotice } from "./TransactionList.styles";
 import { useTransactionActions } from "./useTransactionActions";
@@ -19,7 +20,6 @@ export function TransactionList() {
   const [filter, setFilter] = useState(NO_FILTER);
   const actions = useTransactionActions();
 
-  const years = useMemo(() => transactionYears(transactions), [transactions]);
   const visible = useMemo(() => filterTransactions(transactions, filter), [transactions, filter]);
 
   if (transactions.length === 0) {
@@ -41,9 +41,9 @@ export function TransactionList() {
     <ListLayout>
       <TransactionFilters
         filter={filter}
-        years={years}
         resultCount={visible.length}
         onChange={setFilter}
+        action={<ExportButton transactions={visible} range={filter.range} />}
       />
       {pendingCount > 0 && <ListNotice>{`${pendingCount} waiting to sync`}</ListNotice>}
       {visible.length === 0 ? (

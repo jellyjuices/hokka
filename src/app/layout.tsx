@@ -45,9 +45,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <LockGate>
             <LedgerProvider>
               <AppShell>{children}</AppShell>
-              <ServiceWorker />
             </LedgerProvider>
           </LockGate>
+          <ServiceWorker />
         </EmotionRegistry>
       </body>
     </html>

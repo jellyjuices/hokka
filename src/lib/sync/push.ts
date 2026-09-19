@@ -10,15 +10,12 @@ import {
 import type { OutboxOp } from "@/src/data/local";
 import {
   isRetryable,
-  pushDocument,
-  pushFiling,
-  pushPeriod,
-  pushSettings,
-  pushTransaction,
+  pushEntity,
   pushTransactionDeletion,
   requestUploadTicket,
   uploadFile,
 } from "@/src/data/remote";
+import type { EntityName, EntityRecord } from "@/src/data/entities";
 import type { PushResult } from "./engine.types";
 
 const MAX_ATTEMPTS = 5;
@@ -31,39 +28,38 @@ async function pushDocumentOp(id: string) {
     const ticket = await requestUploadTicket(pending.fileKey, pending.contentType);
     await uploadFile(ticket, pending.blob, pending.contentType);
   }
-  await pushDocument(document);
+  await pushEntity("document", document);
   if (pending) await deletePendingFile(id);
 }
 
+function storedPusher<Name extends EntityName>(
+  entity: Name,
+  load: (id: string) => EntityRecord[Name] | null,
+) {
+  return async (id: string) => {
+    const record = load(id);
+    if (record) await pushEntity(entity, record);
+  };
+}
+
+// Keyed by EntityName rather than tested with a chain of ifs: the map has to name every
+// entity, so a new one is a type error here instead of a silent settings push.
+const PUSH_UPSERT: { [Name in EntityName]: (id: string) => Promise<void> } = {
+  transaction: storedPusher("transaction", (id) => getLocalRecord("transactions", id)),
+  filing: storedPusher("filing", (id) => getLocalRecord("filings", id)),
+  period: storedPusher("period", (id) => getLocalRecord("periods", id)),
+  document: pushDocumentOp,
+  settings: async () => {
+    await pushEntity("settings", getLocalSettings());
+  },
+};
+
 async function runOp(op: OutboxOp) {
-  if (op.entity === "transaction") {
-    if (op.action === "delete") {
-      await pushTransactionDeletion(op.id);
-      return;
-    }
-    const transaction = getLocalRecord("transactions", op.id);
-    if (transaction) await pushTransaction(transaction);
+  if (op.entity === "transaction" && op.action === "delete") {
+    await pushTransactionDeletion(op.id);
     return;
   }
-
-  if (op.entity === "filing") {
-    const filing = getLocalRecord("filings", op.id);
-    if (filing) await pushFiling(filing);
-    return;
-  }
-
-  if (op.entity === "period") {
-    const period = getLocalRecord("periods", op.id);
-    if (period) await pushPeriod(period);
-    return;
-  }
-
-  if (op.entity === "document") {
-    await pushDocumentOp(op.id);
-    return;
-  }
-
-  await pushSettings(getLocalSettings());
+  await PUSH_UPSERT[op.entity](op.id);
 }
 
 export async function pushOutbox(): Promise<PushResult> {

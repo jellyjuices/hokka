@@ -4,6 +4,7 @@ import { LockGate } from "@/src/components/LockGate";
 import { EmotionRegistry } from "@/src/context/EmotionRegistry";
 import { LedgerProvider } from "@/src/context/Ledger";
 import { ServiceWorker } from "@/src/components/ServiceWorker";
+import "./fonts.css";
 import "./globals.css";
 
 export const metadata: Metadata = {

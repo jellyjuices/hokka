@@ -5,7 +5,9 @@ export type CalendarProps = {
   onSelect: (date: Date) => void;
 };
 
-export type DateTone = "outline" | "soft";
+export type DateTone = "outline" | "soft" | "plain";
+
+export type DateDisplay = "full" | "dayMonth";
 
 export type DatePickerProps = {
   id: string;
@@ -15,4 +17,5 @@ export type DatePickerProps = {
   onChange?: (isoDate: string) => void;
   placeholder?: string;
   tone?: DateTone;
+  display?: DateDisplay;
 };

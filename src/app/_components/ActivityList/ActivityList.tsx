@@ -1,5 +1,6 @@
 import { LinkButton } from "@/src/components/Button";
 import { EmptyState } from "@/src/components/EmptyState";
+import { Icon } from "@/src/components/Icon";
 import { ListRow } from "@/src/components/ListRow";
 import {
   ActivityFooter,
@@ -22,7 +23,11 @@ export function ActivityList({
     <ActivitySection $visibility={visibility}>
       <ActivityTitle>{title}</ActivityTitle>
       {items.length === 0 ? (
-        <EmptyState icon="receipt" title={emptyTitle} description={emptyDescription} />
+        <EmptyState
+          icon={<Icon name="receipt" size={32} weight="fill" />}
+          title={emptyTitle}
+          description={emptyDescription}
+        />
       ) : (
         <ActivityItems>
           {items.map((item) => (

@@ -5,7 +5,8 @@ import { useLedger } from "@/src/context/Ledger";
 import { categoriesFor } from "@/src/data/categories";
 import type { ParsedReceipt } from "@/src/lib/ocr";
 import type { TransactionDirection } from "@/src/data/domain.types";
-import { newId } from "@/src/lib/id";
+import { todayIsoDate } from "@/src/lib/dates";
+import { newId } from "@/src/lib/platform/id";
 import {
   computeTotals,
   defaultClaimablePct,
@@ -16,13 +17,6 @@ import type { TransactionFormState, TransactionItem } from "./TransactionForm.ty
 
 function emptyItem(): TransactionItem {
   return { id: newId(), name: "", amount: "" };
-}
-
-function todayIsoDate() {
-  const now = new Date();
-  const month = String(now.getMonth() + 1).padStart(2, "0");
-  const day = String(now.getDate()).padStart(2, "0");
-  return `${now.getFullYear()}-${month}-${day}`;
 }
 
 function initialState(): TransactionFormState {

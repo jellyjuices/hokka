@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import { LinkButton } from "@/src/components/Button";
 import { EmptyState } from "@/src/components/EmptyState";
+import { Icon } from "@/src/components/Icon";
 import { Menu } from "@/src/components/Menu";
 import { TransactionCard } from "@/src/components/TransactionCard";
 import { useLedger, useSyncState } from "@/src/context/Ledger";
@@ -24,7 +25,7 @@ export function TransactionList() {
   if (transactions.length === 0) {
     return (
       <EmptyState
-        icon="receipt"
+        icon={<Icon name="receipt" size={32} weight="fill" />}
         title={isHydrated ? "No transactions yet" : "Loading transactions…"}
         description="Log an invoice or a receipt and the HST split is tracked from there."
         action={
@@ -47,7 +48,7 @@ export function TransactionList() {
       {pendingCount > 0 && <ListNotice>{`${pendingCount} waiting to sync`}</ListNotice>}
       {visible.length === 0 ? (
         <EmptyState
-          icon="filter"
+          icon={<Icon name="filter" size={32} weight="fill" />}
           title="Nothing matches these filters"
           description="Widen the type, category or year to see more."
         />

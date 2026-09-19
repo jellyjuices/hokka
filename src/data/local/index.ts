@@ -5,13 +5,13 @@ export {
   getLocalSnapshot,
   getServerSnapshot,
   hydrateLocalStore,
-  mergeLocalRecords,
+  mergeLocalBatch,
   putLocalRecord,
   putLocalSettings,
   removeLocalRecord,
   subscribeLocalStore,
 } from "./localStore";
-export type { LocalCollectionName, LocalSnapshot } from "./localStore.types";
+export type { LocalCollectionName, LocalMergeBatch, LocalSnapshot } from "./localStore.types";
 export {
   EMPTY_OUTBOX,
   enqueueOp,

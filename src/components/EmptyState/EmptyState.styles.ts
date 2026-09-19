@@ -7,7 +7,7 @@ export const EmptyStateLayout = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: ${theme.space.sm};
+  gap: ${theme.space.lg};
   padding: ${theme.space.xl} ${theme.space.lg};
   text-align: center;
   color: ${theme.foreground.secondary};
@@ -18,7 +18,7 @@ export const EmptyStateLayout = styled.div`
 
 export const EmptyStateTitle = styled.h3`
   margin: 0;
-  font-size: ${theme.fontSize.md};
+  font-size: ${theme.fontSize.lg};
   font-weight: 500;
 `;
 
@@ -26,4 +26,11 @@ export const EmptyStateDescription = styled.p`
   margin: 0;
   max-width: 40ch;
   font-size: ${theme.fontSize.sm};
+`;
+
+export const EmptyConentWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: ${theme.space.sm};
 `;

@@ -106,10 +106,6 @@ export function useLedger() {
   return value;
 }
 
-export function useLedgerOptional() {
-  return useContext(DataContext);
-}
-
 export function useLedgerActions() {
   const value = useContext(ActionsContext);
   if (!value) throw new Error("useLedgerActions must be used inside LedgerProvider");

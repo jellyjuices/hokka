@@ -1,7 +1,7 @@
 "use client";
 
 import { Icon } from "@/src/components/Icon";
-import { SelectChip } from "@/src/components/SelectChip";
+import { Select } from "@/src/components/Select";
 import { CATEGORIES } from "@/src/data/categories";
 import type { TransactionDirection } from "@/src/data/domain.types";
 import { ANY, NO_FILTER, isFiltered } from "@/src/lib/filters";
@@ -54,14 +54,14 @@ export function TransactionFilters({
           </FilterSegment>
         ))}
       </FilterSegments>
-      <SelectChip
+      <Select
         label="Category"
         placeholder="All categories"
         value={filter.category}
         options={categoryOptions}
         onChange={(value) => onChange({ ...filter, category: value === ALL ? ANY : value })}
       />
-      <SelectChip
+      <Select
         label="Year"
         placeholder="All years"
         value={filter.year}

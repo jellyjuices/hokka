@@ -34,7 +34,7 @@ function pad(value: number) {
   return String(value).padStart(2, "0");
 }
 
-function toIsoDate(year: number, month: number, day: number, today: Date) {
+function boundedIsoDate(year: number, month: number, day: number, today: Date) {
   if (month < 1 || month > 12 || day < 1 || day > 31) return null;
   const candidate = new Date(year, month - 1, day);
   if (candidate.getMonth() !== month - 1 || candidate.getDate() !== day) return null;
@@ -48,23 +48,28 @@ function fromNumeric(match: RegExpMatchArray, today: Date) {
   const first = Number(match[1]);
   const second = Number(match[2]);
   const year = fullYear(Number(match[3]));
-  if (first > 12) return toIsoDate(year, second, first, today);
-  if (second > 12) return toIsoDate(year, first, second, today);
-  return toIsoDate(year, first, second, today) ?? toIsoDate(year, second, first, today);
+  if (first > 12) return boundedIsoDate(year, second, first, today);
+  if (second > 12) return boundedIsoDate(year, first, second, today);
+  return boundedIsoDate(year, first, second, today) ?? boundedIsoDate(year, second, first, today);
 }
 
 function fromLine(line: string, today: Date) {
   const iso = line.match(ISO_DATE);
-  if (iso) return toIsoDate(Number(iso[1]), Number(iso[2]), Number(iso[3]), today);
+  if (iso) return boundedIsoDate(Number(iso[1]), Number(iso[2]), Number(iso[3]), today);
 
   const named = line.match(MONTH_FIRST);
   if (named && monthFromName(named[1]) > 0) {
-    return toIsoDate(fullYear(Number(named[3])), monthFromName(named[1]), Number(named[2]), today);
+    return boundedIsoDate(
+      fullYear(Number(named[3])),
+      monthFromName(named[1]),
+      Number(named[2]),
+      today,
+    );
   }
 
   const dayFirst = line.match(DAY_FIRST);
   if (dayFirst && monthFromName(dayFirst[2]) > 0) {
-    return toIsoDate(
+    return boundedIsoDate(
       fullYear(Number(dayFirst[3])),
       monthFromName(dayFirst[2]),
       Number(dayFirst[1]),

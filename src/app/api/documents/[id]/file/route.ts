@@ -1,5 +1,5 @@
 import { getDocument } from "@/src/data/server/ledger";
-import { handleRoute, jsonError } from "@/src/lib/api/respond";
+import { handleRoute, jsonError } from "@/src/lib/http";
 import { isR2Configured, presignR2Url } from "@/src/lib/r2";
 
 export const dynamic = "force-dynamic";

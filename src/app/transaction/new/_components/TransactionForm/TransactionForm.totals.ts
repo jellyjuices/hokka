@@ -1,4 +1,5 @@
 import { findCategory } from "@/src/data/categories";
+import { roundToCents } from "@/src/lib/money";
 import type { TransactionFormState, TransactionTotals } from "./TransactionForm.types";
 
 export function toAmount(value: string) {
@@ -10,10 +11,6 @@ export function sanitizeAmount(value: string) {
   const cleaned = value.replace(/[^0-9.]/g, "");
   const [whole, ...rest] = cleaned.split(".");
   return rest.length === 0 ? whole : `${whole}.${rest.join("").slice(0, 2)}`;
-}
-
-function roundToCents(amount: number) {
-  return Math.round(amount * 100) / 100;
 }
 
 export function computeTotals(state: TransactionFormState, hstRate: number): TransactionTotals {

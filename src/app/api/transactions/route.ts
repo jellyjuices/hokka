@@ -1,6 +1,6 @@
 import type { Transaction } from "@/src/data/domain.types";
 import { saveTransaction } from "@/src/data/server/ledger";
-import { handleRoute, jsonResponse } from "@/src/lib/api/respond";
+import { handleRoute, jsonResponse } from "@/src/lib/http";
 
 export const dynamic = "force-dynamic";
 

@@ -25,7 +25,6 @@ export const SummaryLabel = styled.span`
   font-family: ${theme.fontFamily.display};
   font-size: ${theme.fontSize["2xl"]};
   font-weight: 500;
-  letter-spacing: -0.02em;
 `;
 
 export const SummaryAmount = styled.span`
@@ -34,7 +33,6 @@ export const SummaryAmount = styled.span`
   font-size: ${theme.fontSize["3xl"]};
   font-weight: 500;
   font-variant-numeric: tabular-nums;
-  letter-spacing: -0.03em;
 `;
 
 export const SummaryNote = styled.p`

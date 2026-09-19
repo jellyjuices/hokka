@@ -58,7 +58,6 @@ export const ModalTitle = styled(Dialog.Title)`
   font-family: ${theme.fontFamily.display};
   font-size: ${theme.fontSize.xl};
   font-weight: 500;
-  letter-spacing: -0.02em;
   color: ${theme.foreground.primary};
 `;
 

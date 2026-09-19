@@ -37,7 +37,7 @@ export const SearchForm = styled.form`
   background: ${theme.surface.primary};
   color: ${theme.foreground.secondary};
 
-  &:focus-within {
+  &:has(:focus-visible) {
     outline: 2px solid ${theme.foreground.accent};
     outline-offset: 2px;
   }
@@ -61,7 +61,7 @@ export const SearchInput = styled.input`
     color: ${theme.foreground.secondary};
   }
 
-  &:focus {
+  &:focus-visible {
     outline: none;
   }
 `;

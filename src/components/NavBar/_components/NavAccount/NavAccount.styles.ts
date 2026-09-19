@@ -3,7 +3,7 @@
 import styled from "@emotion/styled";
 import Link from "next/link";
 import { theme, hoverFill } from "@/src/lib/theme";
-import { transientProps } from "@/src/lib/styled";
+import { transientProps } from "@/src/lib/theme";
 
 export const AccountLink = styled(Link, transientProps)<{
   $isCollapsed: boolean;

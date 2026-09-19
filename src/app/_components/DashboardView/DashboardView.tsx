@@ -1,21 +1,20 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { LinkButton } from "@/src/components/Button";
 import { Grid, GridItem } from "@/src/components/Grid";
 import { PageDots } from "@/src/components/PageDots";
 import { PageHeader } from "@/src/components/PageHeader";
 import { useMediaQuery, useScrollSnapIndex } from "@/src/hooks";
 import { breakpoints } from "@/src/lib/breakpoints";
-import { formatCurrency } from "@/src/lib/format";
+import { formatCurrency } from "@/src/lib/money";
 import { ActivityList } from "../ActivityList";
-import type { Obligation } from "../ObligationCard";
 import { ObligationHistory } from "../ObligationHistory";
 import { ObligationsPanel } from "../ObligationsPanel";
 import { StreamPanel } from "../StreamPanel";
 import { SummaryDeck } from "../SummaryDeck";
 import { YearSelect } from "../YearSelect";
-import { DashboardPagination } from "./DashboardView.styles";
+import { DashboardAction, DashboardPagination } from "./DashboardView.styles";
 import type { DashboardSlide } from "./DashboardView.types";
 import { useDashboardTotals } from "./useDashboardTotals";
 
@@ -27,57 +26,15 @@ const SLIDES: DashboardSlide[] = [
 
 const NARROW_QUERY = `(max-width: ${breakpoints.smTablet}px)`;
 
-function obligationState(id: string, amount: number, filedIds: string[]): Obligation["state"] {
-  if (filedIds.includes(id)) return "collected";
-  return amount === 0 ? "collecting" : "claimable";
-}
-
 export function DashboardView() {
-  const thisYear = new Date().getUTCFullYear();
+  const thisYear = new Date().getFullYear();
   const [year, setYear] = useState(thisYear);
-  const [filedIds, setFiledIds] = useState<string[]>([]);
 
   const isNarrow = useMediaQuery(NARROW_QUERY);
   const { trackRef, activeIndex, goTo } = useScrollSnapIndex(isNarrow ? SLIDES.length : 0);
 
-  const { period, periodTitle, yearTotals, periodTotals, incomeItems, expenseItems, recentItems } =
+  const { yearTotals, obligations, incomeItems, expenseItems, recentItems } =
     useDashboardTotals(year);
-
-  const obligations = useMemo(
-    () =>
-      [
-        {
-          id: `reserve-${year}`,
-          label: "Set aside",
-          amount: yearTotals.incomeTaxSetAside,
-          value: formatCurrency(yearTotals.incomeTaxSetAside),
-          caption: `For ${year} taxes`,
-          icon: "reserve" as const,
-        },
-        {
-          id: `hst-${period.id}`,
-          label: periodTotals.netHstOwing < 0 ? "Claim HST" : "Remit HST",
-          amount: periodTotals.netHstOwing,
-          value: formatCurrency(Math.abs(periodTotals.netHstOwing)),
-          caption: `This period (${periodTitle})`,
-          icon: "claim" as const,
-        },
-      ].map((seed) => ({ ...seed, state: obligationState(seed.id, seed.amount, filedIds) })),
-    [
-      filedIds,
-      period.id,
-      periodTitle,
-      periodTotals.netHstOwing,
-      yearTotals.incomeTaxSetAside,
-      year,
-    ],
-  );
-
-  function handleToggle(id: string) {
-    setFiledIds((current) =>
-      current.includes(id) ? current.filter((filed) => filed !== id) : [...current, id],
-    );
-  }
 
   return (
     <Grid>
@@ -94,9 +51,11 @@ export function DashboardView() {
             />
           }
           action={
-            <LinkButton href="/transaction/new" tone="accent" trailingIcon="plus">
-              New transaction
-            </LinkButton>
+            <DashboardAction>
+              <LinkButton href="/transaction/new" tone="accent" trailingIcon="plus">
+                New transaction
+              </LinkButton>
+            </DashboardAction>
           }
         />
       </GridItem>
@@ -123,7 +82,7 @@ export function DashboardView() {
           />
         </GridItem>
         <GridItem span={4} rowSpan={2}>
-          <ObligationsPanel obligations={obligations} onToggle={handleToggle} />
+          <ObligationsPanel obligations={obligations} />
         </GridItem>
       </SummaryDeck>
 
@@ -173,7 +132,6 @@ export function DashboardView() {
       <GridItem>
         <ObligationHistory
           obligations={obligations.filter((obligation) => obligation.state === "collected")}
-          onToggle={handleToggle}
         />
       </GridItem>
     </Grid>

@@ -1,6 +1,6 @@
 import type { TaxPeriod } from "@/src/data/domain.types";
 import { savePeriod } from "@/src/data/server/ledger";
-import { handleRoute, jsonResponse } from "@/src/lib/api/respond";
+import { handleRoute, jsonResponse } from "@/src/lib/http";
 
 export const dynamic = "force-dynamic";
 

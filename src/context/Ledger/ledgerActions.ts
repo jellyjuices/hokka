@@ -2,13 +2,13 @@ import { captureDocument } from "@/src/data/capture";
 import type { Filing, TaxSettings, Transaction } from "@/src/data/domain.types";
 import { getLocalSettings } from "@/src/data/local";
 import { ensurePeriod, repository } from "@/src/data/repository";
-import { newId } from "@/src/lib/id";
+import { newId } from "@/src/lib/platform/id";
 import { currentPeriod } from "@/src/lib/periods";
 import type { FilingDraft, LedgerActionsValue, TransactionDraft } from "./Ledger.types";
 
 async function resolveTaxPeriodId(draft: TransactionDraft, settings: TaxSettings) {
   if (draft.taxPeriodId) return draft.taxPeriodId;
-  const period = currentPeriod(settings.filingFrequency, new Date(draft.txnDate));
+  const period = currentPeriod(settings.filingFrequency, draft.txnDate);
   await ensurePeriod(period);
   return period.id;
 }

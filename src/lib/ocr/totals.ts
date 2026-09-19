@@ -1,5 +1,6 @@
 import { hasTaxLabel, NOT_A_TOTAL, SUBTOTAL_LABEL, TIP_LABEL, TOTAL_LABEL } from "./keywords";
-import { isCloseEnough, lastAmount, roundToCents } from "./money";
+import { roundToCents } from "@/src/lib/money";
+import { isCloseEnough, lastAmount } from "./amounts";
 import type { ParsedReceiptItem, ReceiptTotals } from "./ocr.types";
 
 export type TotalsLabel = "subtotal" | "tip" | "tax" | "total";
@@ -18,7 +19,7 @@ export function labelFor(line: string): TotalsLabel | null {
   return null;
 }
 
-export function labelAmounts(lines: string[]): LabelledAmount[] {
+function labelAmounts(lines: string[]): LabelledAmount[] {
   const found: LabelledAmount[] = [];
   lines.forEach((line, index) => {
     const label = labelFor(line);

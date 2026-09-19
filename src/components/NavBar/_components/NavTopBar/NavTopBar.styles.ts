@@ -32,5 +32,4 @@ export const TopBarBrandName = styled.span`
   font-family: ${theme.fontFamily.display};
   font-size: ${theme.fontSize["2xl"]};
   font-weight: 500;
-  letter-spacing: -0.02em;
 `;

@@ -32,6 +32,15 @@ const tones: Record<DateTone, ReturnType<typeof css>> = {
       background: ${hoverFill(theme.surface.secondary)};
     }
   `,
+  plain: css`
+    width: auto;
+    justify-content: flex-end;
+    gap: ${theme.space.md};
+    padding: 0;
+    border: none;
+    background: transparent;
+    font-size: ${theme.fontSize.md};
+  `,
 };
 
 export const CalendarTrigger = styled.button<{ $tone: DateTone }>`
@@ -48,10 +57,14 @@ export const CalendarTrigger = styled.button<{ $tone: DateTone }>`
     outline: 2px solid ${theme.foreground.accent};
     outline-offset: 1px;
   }
+
+  &[data-pointer-focus] {
+    outline: none;
+  }
 `;
 
 export const CalendarPopover = styled.div`
-  background: ${theme.surface.secondary};
+  background: ${theme.surface.primary};
   border: 1px solid ${theme.surface.tint};
   border-radius: ${theme.borderRadius.md};
   padding: ${theme.space.md};

@@ -18,7 +18,6 @@ export const HistoryTitle = styled.h2`
   margin: 0;
   font-size: ${theme.fontSize.lg};
   font-weight: 500;
-  letter-spacing: -0.01em;
 `;
 
 export const HistoryHint = styled.p`

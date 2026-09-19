@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { readPendingFile } from "@/src/data/local";
 import { documentFileUrl } from "@/src/data/remote";
-import { newId } from "@/src/lib/id";
+import { newId } from "@/src/lib/platform/id";
 import type { Attachment } from "./TransactionForm.types";
 
 export function useAttachments(documentId: string | null, onAdded: (added: Attachment[]) => void) {

@@ -1,30 +1,51 @@
 "use client";
 
-import * as Select from "@radix-ui/react-select";
+import * as RadixSelect from "@radix-ui/react-select";
 import { Icon } from "@/src/components/Icon";
-import { ChipMenu, ChipOption, ChipTrigger } from "./SelectChip.styles";
-import type { SelectChipProps } from "./SelectChip.types";
+import { usePointerFocus } from "@/src/hooks";
+import { SelectMenu, SelectOptionRow, SelectTick, SelectTrigger } from "./Select.styles";
+import type { SelectProps } from "./Select.types";
 
-export function SelectChip({ label, value, placeholder, options, onChange }: SelectChipProps) {
+export function Select({
+  label,
+  options,
+  id,
+  name,
+  value,
+  defaultValue,
+  placeholder,
+  tone = "chip",
+  onChange,
+}: SelectProps) {
+  const pointerFocus = usePointerFocus();
+
   return (
-    <Select.Root value={value} onValueChange={onChange}>
-      <ChipTrigger aria-label={label}>
-        <Select.Value placeholder={placeholder} />
-        <Select.Icon>
+    <RadixSelect.Root
+      name={name}
+      value={value}
+      defaultValue={defaultValue}
+      onValueChange={onChange}
+    >
+      <SelectTrigger id={id} aria-label={label} $tone={tone} {...pointerFocus}>
+        <RadixSelect.Value placeholder={placeholder} />
+        <RadixSelect.Icon>
           <Icon name="caretDown" size={16} />
-        </Select.Icon>
-      </ChipTrigger>
-      <Select.Portal>
-        <ChipMenu position="popper" sideOffset={8} align="start">
-          <Select.Viewport>
+        </RadixSelect.Icon>
+      </SelectTrigger>
+      <RadixSelect.Portal>
+        <SelectMenu position="popper" sideOffset={8} align="start">
+          <RadixSelect.Viewport>
             {options.map((option) => (
-              <ChipOption key={option.value} value={option.value}>
-                <Select.ItemText>{option.label}</Select.ItemText>
-              </ChipOption>
+              <SelectOptionRow key={option.value} value={option.value}>
+                <RadixSelect.ItemText>{option.label}</RadixSelect.ItemText>
+                <SelectTick>
+                  <Icon name="check" size={16} />
+                </SelectTick>
+              </SelectOptionRow>
             ))}
-          </Select.Viewport>
-        </ChipMenu>
-      </Select.Portal>
-    </Select.Root>
+          </RadixSelect.Viewport>
+        </SelectMenu>
+      </RadixSelect.Portal>
+    </RadixSelect.Root>
   );
 }

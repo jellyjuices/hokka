@@ -1,4 +1,5 @@
-import { newId } from "@/src/lib/id";
+import { compressForUpload } from "@/src/lib/compress";
+import { newId } from "@/src/lib/platform/id";
 import { parseReceiptText, recognizeDocument } from "@/src/lib/ocr";
 import type { ReceiptReading } from "@/src/lib/ocr";
 import type { DocumentKind, OcrStatus, StoredDocument } from "./domain.types";
@@ -7,8 +8,6 @@ import { documentFileUrl } from "./remote";
 import { repository } from "./repository";
 
 const PARSED_CONFIDENCE = 0.6;
-
-const DEFAULT_CONTENT_TYPE = "application/octet-stream";
 
 function fileExtension(fileName: string) {
   const dot = fileName.lastIndexOf(".");
@@ -32,7 +31,8 @@ export async function captureDocument(
   reading: ReceiptReading | null = null,
 ): Promise<StoredDocument> {
   const documentId = newId();
-  const fileKey = buildFileKey(documentId, file.name);
+  const stored = await compressForUpload(file);
+  const fileKey = buildFileKey(documentId, stored.fileName);
 
   const document: StoredDocument = {
     id: documentId,
@@ -46,10 +46,10 @@ export async function captureDocument(
   await savePendingFile({
     documentId,
     fileKey,
-    fileName: file.name,
-    contentType: file.type === "" ? DEFAULT_CONTENT_TYPE : file.type,
-    size: file.size,
-    blob: file,
+    fileName: stored.fileName,
+    contentType: stored.contentType,
+    size: stored.blob.size,
+    blob: stored.blob,
   });
 
   await repository.saveDocument(document);

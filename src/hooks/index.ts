@@ -1,6 +1,6 @@
 export { useThemeMode } from "./useThemeMode";
-export { useAsyncData } from "./useAsyncData";
 export { useMediaQuery } from "./useMediaQuery";
+export { usePointerFocus } from "./usePointerFocus";
 export { useReducedMotion } from "./useReducedMotion";
 export { useScrollSnapIndex } from "./useScrollSnapIndex";
 export { useSwipeAction } from "./useSwipeAction";

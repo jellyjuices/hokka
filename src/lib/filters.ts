@@ -26,3 +26,15 @@ export function filterTransactions(transactions: Transaction[], filter: Transact
     .filter((transaction) => filter.year === ANY || transaction.txnDate.startsWith(filter.year))
     .sort((a, b) => b.txnDate.localeCompare(a.txnDate));
 }
+
+function matchesQuery(transaction: Transaction, needle: string) {
+  return [transaction.counterparty, transaction.category, transaction.notes].some((field) =>
+    field.toLowerCase().includes(needle),
+  );
+}
+
+export function searchTransactions(transactions: Transaction[], query: string) {
+  const needle = query.trim().toLowerCase();
+  if (needle === "") return [];
+  return transactions.filter((transaction) => matchesQuery(transaction, needle));
+}

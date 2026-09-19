@@ -7,6 +7,7 @@ import { mediaDown } from "@/src/lib/breakpoints";
 export const ShellLayout = styled.div`
   display: flex;
   align-items: flex-start;
+  justify-content: center;
   gap: ${theme.layout.railGap};
   min-height: 100dvh;
   padding: ${theme.layout.gutter};

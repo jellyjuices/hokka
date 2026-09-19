@@ -28,7 +28,6 @@ export const HeaderTitle = styled.h1`
   font-family: ${theme.fontFamily.display};
   font-size: ${theme.fontSize["3xl"]};
   font-weight: 500;
-  letter-spacing: -0.03em;
   line-height: 1.1;
 `;
 

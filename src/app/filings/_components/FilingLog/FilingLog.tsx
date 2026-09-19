@@ -2,10 +2,12 @@
 
 import { Card } from "@/src/components/Card";
 import { EmptyState } from "@/src/components/EmptyState";
+import { Icon } from "@/src/components/Icon";
 import { LinkButton } from "@/src/components/Button";
 import { ListRow } from "@/src/components/ListRow";
 import { useLedger } from "@/src/context/Ledger";
-import { formatCurrency, formatDate } from "@/src/lib/format";
+import { formatCurrency } from "@/src/lib/money";
+import { formatDate } from "@/src/lib/dates";
 
 const FILING_LABEL = { hst: "HST remittance", income_tax: "Income tax instalment" };
 
@@ -16,7 +18,7 @@ export function FilingLog() {
     return (
       <Card>
         <EmptyState
-          icon="filings"
+          icon={<Icon name="filings" size={32} weight="fill" />}
           title="No filings logged"
           description="Record what you remitted and when, and the net HST owing updates on the next read."
           action={

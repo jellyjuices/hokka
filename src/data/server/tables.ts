@@ -1,4 +1,4 @@
-import { getServiceClient } from "@/src/lib/supabase/server";
+import { getServiceClient } from "@/src/lib/supabase";
 
 export const TABLES = {
   transactions: "transactions",

@@ -1,3 +1,4 @@
+import { clearLocal, readLocal, writeLocal } from "./local";
 import { idbDelete, idbGet, idbKeys, idbSet, isIdbAvailable } from "./idb";
 
 const FALLBACK_PREFIX = "hokka:";
@@ -7,9 +8,10 @@ function fallbackKey(key: string) {
 }
 
 function readFallback<T>(key: string): T | null {
+  const raw = readLocal(fallbackKey(key));
+  if (raw === null) return null;
   try {
-    const raw = localStorage.getItem(fallbackKey(key));
-    return raw === null ? null : (JSON.parse(raw) as T);
+    return JSON.parse(raw) as T;
   } catch {
     return null;
   }
@@ -17,7 +19,7 @@ function readFallback<T>(key: string): T | null {
 
 function writeFallback(key: string, value: unknown) {
   try {
-    localStorage.setItem(fallbackKey(key), JSON.stringify(value));
+    writeLocal(fallbackKey(key), JSON.stringify(value));
   } catch {
     return;
   }
@@ -55,11 +57,7 @@ export async function deleteValue(key: string): Promise<void> {
       return;
     }
   }
-  try {
-    localStorage.removeItem(fallbackKey(key));
-  } catch {
-    return;
-  }
+  clearLocal(fallbackKey(key));
 }
 
 export async function listKeys(prefix: string): Promise<string[]> {
@@ -70,8 +68,4 @@ export async function listKeys(prefix: string): Promise<string[]> {
   } catch {
     return [];
   }
-}
-
-export function isBlobStorageAvailable() {
-  return isIdbAvailable();
 }

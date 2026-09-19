@@ -1,5 +1,5 @@
 import { Icon } from "@/src/components/Icon";
-import { formatAmount } from "@/src/lib/format";
+import { formatAmount } from "@/src/lib/money";
 import {
   SummaryAmount,
   SummaryBlock,
@@ -24,10 +24,12 @@ export function TotalSummary({ direction, total, claimBack }: TotalSummaryProps)
         </SummaryLabel>
         <SummaryAmount>{formatAmount(total)}</SummaryAmount>
       </SummaryRow>
-      <SummaryNote>
-        <Icon name="claim" size={18} />
-        {note}
-      </SummaryNote>
+      {!!claimBack && (
+        <SummaryNote>
+          <Icon name="claim" size={18} />
+          {note}
+        </SummaryNote>
+      )}
     </SummaryBlock>
   );
 }

@@ -30,8 +30,7 @@ export const FilterSegment = styled.button<{ $isSelected: boolean }>`
   padding: 0 ${theme.space.md};
   border: none;
   border-radius: ${theme.borderRadius.full};
-  background: ${({ $isSelected }) =>
-    $isSelected ? theme.surface.accentSecondary : "transparent"};
+  background: ${({ $isSelected }) => ($isSelected ? theme.surface.accentSecondary : "transparent")};
   color: ${({ $isSelected }) =>
     $isSelected ? theme.foreground.accent : theme.foreground.secondary};
   font-size: ${theme.fontSize.sm};

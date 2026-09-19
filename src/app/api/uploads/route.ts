@@ -1,4 +1,4 @@
-import { handleRoute, jsonError, jsonResponse } from "@/src/lib/api/respond";
+import { handleRoute, jsonError, jsonResponse } from "@/src/lib/http";
 import { isR2Configured, presignR2Url } from "@/src/lib/r2";
 
 export const dynamic = "force-dynamic";

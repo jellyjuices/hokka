@@ -1,12 +1,18 @@
-export type SelectChipOption = {
+export type SelectTone = "chip" | "outline" | "plain";
+
+export type SelectOption = {
   value: string;
   label: string;
 };
 
-export type SelectChipProps = {
+export type SelectProps = {
   label: string;
-  value: string;
-  placeholder: string;
-  options: SelectChipOption[];
-  onChange: (value: string) => void;
+  options: SelectOption[];
+  id?: string;
+  name?: string;
+  value?: string;
+  defaultValue?: string;
+  placeholder?: string;
+  tone?: SelectTone;
+  onChange?: (value: string) => void;
 };

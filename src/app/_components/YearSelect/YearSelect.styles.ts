@@ -19,6 +19,10 @@ export const YearTrigger = styled(Select.Trigger)`
   cursor: pointer;
   transition: background ${theme.motion.fast} ease;
 
+  & > * {
+    letter-spacing: -0.03em;
+  }
+
   &:hover {
     background: ${hoverFill(theme.surface.secondary)};
   }

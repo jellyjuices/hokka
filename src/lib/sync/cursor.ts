@@ -1,25 +1,15 @@
+import { clearLocal, readLocal, writeLocal } from "@/src/lib/storage/local";
+
 const CURSOR_KEY = "hokka.sync.cursor.v1";
 
-export function readCursor(): string | null {
-  try {
-    return localStorage.getItem(CURSOR_KEY);
-  } catch {
-    return null;
-  }
+export function readCursor() {
+  return readLocal(CURSOR_KEY);
 }
 
 export function writeCursor(value: string) {
-  try {
-    localStorage.setItem(CURSOR_KEY, value);
-  } catch {
-    return;
-  }
+  writeLocal(CURSOR_KEY, value);
 }
 
 export function clearCursor() {
-  try {
-    localStorage.removeItem(CURSOR_KEY);
-  } catch {
-    return;
-  }
+  clearLocal(CURSOR_KEY);
 }

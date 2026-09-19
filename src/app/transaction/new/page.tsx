@@ -9,7 +9,7 @@ export default function NewTransactionPage() {
       <GridItem>
         <PageHeader title="New transaction" mobileTitle="New" backHref="/transactions" />
       </GridItem>
-      <GridItem span={8} spanTablet={12}>
+      <GridItem span={10} spanTablet={12}>
         <Suspense fallback={null}>
           <TransactionForm />
         </Suspense>

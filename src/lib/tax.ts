@@ -14,74 +14,48 @@ export type PeriodTotals = {
   isReserveOverridden: boolean;
 };
 
-export const EMPTY_TOTALS: PeriodTotals = {
-  incomeTotal: 0,
-  expenseTotal: 0,
-  hstCollected: 0,
-  itcClaimed: 0,
-  hstRemitted: 0,
-  netHstOwing: 0,
-  netIncome: 0,
-  incomeTaxSetAside: 0,
-  incomeTaxReservePct: 0,
-  isReserveOverridden: false,
+type TransactionSums = {
+  incomeTotal: number;
+  expenseTotal: number;
+  hstCollected: number;
+  itcClaimed: number;
+  netIncome: number;
 };
 
-function roundToCents(amount: number) {
-  return Math.round(amount * 100) / 100;
+// Every figure below answers a different question about the same rows, so they are
+// gathered in one walk rather than five filters over the same array.
+function sumTransactions(transactions: Transaction[]): TransactionSums {
+  const sums: TransactionSums = {
+    incomeTotal: 0,
+    expenseTotal: 0,
+    hstCollected: 0,
+    itcClaimed: 0,
+    netIncome: 0,
+  };
+
+  for (const transaction of transactions) {
+    if (transaction.direction === "income") {
+      sums.incomeTotal += transaction.total;
+      sums.hstCollected += transaction.hstAmount;
+      sums.netIncome += transaction.subtotal;
+      continue;
+    }
+    const claimable = transaction.claimablePct / 100;
+    sums.expenseTotal += transaction.total;
+    sums.itcClaimed += transaction.hstAmount * claimable;
+    sums.netIncome -= transaction.subtotal * claimable;
+  }
+
+  return sums;
 }
 
-export function splitHstFromTotal(total: number, hstRate: number) {
-  const subtotal = roundToCents(total / (1 + hstRate / 100));
-  return { subtotal, hstAmount: roundToCents(total - subtotal), total, hstRate };
-}
-
-export function totalFromSubtotal(subtotal: number, hstRate: number) {
-  const hstAmount = roundToCents(subtotal * (hstRate / 100));
-  return { subtotal, hstAmount, total: roundToCents(subtotal + hstAmount), hstRate };
-}
-
-export function incomeTotal(transactions: Transaction[]) {
-  return transactions
-    .filter((transaction) => transaction.direction === "income")
-    .reduce((total, transaction) => total + transaction.total, 0);
-}
-
-export function expenseTotal(transactions: Transaction[]) {
-  return transactions
-    .filter((transaction) => transaction.direction === "expense")
-    .reduce((total, transaction) => total + transaction.total, 0);
-}
-
-export function hstCollected(transactions: Transaction[]) {
-  return transactions
-    .filter((transaction) => transaction.direction === "income")
-    .reduce((total, transaction) => total + transaction.hstAmount, 0);
-}
-
-export function itcClaimed(transactions: Transaction[]) {
-  return transactions
-    .filter((transaction) => transaction.direction === "expense")
-    .reduce(
-      (total, transaction) => total + transaction.hstAmount * (transaction.claimablePct / 100),
-      0,
-    );
-}
-
-export function hstRemitted(filings: Filing[]) {
+function hstRemitted(filings: Filing[]) {
   return filings
     .filter((filing) => filing.filingType === "hst")
     .reduce((total, filing) => total + filing.amountFiled, 0);
 }
 
-export function netIncome(transactions: Transaction[]) {
-  return transactions.reduce((total, transaction) => {
-    if (transaction.direction === "income") return total + transaction.subtotal;
-    return total - transaction.subtotal * (transaction.claimablePct / 100);
-  }, 0);
-}
-
-export function incomeTaxReserve(netIncomeToDate: number, overridePct: number | null) {
+function incomeTaxReserve(netIncomeToDate: number, overridePct: number | null) {
   const reservePct = resolveReservePct(netIncomeToDate, overridePct);
   return {
     reservePct,
@@ -95,20 +69,18 @@ export function calculatePeriodTotals(
   filings: Filing[],
   settings: TaxSettings,
 ): PeriodTotals {
-  const collected = hstCollected(transactions);
-  const itcs = itcClaimed(transactions);
+  const sums = sumTransactions(transactions);
   const remitted = hstRemitted(filings);
-  const incomeToDate = netIncome(transactions);
-  const reserve = incomeTaxReserve(incomeToDate, settings.incomeTaxReservePct);
+  const reserve = incomeTaxReserve(sums.netIncome, settings.incomeTaxReservePct);
 
   return {
-    incomeTotal: incomeTotal(transactions),
-    expenseTotal: expenseTotal(transactions),
-    hstCollected: collected,
-    itcClaimed: itcs,
+    incomeTotal: sums.incomeTotal,
+    expenseTotal: sums.expenseTotal,
+    hstCollected: sums.hstCollected,
+    itcClaimed: sums.itcClaimed,
     hstRemitted: remitted,
-    netHstOwing: collected - itcs - remitted,
-    netIncome: incomeToDate,
+    netHstOwing: sums.hstCollected - sums.itcClaimed - remitted,
+    netIncome: sums.netIncome,
     incomeTaxSetAside: reserve.setAside,
     incomeTaxReservePct: reserve.reservePct,
     isReserveOverridden: reserve.isOverridden,

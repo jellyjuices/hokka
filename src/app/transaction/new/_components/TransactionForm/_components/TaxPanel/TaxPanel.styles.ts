@@ -48,7 +48,7 @@ export const ModifierField = styled.label`
   color: ${theme.foreground.primary};
   cursor: text;
 
-  &:focus-within {
+  &:has(:focus-visible) {
     border-color: ${theme.foreground.accent};
   }
 `;

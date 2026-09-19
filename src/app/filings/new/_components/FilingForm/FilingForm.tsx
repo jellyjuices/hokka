@@ -5,17 +5,21 @@ import { useRouter } from "next/navigation";
 import { Button, LinkButton } from "@/src/components/Button";
 import { DatePicker } from "@/src/components/Calendar";
 import { Card } from "@/src/components/Card";
-import { Field, Select, TextInput } from "@/src/components/Field";
+import { Field, TextInput } from "@/src/components/Field";
+import { Select } from "@/src/components/Select";
 import { useLedger, useLedgerActions } from "@/src/context/Ledger";
 import type { FilingType } from "@/src/data/domain.types";
+import { todayIsoDate } from "@/src/lib/dates";
 import { currentPeriod, periodLabel } from "@/src/lib/periods";
 import { FilingActions, FilingNotice } from "./FilingForm.styles";
+import type { FilingFormProps } from "./FilingForm.types";
 
-function todayIsoDate() {
-  return new Date().toISOString().slice(0, 10);
-}
+const FILING_TYPES = [
+  { value: "hst", label: "HST remittance" },
+  { value: "income_tax", label: "Income tax instalment" },
+];
 
-export function FilingForm() {
+export function FilingForm({ defaults }: FilingFormProps) {
   const { periods, settings } = useLedger();
   const { saveFiling } = useLedgerActions();
   const router = useRouter();
@@ -23,10 +27,15 @@ export function FilingForm() {
   const [error, setError] = useState<string | null>(null);
 
   const options = useMemo(() => {
-    const open = currentPeriod(settings.filingFrequency, new Date());
+    const open = currentPeriod(settings.filingFrequency, todayIsoDate());
     const known = periods.some((period) => period.id === open.id) ? periods : [...periods, open];
-    return known.map((period) => ({ id: period.id, label: periodLabel(period) }));
+    return known.map((period) => ({ value: period.id, label: periodLabel(period) }));
   }, [periods, settings.filingFrequency]);
+
+  // A period handed over in the link only wins if it is one of the offered options.
+  const selectedPeriod = options.some((option) => option.value === defaults.taxPeriodId)
+    ? defaults.taxPeriodId
+    : options[0]?.value;
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -55,22 +64,34 @@ export function FilingForm() {
     <form onSubmit={handleSubmit}>
       <Card title="Filing">
         <Field label="Filing type" htmlFor="filingType">
-          <Select id="filingType" name="filingType" defaultValue="hst">
-            <option value="hst">HST remittance</option>
-            <option value="income_tax">Income tax instalment</option>
-          </Select>
+          <Select
+            id="filingType"
+            name="filingType"
+            label="Filing type"
+            tone="outline"
+            defaultValue={defaults.filingType ?? "hst"}
+            options={FILING_TYPES}
+          />
         </Field>
         <Field label="Period" htmlFor="taxPeriodId">
-          <Select id="taxPeriodId" name="taxPeriodId">
-            {options.map((option) => (
-              <option key={option.id} value={option.id}>
-                {option.label}
-              </option>
-            ))}
-          </Select>
+          <Select
+            id="taxPeriodId"
+            name="taxPeriodId"
+            label="Period"
+            tone="outline"
+            placeholder="Select a period"
+            defaultValue={selectedPeriod}
+            options={options}
+          />
         </Field>
         <Field label="Amount filed" htmlFor="amountFiled">
-          <TextInput id="amountFiled" name="amountFiled" type="number" placeholder="0.00" />
+          <TextInput
+            id="amountFiled"
+            name="amountFiled"
+            type="number"
+            placeholder="0.00"
+            defaultValue={defaults.amountFiled}
+          />
         </Field>
         <Field label="Filed date" htmlFor="filedDate">
           <DatePicker id="filedDate" name="filedDate" />

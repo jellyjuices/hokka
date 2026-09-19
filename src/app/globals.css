@@ -1,35 +1,3 @@
-@font-face {
-  font-family: "PP Neue Montreal";
-  src: url("/fonts/PPNeueMontreal-Book.woff2") format("woff2");
-  font-weight: 300;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "PP Neue Montreal";
-  src: url("/fonts/PPNeueMontreal-Regular.woff2") format("woff2");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "PP Neue Montreal";
-  src: url("/fonts/PPNeueMontreal-Medium.woff2") format("woff2");
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "PP Neue Montreal";
-  src: url("/fonts/PPNeueMontreal-Bold.woff2") format("woff2");
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-
 :root {
   --surface-primary: #ffffff;
   --surface-secondary: #f4f1ee;
@@ -42,6 +10,15 @@
   --foreground-inverse: #ffffff;
   --foreground-disabled: #a79c95;
   --foreground-accent: #e04b2f;
+
+  --category-moss: #2f7d4f;
+  --category-indigo: #4a56c8;
+  --category-teal: #0f7576;
+  --category-amber: #8a6410;
+  --category-sky: #1f6ec4;
+  --category-plum: #8f3f83;
+  --category-slate: #59636f;
+  --category-rose: #b03a54;
 
   --font-family-display: "PP Neue Montreal", ui-sans-serif, system-ui, sans-serif;
   --font-family-text: "PP Neue Montreal", ui-sans-serif, system-ui, sans-serif;
@@ -69,8 +46,8 @@
   --space-lg: 24px;
   --space-xl: 32px;
 
-  --page-gutter: 40px;
-  --rail-gap: 40px;
+  --page-gutter: 80px;
+  --rail-gap: 80px;
   --rail-width: 292px;
   --rail-width-collapsed: 104px;
   --content-max: 900px;
@@ -86,6 +63,13 @@
 @media (min-width: 1921px) {
   :root {
     --content-max: 1440px;
+  }
+}
+
+@media (max-width: 1024px) {
+  :root {
+    --page-gutter: 40px;
+    --rail-gap: 40px;
   }
 }
 
@@ -113,6 +97,15 @@
     --foreground-inverse: #2a0d06;
     --foreground-disabled: #6f635c;
     --foreground-accent: #f2664c;
+
+    --category-moss: #74c48d;
+    --category-indigo: #9aa2f2;
+    --category-teal: #56c3c1;
+    --category-amber: #d9a648;
+    --category-sky: #7bb4ee;
+    --category-plum: #de92ce;
+    --category-slate: #a7b2bf;
+    --category-rose: #f0899e;
   }
 }
 
@@ -128,11 +121,20 @@
   --foreground-inverse: #2a0d06;
   --foreground-disabled: #6f635c;
   --foreground-accent: #f2664c;
+
+  --category-moss: #74c48d;
+  --category-indigo: #9aa2f2;
+  --category-teal: #56c3c1;
+  --category-amber: #d9a648;
+  --category-sky: #7bb4ee;
+  --category-plum: #de92ce;
+  --category-slate: #a7b2bf;
+  --category-rose: #f0899e;
 }
 
 * {
   box-sizing: border-box;
-  letter-spacing: 0.03em;
+  letter-spacing: 0.02em;
 }
 
 html,

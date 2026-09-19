@@ -1,13 +1,13 @@
 "use client";
 
 import { useSyncExternalStore } from "react";
-import { PinForm } from "./_components/PinForm";
 import {
   getUnlockedServerSnapshot,
   getUnlockedSnapshot,
   subscribeUnlocked,
   writeUnlocked,
-} from "./LockGate.storage";
+} from "@/src/lib/platform/unlocked";
+import { PinForm } from "./_components/PinForm";
 import type { LockGateProps } from "./LockGate.types";
 
 export function LockGate({ children }: LockGateProps) {

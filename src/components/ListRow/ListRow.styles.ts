@@ -61,4 +61,5 @@ export const RowValue = styled.strong`
   font-size: ${theme.fontSize.md};
   font-weight: 500;
   font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
 `;

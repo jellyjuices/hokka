@@ -101,7 +101,7 @@ export const CardTotal = styled.strong<{ $isIncome: boolean }>`
   font-size: ${theme.fontSize.lg};
   font-weight: 500;
   font-variant-numeric: tabular-nums;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.02em;
   white-space: nowrap;
 `;
 
@@ -109,5 +109,6 @@ export const CardSubAmount = styled.span`
   color: ${theme.foreground.secondary};
   font-size: ${theme.fontSize.xs};
   font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
   white-space: nowrap;
 `;

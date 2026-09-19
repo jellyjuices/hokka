@@ -8,7 +8,7 @@ const MONTHS_PER_PERIOD: Record<FilingFrequency, number> = {
   annual: 12,
 };
 
-function toIsoDate(year: number, monthIndex: number, day: number) {
+function utcIsoDate(year: number, monthIndex: number, day: number) {
   return new Date(Date.UTC(year, monthIndex, day)).toISOString().slice(0, 10);
 }
 
@@ -27,37 +27,18 @@ export function periodLabel(period: TaxPeriod) {
   return `${MONTH_NAME.format(start)} – ${MONTH_NAME.format(end)}`;
 }
 
-export function currentPeriod(frequency: FilingFrequency, referenceDate: Date): TaxPeriod {
+// The reference is a calendar date, not an instant: a transaction belongs to the period
+// its date falls in, whatever hour it was entered and whatever the browser's offset is.
+export function currentPeriod(frequency: FilingFrequency, isoDate: string): TaxPeriod {
   const span = MONTHS_PER_PERIOD[frequency];
-  const year = referenceDate.getUTCFullYear();
-  const startMonth = Math.floor(referenceDate.getUTCMonth() / span) * span;
+  const year = Number(isoDate.slice(0, 4));
+  const startMonth = Math.floor((Number(isoDate.slice(5, 7)) - 1) / span) * span;
 
   return {
     id: periodId(frequency, year, startMonth),
     periodType: frequency,
-    startDate: toIsoDate(year, startMonth, 1),
-    endDate: toIsoDate(year, startMonth + span, 0),
+    startDate: utcIsoDate(year, startMonth, 1),
+    endDate: utcIsoDate(year, startMonth + span, 0),
     status: "open",
   };
-}
-
-export function generatePeriods(frequency: FilingFrequency, fiscalYearStart: string): TaxPeriod[] {
-  const start = new Date(fiscalYearStart);
-  const span = MONTHS_PER_PERIOD[frequency];
-  const year = start.getUTCFullYear();
-
-  return Array.from({ length: 12 / span }, (item, index) => {
-    const startMonth = start.getUTCMonth() + index * span;
-    return {
-      id: periodId(frequency, year, startMonth),
-      periodType: frequency,
-      startDate: toIsoDate(year, startMonth, 1),
-      endDate: toIsoDate(year, startMonth + span, 0),
-      status: "open" as const,
-    };
-  });
-}
-
-export function findOpenPeriod(periods: TaxPeriod[]) {
-  return periods.find((period) => period.status === "open") ?? null;
 }

@@ -32,11 +32,3 @@ export const FieldInput = styled.input`
     outline-offset: 1px;
   }
 `;
-
-export const FieldSelect = styled.select`
-  padding: ${theme.space.sm} ${theme.space.md};
-  border: 1px solid ${theme.surface.tint};
-  border-radius: ${theme.borderRadius.sm};
-  background: ${theme.surface.primary};
-  color: ${theme.foreground.primary};
-`;

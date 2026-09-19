@@ -2,9 +2,16 @@
 
 import styled from "@emotion/styled";
 import * as Select from "@radix-ui/react-select";
-import { theme, hoverFill } from "@/src/lib/theme";
+import { theme, hoverFill, categoryTint, type CategoryColor } from "@/src/lib/theme";
+import { transientProps } from "@/src/lib/theme";
 
-export const CategoryTrigger = styled(Select.Trigger)`
+type Tinted = { $color: CategoryColor | null };
+
+function fill({ $color }: Tinted) {
+  return $color ? categoryTint(theme.categoryColor[$color]) : theme.surface.secondary;
+}
+
+export const CategoryTrigger = styled(Select.Trigger, transientProps)<Tinted>`
   display: inline-flex;
   align-items: center;
   align-self: flex-start;
@@ -13,14 +20,20 @@ export const CategoryTrigger = styled(Select.Trigger)`
   padding: 0 ${theme.space.md} 0 ${theme.space.lg};
   border: none;
   border-radius: ${theme.borderRadius.full};
-  background: ${theme.surface.secondary};
-  color: ${theme.foreground.primary};
+  background: ${fill};
+  color: ${({ $color }) => ($color ? theme.categoryColor[$color] : theme.foreground.primary)};
   font-size: ${theme.fontSize.sm};
   cursor: pointer;
-  transition: background ${theme.motion.fast} ease;
+  transition:
+    background ${theme.motion.fast} ease,
+    color ${theme.motion.fast} ease;
 
   &:hover {
-    background: ${hoverFill(theme.surface.secondary)};
+    background: ${(props) => hoverFill(fill(props))};
+  }
+
+  &[data-pointer-focus] {
+    outline: none;
   }
 
   &[data-placeholder] {
@@ -37,9 +50,10 @@ export const CategoryMenu = styled(Select.Content)`
   background: ${theme.surface.primary};
 `;
 
-export const CategoryOption = styled(Select.Item)`
+export const CategoryOption = styled(Select.Item, transientProps)<{ $color: CategoryColor }>`
   display: flex;
   align-items: center;
+  gap: ${theme.space.sm};
   min-height: 40px;
   padding: 0 ${theme.space.md};
   border-radius: ${theme.borderRadius.sm};
@@ -49,7 +63,15 @@ export const CategoryOption = styled(Select.Item)`
   outline: none;
 
   &[data-highlighted] {
-    background: ${hoverFill("transparent")};
-    color: ${theme.foreground.accent};
+    background: ${({ $color }) => categoryTint(theme.categoryColor[$color])};
+    color: ${({ $color }) => theme.categoryColor[$color]};
   }
+`;
+
+export const CategorySwatch = styled.span<{ $color: CategoryColor }>`
+  flex: 0 0 auto;
+  width: 10px;
+  height: 10px;
+  border-radius: ${theme.borderRadius.full};
+  background: ${({ $color }) => theme.categoryColor[$color]};
 `;

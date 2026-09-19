@@ -1,5 +1,6 @@
 import { timingSafeEqual } from "node:crypto";
-import { handleRoute, jsonError, jsonResponse } from "@/src/lib/api/respond";
+import { createSessionCookie } from "@/src/lib/session";
+import { handleRoute, jsonError, jsonResponse } from "@/src/lib/http";
 
 export const dynamic = "force-dynamic";
 
@@ -21,6 +22,8 @@ export async function POST(request: Request) {
     if (typeof body.password !== "string" || !isMatch(body.password)) {
       return jsonError("That password is not right", 401);
     }
-    return jsonResponse({ unlocked: true });
+    const response = jsonResponse({ unlocked: true });
+    response.headers.append("Set-Cookie", await createSessionCookie());
+    return response;
   });
 }

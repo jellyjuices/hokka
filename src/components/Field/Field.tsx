@@ -1,4 +1,4 @@
-import { FieldGroup, FieldHint, FieldInput, FieldLabel, FieldSelect } from "./Field.styles";
+import { FieldGroup, FieldHint, FieldInput, FieldLabel } from "./Field.styles";
 import type { FieldProps, TextInputProps } from "./Field.types";
 
 export function Field({ label, hint, htmlFor, children }: FieldProps) {
@@ -36,5 +36,3 @@ export function TextInput({
     />
   );
 }
-
-export const Select = FieldSelect;

@@ -35,6 +35,6 @@ export const MetricValue = styled.strong`
   font-family: ${theme.fontFamily.display};
   font-size: ${theme.fontSize.xl};
   font-weight: 500;
-  letter-spacing: -0.02em;
   font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
 `;

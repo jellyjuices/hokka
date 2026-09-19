@@ -8,8 +8,8 @@ import { mediaDown } from "@/src/lib/breakpoints";
 export const FormRoot = styled.form`
   display: flex;
   flex-direction: column;
-  gap: ${theme.space.lg};
-  padding-bottom: ${theme.space.xl};
+  gap: ${theme.space.xl};
+  padding-bottom: ${theme.space.lg};
 `;
 
 export const TitleRow = styled.div`
@@ -34,7 +34,6 @@ export const TitleInput = styled.input`
   font-family: ${theme.fontFamily.display};
   font-size: ${theme.fontSize["4xl"]};
   font-weight: 400;
-  letter-spacing: -0.03em;
 
   &::placeholder {
     color: ${theme.foreground.disabled};
@@ -67,7 +66,7 @@ export const SoftField = styled.label`
   color: ${theme.foreground.secondary};
   cursor: text;
 
-  &:focus-within {
+  &:has(:focus-visible) {
     outline: 2px solid ${theme.foreground.accent};
     outline-offset: 2px;
   }

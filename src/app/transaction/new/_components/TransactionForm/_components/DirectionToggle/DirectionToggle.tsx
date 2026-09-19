@@ -22,7 +22,11 @@ export function DirectionToggle({ value, onChange }: DirectionToggleProps) {
           $isSelected={value === option.direction}
           onClick={() => onChange(option.direction)}
         >
-          <Icon name={option.icon} size={22} weight={value === option.direction ? "fill" : "regular"} />
+          <Icon
+            name={option.icon}
+            size={22}
+            weight={value === option.direction ? "fill" : "regular"}
+          />
           {option.label}
         </ToggleOption>
       ))}

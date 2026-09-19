@@ -21,3 +21,11 @@ export type LocalSnapshot = {
   settings: TaxSettings;
   isHydrated: boolean;
 };
+
+export type LocalMergeBatch = {
+  [Name in LocalCollectionName]: {
+    collection: Name;
+    incoming: LocalRecordMap[Name][];
+    removedIds: string[];
+  };
+}[LocalCollectionName];

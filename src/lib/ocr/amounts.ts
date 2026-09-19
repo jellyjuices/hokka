@@ -18,12 +18,8 @@ function repairToken(token: string) {
   return token.replace(LOOKALIKE_PATTERN, (character) => DIGIT_LOOKALIKES[character] ?? character);
 }
 
-export function repairDigits(text: string) {
+function repairDigits(text: string) {
   return text.replace(/\S+/g, repairToken);
-}
-
-export function roundToCents(amount: number) {
-  return Math.round(amount * 100) / 100;
 }
 
 export function findAmounts(line: string): MoneyMatch[] {

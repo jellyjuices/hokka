@@ -14,10 +14,6 @@ const tones: Record<StatTileTone, ReturnType<typeof css>> = {
     background: ${theme.surface.accent};
     color: ${theme.foreground.inverse};
   `,
-  accentSoft: css`
-    background: ${theme.surface.accentSecondary};
-    color: ${theme.foreground.accent};
-  `,
 };
 
 const sizes: Record<StatTileSize, ReturnType<typeof css>> = {
@@ -54,9 +50,9 @@ export const TileValue = styled.strong<{ $size: StatTileSize }>`
   font-family: ${theme.fontFamily.display};
   font-size: ${({ $size }) => ($size === "display" ? theme.fontSize["4xl"] : theme.fontSize["3xl"])};
   font-weight: 500;
-  letter-spacing: -0.03em;
   line-height: 1.1;
   font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
 `;
 
 export const TileCaption = styled.span<{ $tone: StatTileTone }>`

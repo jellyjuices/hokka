@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import type { IconName } from "@/src/components/Icon";
 
-export type StatTileTone = "neutral" | "accent" | "accentSoft";
+export type StatTileTone = "neutral" | "accent";
 export type StatTileSize = "display" | "compact";
 
 export type StatTileProps = {

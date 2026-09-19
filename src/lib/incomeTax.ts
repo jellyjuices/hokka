@@ -1,6 +1,6 @@
 import { INCOME_TAX_RATES, type TaxBracket } from "@/src/data/incomeTaxRates";
 
-export type IncomeTaxEstimate = {
+type IncomeTaxEstimate = {
   netIncome: number;
   federalTax: number;
   ontarioTax: number;
@@ -9,7 +9,7 @@ export type IncomeTaxEstimate = {
   effectiveRate: number;
 };
 
-export const EMPTY_ESTIMATE: IncomeTaxEstimate = {
+const EMPTY_ESTIMATE: IncomeTaxEstimate = {
   netIncome: 0,
   federalTax: 0,
   ontarioTax: 0,
@@ -59,7 +59,7 @@ function ontarioTax(netIncome: number) {
   return baseTax + applyBrackets(baseTax, ontarioSurtaxThresholds);
 }
 
-export function estimateIncomeTax(netIncome: number): IncomeTaxEstimate {
+function estimateIncomeTax(netIncome: number): IncomeTaxEstimate {
   if (netIncome <= 0) return EMPTY_ESTIMATE;
 
   const federal = federalTax(netIncome);
@@ -77,7 +77,7 @@ export function estimateIncomeTax(netIncome: number): IncomeTaxEstimate {
   };
 }
 
-export function derivedReservePct(netIncome: number) {
+function derivedReservePct(netIncome: number) {
   return estimateIncomeTax(netIncome).effectiveRate * 100;
 }
 

@@ -1,11 +1,13 @@
-const listeners = new Set<() => void>();
+import { createSubscribers } from "./subscribers";
+
+const subscribers = createSubscribers();
 let snapshot = true;
 
 function publish() {
-  const next = typeof navigator === "undefined" ? true : navigator.onLine;
+  const next = isOnline();
   if (next === snapshot) return;
   snapshot = next;
-  for (const listener of listeners) listener();
+  subscribers.publish();
 }
 
 export function isOnline() {
@@ -22,15 +24,15 @@ export function getConnectivityServerSnapshot() {
 }
 
 export function subscribeConnectivity(listener: () => void) {
-  if (listeners.size === 0) {
+  if (subscribers.size === 0) {
     snapshot = isOnline();
     window.addEventListener("online", publish);
     window.addEventListener("offline", publish);
   }
-  listeners.add(listener);
+  subscribers.add(listener);
   return () => {
-    listeners.delete(listener);
-    if (listeners.size > 0) return;
+    subscribers.remove(listener);
+    if (subscribers.size > 0) return;
     window.removeEventListener("online", publish);
     window.removeEventListener("offline", publish);
   };

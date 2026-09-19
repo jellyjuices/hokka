@@ -29,7 +29,7 @@ segmented the page.
 
 ## What the parser decides
 
-- **Money** ([money.ts](../src/lib/ocr/money.ts)) is a number with exactly two decimals. Digit
+- **Money** ([amounts.ts](../src/lib/ocr/amounts.ts)) is a number with exactly two decimals. Digit
   lookalikes are repaired only inside tokens that already look like money, so `5.5O` becomes `5.50`
   while `C0FFEE` is left alone.
 - **Totals** ([totals.ts](../src/lib/ocr/totals.ts)) are labelled first and reconciled second.
@@ -39,11 +39,11 @@ segmented the page.
   total, which is what a zero-rated grocery run should produce. A tax label whose amount was
   unreadable is the one case where the rate is applied to the subtotal, and that reading is marked
   unreconciled so its confidence drops.
-- **Dates** ([dates.ts](../src/lib/ocr/dates.ts)) accept ISO, numeric and month-name forms. An
+- **Dates** ([receiptDate.ts](../src/lib/ocr/receiptDate.ts)) accept ISO, numeric and month-name forms. An
   ambiguous `03/04/2026` is read month-first unless that lands in the future, which resolves most
   Canadian receipts correctly. A date more than ten years old or more than two days ahead is
   rejected rather than trusted.
-- **Line items** ([items.ts](../src/lib/ocr/items.ts)) are the rows above the totals block that end
+- **Line items** ([fields.ts](../src/lib/ocr/fields.ts)) are the rows above the totals block that end
   in a price. They are always returned, but the form only uses them as its rows when they add up to
   the parsed subtotal — `itemsCoverSubtotal`. Otherwise the form writes one row for the subtotal and
   the items stay in the document's stored reading.

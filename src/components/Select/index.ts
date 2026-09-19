@@ -1,2 +1,2 @@
-export { SelectChip } from "./SelectChip";
-export type { SelectChipOption, SelectChipProps } from "./SelectChip.types";
+export { Select } from "./Select";
+export type { SelectOption, SelectProps, SelectTone } from "./Select.types";

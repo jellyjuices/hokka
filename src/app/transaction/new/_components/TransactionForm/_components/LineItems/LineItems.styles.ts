@@ -19,7 +19,7 @@ export const ItemRow = styled.div`
   border-radius: ${theme.borderRadius.full};
   background: ${theme.surface.primary};
 
-  &:focus-within {
+  &:has(:focus-visible) {
     border-color: ${theme.foreground.accent};
   }
 `;

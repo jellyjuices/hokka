@@ -3,7 +3,7 @@
 import styled from "@emotion/styled";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { theme, hoverFill } from "@/src/lib/theme";
-import { transientProps } from "@/src/lib/styled";
+import { transientProps } from "@/src/lib/theme";
 
 export const MenuTrigger = styled(DropdownMenu.Trigger)`
   display: inline-flex;

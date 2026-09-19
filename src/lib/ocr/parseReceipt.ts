@@ -1,10 +1,9 @@
 import { classifyReceipt } from "./classify";
-import { extractDate } from "./dates";
-import { extractItems } from "./items";
-import { isCloseEnough } from "./money";
+import { extractItems, extractVendor } from "./fields";
+import { extractDate } from "./receiptDate";
+import { isCloseEnough } from "./amounts";
 import type { OcrPage, ParsedReceipt, ParseReceiptOptions } from "./ocr.types";
 import { extractTotals, totalsFromItems } from "./totals";
-import { extractVendor } from "./vendor";
 
 const RECONCILED_WEIGHT = 0.4;
 const DATE_WEIGHT = 0.2;

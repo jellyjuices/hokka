@@ -4,7 +4,7 @@ import styled from "@emotion/styled";
 import Image from "next/image";
 import Link from "next/link";
 import { theme, hoverFill } from "@/src/lib/theme";
-import { transientProps } from "@/src/lib/styled";
+import { transientProps } from "@/src/lib/theme";
 import { mediaDown } from "@/src/lib/breakpoints";
 
 export const Rail = styled.nav<{ $isCollapsed: boolean }>`
@@ -55,7 +55,6 @@ export const RailBrandName = styled.span<{ $isCollapsed: boolean }>`
   font-family: ${theme.fontFamily.display};
   font-size: ${theme.fontSize["2xl"]};
   font-weight: 500;
-  letter-spacing: -0.02em;
   max-width: ${({ $isCollapsed }) => ($isCollapsed ? "0" : "180px")};
   margin-left: ${({ $isCollapsed }) => ($isCollapsed ? "0" : theme.space.sm)};
   opacity: ${({ $isCollapsed }) => ($isCollapsed ? 0 : 1)};
@@ -90,12 +89,10 @@ export const RailItem = styled(Link, transientProps)<{
   background: ${({ $isActive }) => ($isActive ? theme.surface.accentSecondary : "transparent")};
   transition:
     background ${theme.motion.fast} ease,
-    color ${theme.motion.fast} ease,
     width ${theme.motion.base} ease,
     padding-left ${theme.motion.base} ease;
 
   &:hover {
-    color: ${theme.foreground.accent};
     background: ${({ $isActive }) =>
       hoverFill($isActive ? theme.surface.accentSecondary : "transparent")};
   }

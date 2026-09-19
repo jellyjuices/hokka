@@ -10,6 +10,7 @@ export const ToggleTrack = styled.div`
   padding: ${theme.space.xs};
   border-radius: ${theme.borderRadius.full};
   background: ${theme.surface.secondary};
+  margin-bottom: ${theme.space.sm};
 `;
 
 export const ToggleOption = styled.button<{ $isSelected: boolean }>`
@@ -20,8 +21,7 @@ export const ToggleOption = styled.button<{ $isSelected: boolean }>`
   padding: 0 ${theme.space.lg};
   border: none;
   border-radius: ${theme.borderRadius.full};
-  background: ${({ $isSelected }) =>
-    $isSelected ? theme.surface.accentSecondary : "transparent"};
+  background: ${({ $isSelected }) => ($isSelected ? theme.surface.accentSecondary : "transparent")};
   color: ${({ $isSelected }) =>
     $isSelected ? theme.foreground.accent : theme.foreground.secondary};
   font-size: ${theme.fontSize.md};

@@ -23,6 +23,5 @@ export const CardTitle = styled.h2`
   margin: 0;
   font-size: ${theme.fontSize.lg};
   font-weight: 500;
-  letter-spacing: -0.01em;
   color: ${theme.foreground.primary};
 `;

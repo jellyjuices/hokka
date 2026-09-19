@@ -9,11 +9,12 @@ Run all of these before reporting work done, repo-wide, even for a small change.
 ```sh
 npm run typecheck
 npm run lint
+npm run format:check
 npm run size
 npm run build
 ```
 
-`npm run check` bundles the first three.
+`npm run check` bundles the first four. `npm run format` fixes what `format:check` reports.
 
 ## Codemods and checks
 

@@ -31,7 +31,6 @@ export const ActivityTitle = styled.h2`
   margin: 0 0 ${theme.space.xs};
   font-size: ${theme.fontSize.lg};
   font-weight: 500;
-  letter-spacing: -0.01em;
 `;
 
 export const ActivityItems = styled.ul`

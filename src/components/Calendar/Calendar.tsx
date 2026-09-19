@@ -3,7 +3,8 @@
 import { useState } from "react";
 import * as Popover from "@radix-ui/react-popover";
 import { Icon } from "@/src/components/Icon";
-import { formatDate } from "@/src/lib/format";
+import { usePointerFocus } from "@/src/hooks";
+import { formatDate } from "@/src/lib/dates";
 import {
   CalendarDay,
   CalendarDays,
@@ -16,10 +17,11 @@ import {
   CalendarWeekday,
   CalendarWeekdays,
 } from "./Calendar.styles";
-import type { CalendarProps, DatePickerProps } from "./Calendar.types";
+import type { CalendarProps, DateDisplay, DatePickerProps } from "./Calendar.types";
 
 const WEEKDAY_LABELS = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
 const MONTH_FORMATTER = new Intl.DateTimeFormat("en-CA", { month: "long", year: "numeric" });
+const DAY_MONTH_FORMATTER = new Intl.DateTimeFormat("en-CA", { month: "long", day: "numeric" });
 
 function toIsoDate(date: Date) {
   const year = date.getFullYear();
@@ -33,7 +35,10 @@ function fromIsoDate(isoDate: string) {
   return new Date(year, month - 1, day);
 }
 
-function dateLabel(date: Date) {
+// A recurring date — a fiscal year start — is the same day every year, so its
+// label drops the year and never says "Today": both would read as a one-off.
+function dateLabel(date: Date, display: DateDisplay) {
+  if (display === "dayMonth") return DAY_MONTH_FORMATTER.format(date);
   return isSameDay(date, new Date()) ? "Today" : formatDate(toIsoDate(date));
 }
 
@@ -119,12 +124,19 @@ export function DatePicker({
   onChange,
   placeholder = "Select a date",
   tone = "outline",
+  display = "full",
 }: DatePickerProps) {
   const initial = defaultValue ? fromIsoDate(defaultValue) : null;
   const [open, setOpen] = useState(false);
   const [internal, setInternal] = useState<Date | null>(initial);
   const selected = value === undefined ? internal : value === "" ? null : fromIsoDate(value);
   const [month, setMonth] = useState<Date>(selected ?? new Date());
+  const pointerFocus = usePointerFocus();
+
+  function handleOpenChange(next: boolean) {
+    if (next) setMonth(selected ?? new Date());
+    setOpen(next);
+  }
 
   function handleSelect(date: Date) {
     setInternal(date);
@@ -133,21 +145,21 @@ export function DatePicker({
     onChange?.(toIsoDate(date));
   }
 
-  const label = selected === null ? placeholder : dateLabel(selected);
+  const label = selected === null ? placeholder : dateLabel(selected, display);
 
   return (
-    <Popover.Root open={open} onOpenChange={setOpen}>
+    <Popover.Root open={open} onOpenChange={handleOpenChange}>
       <Popover.Trigger asChild>
-        <CalendarTrigger id={id} type="button" $tone={tone}>
-          {tone === "soft" ? (
-            <>
-              {label}
-              <Icon name="calendar" size={20} />
-            </>
-          ) : (
+        <CalendarTrigger id={id} type="button" $tone={tone} {...pointerFocus}>
+          {tone === "outline" ? (
             <>
               <Icon name="calendar" size={16} />
               {label}
+            </>
+          ) : (
+            <>
+              {label}
+              <Icon name="calendar" size={20} />
             </>
           )}
         </CalendarTrigger>

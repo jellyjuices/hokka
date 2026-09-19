@@ -2,6 +2,7 @@
 
 import styled from "@emotion/styled";
 import { theme, hoverFill } from "@/src/lib/theme";
+import { mediaUp } from "@/src/lib/breakpoints";
 
 export const SWIPE_ACTION_WIDTH = 88;
 
@@ -34,6 +35,10 @@ export const SwipeAction = styled.button`
 
   &:hover {
     background: ${hoverFill(theme.surface.accent)};
+  }
+
+  ${mediaUp("smTablet")} {
+    display: none;
   }
 `;
 

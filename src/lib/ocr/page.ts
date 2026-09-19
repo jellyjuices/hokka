@@ -1,6 +1,6 @@
 import type { OcrLine, OcrPage } from "./ocr.types";
 
-export function collapseSpaces(line: string) {
+function collapseSpaces(line: string) {
   return line
     .replace(/[\t ]+/g, " ")
     .replace(/ {2,}/g, " ")

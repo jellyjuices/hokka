@@ -1,6 +1,7 @@
 import { Icon } from "@/src/components/Icon";
 import { findCategory } from "@/src/data/categories";
-import { formatCurrency, formatDate } from "@/src/lib/format";
+import { formatCurrency } from "@/src/lib/money";
+import { formatDate } from "@/src/lib/dates";
 import {
   CardAmounts,
   CardBody,

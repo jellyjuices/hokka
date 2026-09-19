@@ -5,7 +5,7 @@ const SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY ?? "";
 
 let client: SupabaseClient | null = null;
 
-export function isSupabaseConfigured() {
+function isSupabaseConfigured() {
   return SUPABASE_URL !== "" && SERVICE_ROLE_KEY !== "";
 }
 

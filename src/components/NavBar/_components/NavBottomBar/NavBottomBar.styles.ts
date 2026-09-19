@@ -3,7 +3,7 @@
 import styled from "@emotion/styled";
 import Link from "next/link";
 import { theme } from "@/src/lib/theme";
-import { transientProps } from "@/src/lib/styled";
+import { transientProps } from "@/src/lib/theme";
 import { mediaUp } from "@/src/lib/breakpoints";
 
 export const BottomBar = styled.nav`

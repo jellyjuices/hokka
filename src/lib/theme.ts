@@ -1,3 +1,5 @@
+import isPropValid from "@emotion/is-prop-valid";
+
 export const theme = {
   surface: {
     primary: "var(--surface-primary)",
@@ -13,6 +15,17 @@ export const theme = {
     inverse: "var(--foreground-inverse)",
     disabled: "var(--foreground-disabled)",
     accent: "var(--foreground-accent)",
+  },
+
+  categoryColor: {
+    moss: "var(--category-moss)",
+    indigo: "var(--category-indigo)",
+    teal: "var(--category-teal)",
+    amber: "var(--category-amber)",
+    sky: "var(--category-sky)",
+    plum: "var(--category-plum)",
+    slate: "var(--category-slate)",
+    rose: "var(--category-rose)",
   },
 
   fontFamily: {
@@ -69,6 +82,16 @@ export const theme = {
 
 export type Theme = typeof theme;
 
+export type CategoryColor = keyof typeof theme.categoryColor;
+
 export function hoverFill(background: string) {
   return `color-mix(in srgb, ${background}, ${theme.foreground.primary} 5%)`;
 }
+
+export function categoryTint(color: string) {
+  return `color-mix(in srgb, ${color} 12%, ${theme.surface.primary})`;
+}
+
+export const transientProps = {
+  shouldForwardProp: (prop: string) => !prop.startsWith("$") && isPropValid(prop),
+};

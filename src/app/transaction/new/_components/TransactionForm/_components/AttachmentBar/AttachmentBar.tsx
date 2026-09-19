@@ -5,6 +5,7 @@ import { Button } from "@/src/components/Button";
 import { Icon } from "@/src/components/Icon";
 import {
   BarRow,
+  CameraButton,
   HiddenFileInput,
   StackButton,
   StackCount,
@@ -66,9 +67,9 @@ export function AttachmentBar({ attachments, onFilesChosen, onOpenGallery }: Att
       <Button tone="quiet" trailingIcon="upload" onClick={() => uploadRef.current?.click()}>
         Upload
       </Button>
-      <Button tone="accent" trailingIcon="camera" onClick={() => cameraRef.current?.click()}>
+      <CameraButton tone="accent" trailingIcon="camera" onClick={() => cameraRef.current?.click()}>
         Snap a pic
-      </Button>
+      </CameraButton>
     </BarRow>
   );
 }

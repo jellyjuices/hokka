@@ -2,7 +2,9 @@
 
 import styled from "@emotion/styled";
 import Image from "next/image";
+import { Button } from "@/src/components/Button";
 import { theme } from "@/src/lib/theme";
+import { mediaDown } from "@/src/lib/breakpoints";
 
 export const BarRow = styled.div`
   display: flex;
@@ -13,6 +15,18 @@ export const BarRow = styled.div`
 
 export const HiddenFileInput = styled.input`
   display: none;
+`;
+
+export const CameraButton = styled(Button)`
+  ${mediaDown("smTablet")} {
+    position: fixed;
+    right: ${theme.layout.gutter};
+    bottom: calc(76px + env(safe-area-inset-bottom));
+    z-index: 25;
+    min-height: 56px;
+    padding: 0 ${theme.space.lg};
+    border-radius: ${theme.borderRadius.full};
+  }
 `;
 
 export const StackButton = styled.button`

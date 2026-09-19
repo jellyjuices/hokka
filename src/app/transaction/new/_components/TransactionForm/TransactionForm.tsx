@@ -15,15 +15,17 @@ import { LineItems } from "./_components/LineItems";
 import { TaxPanel } from "./_components/TaxPanel";
 import { TotalSummary } from "./_components/TotalSummary";
 import {
+  AttachCell,
+  CategoryCell,
   FormNotice,
   FormRoot,
+  HeadRow,
   PairRow,
   SoftField,
   SoftInput,
   SubmitButton,
   SubmitRow,
   TitleInput,
-  TitleRow,
 } from "./TransactionForm.styles";
 import { useAttachments } from "./useAttachments";
 import { useAutofill } from "./useAutofill";
@@ -55,24 +57,28 @@ export function TransactionForm() {
       <DropZone onFiles={add} label="Drop to attach a receipt" />
       <DirectionToggle value={form.state.direction} onChange={form.setDirection} />
       {autofill.notice !== null && <AutofillNotice notice={autofill.notice} />}
-      <TitleRow>
+      <HeadRow>
         <TitleInput
           value={form.state.title}
           placeholder="Untitled..."
           aria-label="Transaction name"
           onChange={(event) => form.setTitle(event.target.value)}
         />
-        <AttachmentBar
-          attachments={attachments}
-          onFilesChosen={add}
-          onOpenGallery={() => setIsGalleryOpen(true)}
-        />
-      </TitleRow>
-      <CategoryPicker
-        value={form.state.categoryId}
-        categories={form.categories}
-        onChange={form.setCategory}
-      />
+        <CategoryCell>
+          <CategoryPicker
+            value={form.state.categoryId}
+            categories={form.categories}
+            onChange={form.setCategory}
+          />
+        </CategoryCell>
+        <AttachCell>
+          <AttachmentBar
+            attachments={attachments}
+            onFilesChosen={add}
+            onOpenGallery={() => setIsGalleryOpen(true)}
+          />
+        </AttachCell>
+      </HeadRow>
       <PairRow>
         <DatePicker
           id="txnDate"

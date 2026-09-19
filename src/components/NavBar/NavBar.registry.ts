@@ -5,3 +5,5 @@ export const NAV_ITEMS: NavItem[] = [
   { href: "/transactions", label: "Transactions", icon: "transactions" },
   { href: "/filings", label: "Filings", icon: "filings" },
 ];
+
+export const NEW_TRANSACTION_HREF = "/transaction/new";

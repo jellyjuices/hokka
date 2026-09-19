@@ -12,20 +12,42 @@ export const FormRoot = styled.form`
   padding-bottom: ${theme.space.lg};
 `;
 
-export const TitleRow = styled.div`
-  display: flex;
+export const HeadRow = styled.div`
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas:
+    "title attach"
+    "category category";
   align-items: center;
-  justify-content: space-between;
-  gap: ${theme.space.md};
+  row-gap: ${theme.space.xl};
+  column-gap: ${theme.space.md};
 
-  ${mediaDown("mobile")} {
-    flex-direction: column;
-    align-items: stretch;
+  ${mediaDown("smTablet")} {
+    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-areas:
+      "title title"
+      "category attach";
+  }
+`;
+
+export const CategoryCell = styled.div`
+  grid-area: category;
+  display: flex;
+  min-width: 0;
+`;
+
+export const AttachCell = styled.div`
+  grid-area: attach;
+  display: flex;
+  justify-content: flex-end;
+
+  ${mediaDown("smTablet")} {
+    justify-content: flex-start;
   }
 `;
 
 export const TitleInput = styled.input`
-  flex: 1 1 auto;
+  grid-area: title;
   min-width: 0;
   padding: 0;
   border: none;

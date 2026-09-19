@@ -7,7 +7,11 @@ export default function NewTransactionPage() {
   return (
     <Grid>
       <GridItem>
-        <PageHeader title="New transaction" mobileTitle="New" backHref="/transactions" />
+        <PageHeader
+          title="New transaction"
+          mobileTitle="New transaction"
+          backHref="/transactions"
+        />
       </GridItem>
       <GridItem span={10} spanTablet={12}>
         <Suspense fallback={null}>

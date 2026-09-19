@@ -1,13 +1,27 @@
-import * as styles from "./NavAccount.styles";
+"use client";
+
+import { usePathname } from "next/navigation";
+import { isNavItemActive } from "../../isNavItemActive";
+import { AccountAvatar, AccountLabel, AccountLink } from "./NavAccount.styles";
 import type { NavAccountProps } from "./NavAccount.types";
 
+const HREF = "/settings";
+
 export function NavAccount({ initials, isCollapsed = false }: NavAccountProps) {
+  const isSelected = isNavItemActive(usePathname(), HREF);
+
   return (
-    <styles.Root href="/settings" $isCollapsed={isCollapsed} aria-label="Settings">
-      <styles.Avatar $isCollapsed={isCollapsed}>{initials.slice(0, 1)}</styles.Avatar>
-      <styles.Label $isCollapsed={isCollapsed} aria-hidden={isCollapsed}>
+    <AccountLink
+      href={HREF}
+      $isCollapsed={isCollapsed}
+      $isSelected={isSelected}
+      aria-current={isSelected ? "page" : undefined}
+      aria-label="Settings"
+    >
+      <AccountAvatar>{initials.slice(0, 1)}</AccountAvatar>
+      <AccountLabel $isCollapsed={isCollapsed} aria-hidden={isCollapsed}>
         {initials}
-      </styles.Label>
-    </styles.Root>
+      </AccountLabel>
+    </AccountLink>
   );
 }

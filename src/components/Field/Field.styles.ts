@@ -3,24 +3,24 @@
 import styled from "@emotion/styled";
 import { theme } from "@/src/lib/theme";
 
-export const Root = styled.div`
+export const FieldGroup = styled.div`
   display: flex;
   flex-direction: column;
   gap: ${theme.space.xs};
 `;
 
-export const Label = styled.label`
+export const FieldLabel = styled.label`
   font-size: 0.82rem;
   font-weight: 600;
   color: ${theme.foreground.secondary};
 `;
 
-export const Hint = styled.span`
+export const FieldHint = styled.span`
   font-size: 0.78rem;
   color: ${theme.foreground.disabled};
 `;
 
-export const Input = styled.input`
+export const FieldInput = styled.input`
   padding: ${theme.space.sm} ${theme.space.md};
   border: 1px solid ${theme.surface.tint};
   border-radius: ${theme.borderRadius.sm};
@@ -33,7 +33,7 @@ export const Input = styled.input`
   }
 `;
 
-export const Select = styled.select`
+export const FieldSelect = styled.select`
   padding: ${theme.space.sm} ${theme.space.md};
   border: 1px solid ${theme.surface.tint};
   border-radius: ${theme.borderRadius.sm};

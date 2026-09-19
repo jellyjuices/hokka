@@ -15,7 +15,7 @@ import { ObligationsPanel } from "../ObligationsPanel";
 import { StreamPanel } from "../StreamPanel";
 import { SummaryDeck } from "../SummaryDeck";
 import { YearSelect } from "../YearSelect";
-import * as styles from "./DashboardView.styles";
+import { DashboardPagination } from "./DashboardView.styles";
 import type { DashboardSlide } from "./DashboardView.types";
 import { useDashboardTotals } from "./useDashboardTotals";
 
@@ -94,8 +94,8 @@ export function DashboardView() {
             />
           }
           action={
-            <LinkButton href="/new" tone="accent" trailingIcon="plus">
-              New
+            <LinkButton href="/transaction/new" tone="accent" trailingIcon="plus">
+              New transaction
             </LinkButton>
           }
         />
@@ -128,7 +128,7 @@ export function DashboardView() {
       </SummaryDeck>
 
       <GridItem>
-        <styles.Pagination>
+        <DashboardPagination>
           <PageDots
             count={SLIDES.length}
             activeIndex={activeIndex}
@@ -136,7 +136,7 @@ export function DashboardView() {
             onSelect={goTo}
             getSlideLabel={(index) => SLIDES[index].label}
           />
-        </styles.Pagination>
+        </DashboardPagination>
       </GridItem>
 
       <GridItem span={4}>
@@ -145,7 +145,6 @@ export function DashboardView() {
           title="Recent invoices"
           items={incomeItems}
           emptyTitle="No invoices yet"
-          emptyDescription="Paid invoices you record show up here with the HST you charged."
           ctaHref="/transactions"
           ctaLabel="See all invoices"
         />
@@ -156,19 +155,16 @@ export function DashboardView() {
           title="Recent expenses"
           items={expenseItems}
           emptyTitle="No expenses yet"
-          emptyDescription="Capture a receipt and the claimable HST lands here as an ITC."
           ctaHref="/transactions"
           ctaLabel="See all expenses"
         />
       </GridItem>
-
       <GridItem>
         <ActivityList
           visibility="narrow"
           title="All recent"
           items={recentItems}
           emptyTitle="Nothing recorded yet"
-          emptyDescription="Capture a receipt or add a transaction by hand to open the period."
           ctaHref="/transactions"
           ctaLabel="See all transactions"
         />

@@ -3,27 +3,26 @@
 import { css } from "@emotion/react";
 import styled from "@emotion/styled";
 import Link from "next/link";
-import { theme } from "@/src/lib/theme";
+import { theme, hoverFill } from "@/src/lib/theme";
 import { transientProps } from "@/src/lib/styled";
 import type { ButtonSize, ButtonTone } from "./Button.types";
 
+function tone(background: string, color: string) {
+  return css`
+    background: ${background};
+    color: ${color};
+
+    &:hover:not(:disabled) {
+      background: ${hoverFill(background)};
+    }
+  `;
+}
+
 const tones: Record<ButtonTone, ReturnType<typeof css>> = {
-  accent: css`
-    background: ${theme.surface.accent};
-    color: ${theme.foreground.inverse};
-  `,
-  soft: css`
-    background: ${theme.surface.accentSecondary};
-    color: ${theme.foreground.accent};
-  `,
-  quiet: css`
-    background: ${theme.surface.secondary};
-    color: ${theme.foreground.primary};
-  `,
-  ghost: css`
-    background: transparent;
-    color: ${theme.foreground.secondary};
-  `,
+  accent: tone(theme.surface.accent, theme.foreground.inverse),
+  soft: tone(theme.surface.accentSecondary, theme.foreground.accent),
+  quiet: tone(theme.surface.secondary, theme.foreground.primary),
+  ghost: tone("transparent", theme.foreground.secondary),
 };
 
 const sizes: Record<ButtonSize, ReturnType<typeof css>> = {
@@ -55,16 +54,13 @@ const base = css`
   font-weight: 500;
   line-height: 1;
   white-space: nowrap;
-  transition: filter ${theme.motion.fast};
-
-  &:hover {
-    filter: brightness(0.96);
-  }
+  transition:
+    background ${theme.motion.fast} ease,
+    opacity ${theme.motion.fast} ease;
 
   &:disabled {
-    color: ${theme.foreground.disabled};
+    opacity: 0.4;
     cursor: not-allowed;
-    filter: none;
   }
 `;
 
@@ -83,12 +79,12 @@ const variant = ({ $tone, $size, $isBlock }: Variant) => css`
   };
 `;
 
-export const Root = styled.button<Variant>`
+export const ButtonBase = styled.button<Variant>`
   ${base};
   ${variant};
 `;
 
-export const RootLink = styled(Link, transientProps)<Variant>`
+export const ButtonLink = styled(Link, transientProps)<Variant>`
   ${base};
   ${variant};
 `;

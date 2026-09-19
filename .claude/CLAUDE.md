@@ -28,6 +28,7 @@ All dry-run by default; the `:apply` variant writes. Running twice reports nothi
 | `npm run aliases`                 | The passthrough subset only                                                                                  |
 | `npm run arrows` / `arrows:apply` | Converts arrow consts to function declarations, verifying with `tsc` after each round                        |
 | `npm run format`                  | Prettier across the repo                                                                                     |
+| `npm run ocr:assets`              | Copies the Tesseract and pdf.js runtimes into gitignored `public/ocr/`; also runs on install                 |
 
 ## Never run
 

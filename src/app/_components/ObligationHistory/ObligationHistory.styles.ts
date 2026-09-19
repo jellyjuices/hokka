@@ -4,7 +4,7 @@ import styled from "@emotion/styled";
 import { theme } from "@/src/lib/theme";
 import { mediaUp } from "@/src/lib/breakpoints";
 
-export const Root = styled.section`
+export const HistorySection = styled.section`
   display: flex;
   flex-direction: column;
   gap: ${theme.space.md};
@@ -14,14 +14,14 @@ export const Root = styled.section`
   }
 `;
 
-export const Title = styled.h2`
+export const HistoryTitle = styled.h2`
   margin: 0;
   font-size: ${theme.fontSize.lg};
   font-weight: 500;
   letter-spacing: -0.01em;
 `;
 
-export const Hint = styled.p`
+export const HistoryHint = styled.p`
   margin: 0;
   color: ${theme.foreground.secondary};
   font-size: ${theme.fontSize.sm};

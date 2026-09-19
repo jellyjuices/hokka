@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { AppShell } from "@/src/components/AppShell";
+import { LockGate } from "@/src/components/LockGate";
 import { EmotionRegistry } from "@/src/context/EmotionRegistry";
 import { LedgerProvider } from "@/src/context/Ledger";
 import { ServiceWorker } from "@/src/components/ServiceWorker";
@@ -30,10 +31,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <body>
         <EmotionRegistry>
-          <LedgerProvider>
-            <AppShell>{children}</AppShell>
-            <ServiceWorker />
-          </LedgerProvider>
+          <LockGate>
+            <LedgerProvider>
+              <AppShell>{children}</AppShell>
+              <ServiceWorker />
+            </LedgerProvider>
+          </LockGate>
         </EmotionRegistry>
       </body>
     </html>

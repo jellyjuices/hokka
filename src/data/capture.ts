@@ -1,17 +1,12 @@
 import { newId } from "@/src/lib/id";
-import type { DocumentKind, StoredDocument } from "./domain.types";
+import { parseReceiptText, recognizeDocument } from "@/src/lib/ocr";
+import type { ReceiptReading } from "@/src/lib/ocr";
+import type { DocumentKind, OcrStatus, StoredDocument } from "./domain.types";
 import { savePendingFile } from "./local";
 import { documentFileUrl } from "./remote";
 import { repository } from "./repository";
 
-export type ParsedReceipt = {
-  counterparty: string;
-  txnDate: string;
-  subtotal: number;
-  hstAmount: number;
-  total: number;
-  confidence: number;
-};
+const PARSED_CONFIDENCE = 0.6;
 
 const DEFAULT_CONTENT_TYPE = "application/octet-stream";
 
@@ -25,7 +20,17 @@ export function buildFileKey(documentId: string, fileName: string) {
   return `documents/${documentId}${fileExtension(fileName)}`;
 }
 
-export async function captureDocument(file: File, kind: DocumentKind): Promise<StoredDocument> {
+function statusFor(reading: ReceiptReading | null): OcrStatus {
+  if (reading === null) return "pending";
+  const receipt = reading.receipt;
+  return receipt !== null && receipt.confidence >= PARSED_CONFIDENCE ? "parsed" : "needs_review";
+}
+
+export async function captureDocument(
+  file: File,
+  kind: DocumentKind,
+  reading: ReceiptReading | null = null,
+): Promise<StoredDocument> {
   const documentId = newId();
   const fileKey = buildFileKey(documentId, file.name);
 
@@ -34,8 +39,8 @@ export async function captureDocument(file: File, kind: DocumentKind): Promise<S
     kind,
     fileKey,
     uploadedAt: new Date().toISOString(),
-    ocrStatus: "pending",
-    rawOcrJson: null,
+    ocrStatus: statusFor(reading),
+    rawOcrJson: reading === null ? null : { ...reading, parsedAt: new Date().toISOString() },
   };
 
   await savePendingFile({
@@ -55,7 +60,12 @@ export function documentHref(document: StoredDocument) {
   return documentFileUrl(document.id);
 }
 
-export async function parseDocument(document: StoredDocument): Promise<ParsedReceipt | null> {
-  void document;
-  return null;
+export async function readReceipt(blob: Blob, hstRate: number): Promise<ReceiptReading | null> {
+  const page = await recognizeDocument(blob);
+  if (page === null) return null;
+  return {
+    text: page.text,
+    confidence: page.confidence,
+    receipt: parseReceiptText(page, { hstRate }),
+  };
 }

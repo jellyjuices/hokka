@@ -14,7 +14,7 @@ export type SyncedRow = {
 
 export type TransactionRow = SyncedRow & {
   id: string;
-  document_id: string | null;
+  document_ids: string[];
   direction: TransactionDirection;
   counterparty: string;
   txn_date: string;

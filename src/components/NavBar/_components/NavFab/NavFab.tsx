@@ -1,11 +1,11 @@
 import { Icon } from "@/src/components/Icon";
-import * as styles from "./NavFab.styles";
+import { FabLink } from "./NavFab.styles";
 
 export function NavFab() {
   return (
-    <styles.Root href="/new">
-      New
+    <FabLink href="/transaction/new" aria-label="New transaction">
+      New transaction
       <Icon name="plus" size={24} />
-    </styles.Root>
+    </FabLink>
   );
 }

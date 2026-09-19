@@ -5,9 +5,14 @@ export type CalendarProps = {
   onSelect: (date: Date) => void;
 };
 
+export type DateTone = "outline" | "soft";
+
 export type DatePickerProps = {
   id: string;
   name: string;
   defaultValue?: string;
+  value?: string;
+  onChange?: (isoDate: string) => void;
   placeholder?: string;
+  tone?: DateTone;
 };

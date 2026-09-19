@@ -2,39 +2,49 @@
 
 import styled from "@emotion/styled";
 import Link from "next/link";
-import { theme } from "@/src/lib/theme";
+import { theme, hoverFill } from "@/src/lib/theme";
 import { transientProps } from "@/src/lib/styled";
 
-export const Root = styled(Link, transientProps)<{ $isCollapsed: boolean }>`
+export const AccountLink = styled(Link, transientProps)<{
+  $isCollapsed: boolean;
+  $isSelected: boolean;
+}>`
   display: flex;
   align-items: center;
   gap: ${({ $isCollapsed }) => ($isCollapsed ? "0" : theme.space.md)};
-  align-self: ${({ $isCollapsed }) => ($isCollapsed ? "center" : "flex-start")};
+  align-self: ${({ $isCollapsed }) => ($isCollapsed ? "center" : "stretch")};
+  justify-content: ${({ $isCollapsed }) => ($isCollapsed ? "center" : "flex-start")};
+  width: ${({ $isCollapsed }) => ($isCollapsed ? "48px" : "100%")};
+  height: 48px;
+  padding: ${({ $isCollapsed }) => ($isCollapsed ? "0" : `0 ${theme.space.md}`)};
   border-radius: ${theme.borderRadius.full};
-  transition: opacity ${theme.motion.fast} ease;
+  box-shadow: ${({ $isSelected }) =>
+    $isSelected ? `inset 0 0 0 2px ${theme.foreground.accent}` : "none"};
+  transition:
+    background ${theme.motion.fast} ease,
+    box-shadow ${theme.motion.fast} ease,
+    width ${theme.motion.base} ease,
+    padding ${theme.motion.base} ease;
 
   &:hover {
-    opacity: 0.82;
+    background: ${hoverFill("transparent")};
   }
 `;
 
-export const Avatar = styled.span<{ $isCollapsed: boolean }>`
+export const AccountAvatar = styled.span`
   display: grid;
   place-items: center;
   flex: 0 0 auto;
-  width: ${({ $isCollapsed }) => ($isCollapsed ? "48px" : "32px")};
-  height: ${({ $isCollapsed }) => ($isCollapsed ? "48px" : "32px")};
+  width: 32px;
+  height: 32px;
   border-radius: ${theme.borderRadius.full};
   background: ${theme.surface.accentSecondary};
   color: ${theme.foreground.accent};
-  font-size: ${({ $isCollapsed }) => ($isCollapsed ? theme.fontSize.md : theme.fontSize.sm)};
+  font-size: ${theme.fontSize.sm};
   font-weight: 500;
-  transition:
-    width ${theme.motion.base} ease,
-    height ${theme.motion.base} ease;
 `;
 
-export const Label = styled.span<{ $isCollapsed: boolean }>`
+export const AccountLabel = styled.span<{ $isCollapsed: boolean }>`
   overflow: hidden;
   white-space: nowrap;
   font-size: ${theme.fontSize.md};

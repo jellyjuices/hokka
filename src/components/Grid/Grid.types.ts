@@ -12,3 +12,10 @@ export type GridItemProps = {
   rowSpan?: number;
   children: ReactNode;
 };
+
+export type GridCellSpans = {
+  $span: number;
+  $spanTablet: number;
+  $spanMobile: number;
+  $rowSpan: number;
+};

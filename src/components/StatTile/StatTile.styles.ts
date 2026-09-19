@@ -29,7 +29,7 @@ const sizes: Record<StatTileSize, ReturnType<typeof css>> = {
   `,
 };
 
-export const Root = styled.div<{ $tone: StatTileTone; $size: StatTileSize }>`
+export const TileSurface = styled.div<{ $tone: StatTileTone; $size: StatTileSize }>`
   position: relative;
   display: flex;
   flex-direction: column;
@@ -41,7 +41,7 @@ export const Root = styled.div<{ $tone: StatTileTone; $size: StatTileSize }>`
   ${({ $size }) => sizes[$size]};
 `;
 
-export const Label = styled.span`
+export const TileLabel = styled.span`
   display: flex;
   align-items: center;
   gap: ${theme.space.sm};
@@ -50,7 +50,7 @@ export const Label = styled.span`
   color: inherit;
 `;
 
-export const Value = styled.strong<{ $size: StatTileSize }>`
+export const TileValue = styled.strong<{ $size: StatTileSize }>`
   font-family: ${theme.fontFamily.display};
   font-size: ${({ $size }) => ($size === "display" ? theme.fontSize["4xl"] : theme.fontSize["3xl"])};
   font-weight: 500;
@@ -59,13 +59,13 @@ export const Value = styled.strong<{ $size: StatTileSize }>`
   font-variant-numeric: tabular-nums;
 `;
 
-export const Caption = styled.span<{ $tone: StatTileTone }>`
+export const TileCaption = styled.span<{ $tone: StatTileTone }>`
   font-size: ${theme.fontSize.sm};
   color: ${({ $tone }) => ($tone === "accent" ? "inherit" : theme.foreground.secondary)};
   opacity: ${({ $tone }) => ($tone === "accent" ? 0.86 : 1)};
 `;
 
-export const Badge = styled.div`
+export const TileBadge = styled.div`
   position: absolute;
   top: ${theme.space.lg};
   right: ${theme.space.lg};

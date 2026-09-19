@@ -1,14 +1,14 @@
 import { Icon } from "@/src/components/Icon";
-import * as styles from "./EmptyState.styles";
+import { EmptyStateDescription, EmptyStateLayout, EmptyStateTitle } from "./EmptyState.styles";
 import type { EmptyStateProps } from "./EmptyState.types";
 
 export function EmptyState({ icon, title, description, action }: EmptyStateProps) {
   return (
-    <styles.Root>
-      <Icon name={icon} size={32} weight="duotone" />
-      <styles.Title>{title}</styles.Title>
-      <styles.Description>{description}</styles.Description>
+    <EmptyStateLayout>
+      <Icon name={icon} size={32} weight="fill" />
+      <EmptyStateTitle>{title}</EmptyStateTitle>
+      {description && <EmptyStateDescription>{description}</EmptyStateDescription>}
       {action}
-    </styles.Root>
+    </EmptyStateLayout>
   );
 }

@@ -1,9 +1,9 @@
 "use client";
 
 import styled from "@emotion/styled";
-import { theme } from "@/src/lib/theme";
+import { theme, hoverFill } from "@/src/lib/theme";
 
-export const Action = styled.button`
+export const ObligationAction = styled.button`
   display: grid;
   place-items: center;
   width: 36px;
@@ -14,4 +14,9 @@ export const Action = styled.button`
   background: ${theme.surface.primary};
   color: ${theme.foreground.accent};
   cursor: pointer;
+  transition: background ${theme.motion.fast} ease;
+
+  &:hover {
+    background: ${hoverFill(theme.surface.primary)};
+  }
 `;

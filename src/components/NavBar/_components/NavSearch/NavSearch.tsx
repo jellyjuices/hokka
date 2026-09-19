@@ -4,7 +4,13 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import type { ChangeEvent, FormEvent } from "react";
 import { Icon } from "@/src/components/Icon";
-import * as styles from "./NavSearch.styles";
+import {
+  SearchButton,
+  SearchClearButton,
+  SearchForm,
+  SearchGlyph,
+  SearchInput,
+} from "./NavSearch.styles";
 import type { NavSearchProps } from "./NavSearch.types";
 
 export function NavSearch({ isCollapsed, inputRef, onActivate }: NavSearchProps) {
@@ -29,18 +35,18 @@ export function NavSearch({ isCollapsed, inputRef, onActivate }: NavSearchProps)
 
   if (isCollapsed) {
     return (
-      <styles.CollapsedButton type="button" onClick={onActivate} aria-label="Search">
+      <SearchButton type="button" onClick={onActivate} aria-label="Search">
         <Icon name="search" size={24} />
-      </styles.CollapsedButton>
+      </SearchButton>
     );
   }
 
   return (
-    <styles.Form role="search" onSubmit={handleSubmit}>
-      <styles.Glyph>
+    <SearchForm role="search" onSubmit={handleSubmit}>
+      <SearchGlyph>
         <Icon name="search" size={24} />
-      </styles.Glyph>
-      <styles.Input
+      </SearchGlyph>
+      <SearchInput
         ref={inputRef}
         type="search"
         value={query}
@@ -49,10 +55,10 @@ export function NavSearch({ isCollapsed, inputRef, onActivate }: NavSearchProps)
         aria-label="Search transactions"
       />
       {query !== "" && (
-        <styles.Clear type="button" onClick={handleClear} aria-label="Clear search">
+        <SearchClearButton type="button" onClick={handleClear} aria-label="Clear search">
           <Icon name="close" size={18} />
-        </styles.Clear>
+        </SearchClearButton>
       )}
-    </styles.Form>
+    </SearchForm>
   );
 }

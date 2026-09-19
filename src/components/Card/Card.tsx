@@ -1,16 +1,16 @@
-import * as styles from "./Card.styles";
+import { CardHeader, CardSurface, CardTitle } from "./Card.styles";
 import type { CardProps } from "./Card.types";
 
 export function Card({ title, action, children }: CardProps) {
   return (
-    <styles.Root>
+    <CardSurface>
       {(title || action) && (
-        <styles.Header>
-          {title && <styles.Title>{title}</styles.Title>}
+        <CardHeader>
+          {title && <CardTitle>{title}</CardTitle>}
           {action}
-        </styles.Header>
+        </CardHeader>
       )}
       {children}
-    </styles.Root>
+    </CardSurface>
   );
 }

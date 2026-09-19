@@ -20,21 +20,21 @@ const visibilities: Record<ActivityVisibility, ReturnType<typeof css>> = {
   `,
 };
 
-export const Root = styled.section<{ $visibility: ActivityVisibility }>`
+export const ActivitySection = styled.section<{ $visibility: ActivityVisibility }>`
   display: flex;
   flex-direction: column;
   gap: ${theme.space.sm};
   ${({ $visibility }) => visibilities[$visibility]};
 `;
 
-export const Title = styled.h2`
+export const ActivityTitle = styled.h2`
   margin: 0 0 ${theme.space.xs};
   font-size: ${theme.fontSize.lg};
   font-weight: 500;
   letter-spacing: -0.01em;
 `;
 
-export const Items = styled.ul`
+export const ActivityItems = styled.ul`
   display: flex;
   flex-direction: column;
   gap: ${theme.space.sm};
@@ -43,6 +43,6 @@ export const Items = styled.ul`
   list-style: none;
 `;
 
-export const Footer = styled.div`
+export const ActivityFooter = styled.div`
   margin-top: ${theme.space.sm};
 `;

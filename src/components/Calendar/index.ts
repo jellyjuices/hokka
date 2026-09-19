@@ -1,2 +1,2 @@
 export { Calendar, DatePicker } from "./Calendar";
-export type { CalendarProps, DatePickerProps } from "./Calendar.types";
+export type { CalendarProps, DatePickerProps, DateTone } from "./Calendar.types";

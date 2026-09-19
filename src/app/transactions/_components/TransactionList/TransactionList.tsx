@@ -1,42 +1,77 @@
 "use client";
 
-import { Card } from "@/src/components/Card";
-import { EmptyState } from "@/src/components/EmptyState";
+import { useMemo, useState } from "react";
 import { LinkButton } from "@/src/components/Button";
+import { EmptyState } from "@/src/components/EmptyState";
+import { Menu } from "@/src/components/Menu";
+import { TransactionCard } from "@/src/components/TransactionCard";
 import { useLedger, useSyncState } from "@/src/context/Ledger";
-import { formatCurrency, formatDate } from "@/src/lib/format";
-import * as styles from "./TransactionList.styles";
+import { NO_FILTER, filterTransactions, transactionYears } from "@/src/lib/filters";
+import { ConfirmDelete } from "./_components/ConfirmDelete";
+import { TransactionFilters } from "./_components/TransactionFilters";
+import { ListItems, ListLayout, ListNotice } from "./TransactionList.styles";
+import { useTransactionActions } from "./useTransactionActions";
 
 export function TransactionList() {
   const { transactions, isHydrated } = useLedger();
   const { pendingCount } = useSyncState();
+  const [filter, setFilter] = useState(NO_FILTER);
+  const actions = useTransactionActions();
+
+  const years = useMemo(() => transactionYears(transactions), [transactions]);
+  const visible = useMemo(() => filterTransactions(transactions, filter), [transactions, filter]);
 
   if (transactions.length === 0) {
     return (
-      <Card>
-        <EmptyState
-          icon="receipt"
-          title={isHydrated ? "No transactions yet" : "Loading transactions…"}
-          description="Add one by hand, or capture a receipt and confirm the parsed fields."
-          action={
-            <LinkButton href="/transactions/new" tone="accent">
-              Add transaction
-            </LinkButton>
-          }
-        />
-      </Card>
+      <EmptyState
+        icon="receipt"
+        title={isHydrated ? "No transactions yet" : "Loading transactions…"}
+        description="Log an invoice or a receipt and the HST split is tracked from there."
+        action={
+          <LinkButton href="/transaction/new" tone="accent" trailingIcon="plus">
+            New transaction
+          </LinkButton>
+        }
+      />
     );
   }
 
   return (
-    <Card title={pendingCount === 0 ? undefined : `${pendingCount} waiting to sync`}>
-      {transactions.map((transaction) => (
-        <styles.Row key={transaction.id}>
-          <span>{transaction.counterparty}</span>
-          <span>{formatDate(transaction.txnDate)}</span>
-          <span>{formatCurrency(transaction.total)}</span>
-        </styles.Row>
-      ))}
-    </Card>
+    <ListLayout>
+      <TransactionFilters
+        filter={filter}
+        years={years}
+        resultCount={visible.length}
+        onChange={setFilter}
+      />
+      {pendingCount > 0 && <ListNotice>{`${pendingCount} waiting to sync`}</ListNotice>}
+      {visible.length === 0 ? (
+        <EmptyState
+          icon="filter"
+          title="Nothing matches these filters"
+          description="Widen the type, category or year to see more."
+        />
+      ) : (
+        <ListItems>
+          {visible.map((transaction) => (
+            <li key={transaction.id}>
+              <TransactionCard
+                transaction={transaction}
+                action={<Menu label="Transaction options" items={actions.itemsFor(transaction)} />}
+              />
+            </li>
+          ))}
+        </ListItems>
+      )}
+      <ConfirmDelete
+        open={actions.pending !== null}
+        title={actions.pending?.counterparty || "This transaction"}
+        isDeleting={actions.isDeleting}
+        onOpenChange={(open) => {
+          if (!open) actions.cancelDelete();
+        }}
+        onConfirm={() => void actions.confirmDelete()}
+      />
+    </ListLayout>
   );
 }

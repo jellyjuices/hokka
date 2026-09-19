@@ -3,8 +3,9 @@
 import styled from "@emotion/styled";
 import { theme } from "@/src/lib/theme";
 import { mediaDown } from "@/src/lib/breakpoints";
+import type { GridCellSpans } from "./Grid.types";
 
-export const Root = styled.div`
+export const GridLayout = styled.div`
   display: grid;
   grid-template-columns: repeat(${theme.layout.columns}, minmax(0, 1fr));
   column-gap: ${theme.layout.gapX};
@@ -13,7 +14,11 @@ export const Root = styled.div`
   align-content: start;
 `;
 
-export const Item = styled.div`
+export const GridCell = styled.div<GridCellSpans>`
+  --span: ${({ $span }) => $span};
+  --span-tablet: ${({ $spanTablet }) => $spanTablet};
+  --span-mobile: ${({ $spanMobile }) => $spanMobile};
+  --row-span: ${({ $rowSpan }) => $rowSpan};
   grid-column: span var(--span) / span var(--span);
   grid-row: span var(--row-span) / span var(--row-span);
   min-width: 0;

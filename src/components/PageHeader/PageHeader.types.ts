@@ -3,6 +3,7 @@ import type { IconName } from "@/src/components/Icon";
 
 export type PageHeaderProps = {
   title: string;
+  backHref?: string;
   mobileTitle?: string;
   description?: string;
   icon?: IconName;

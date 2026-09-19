@@ -3,7 +3,7 @@
 import styled from "@emotion/styled";
 import { theme } from "@/src/lib/theme";
 
-export const Root = styled.div`
+export const MetricLayout = styled.div`
   display: flex;
   align-items: center;
   gap: ${theme.space.sm};
@@ -13,7 +13,7 @@ export const Root = styled.div`
   background: ${theme.surface.secondary};
 `;
 
-export const Label = styled.span`
+export const MetricLabel = styled.span`
   flex: 1 1 auto;
   min-width: 0;
   overflow: hidden;
@@ -23,14 +23,14 @@ export const Label = styled.span`
   color: ${theme.foreground.secondary};
 `;
 
-export const Glyph = styled.span`
+export const MetricGlyph = styled.span`
   display: grid;
   place-items: center;
   flex: 0 0 auto;
   color: ${theme.foreground.secondary};
 `;
 
-export const Value = styled.strong`
+export const MetricValue = styled.strong`
   flex: 0 0 auto;
   font-family: ${theme.fontFamily.display};
   font-size: ${theme.fontSize.xl};

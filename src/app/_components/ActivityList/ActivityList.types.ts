@@ -14,7 +14,7 @@ export type ActivityListProps = {
   title: string;
   items: ActivityItem[];
   emptyTitle: string;
-  emptyDescription: string;
+  emptyDescription?: string;
   ctaHref: string;
   ctaLabel: string;
   visibility?: ActivityVisibility;

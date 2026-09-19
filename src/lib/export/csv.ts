@@ -11,7 +11,7 @@ const COLUMNS = [
   "total",
   "claimable_pct",
   "tax_period_id",
-  "document_id",
+  "document_ids",
   "notes",
 ];
 
@@ -33,7 +33,7 @@ function toRow(transaction: Transaction) {
     transaction.total,
     transaction.claimablePct,
     transaction.taxPeriodId,
-    transaction.documentId,
+    transaction.documentIds.join(" "),
     transaction.notes,
   ]
     .map(escapeCell)

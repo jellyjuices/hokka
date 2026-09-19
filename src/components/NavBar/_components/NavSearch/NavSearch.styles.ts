@@ -1,9 +1,9 @@
 "use client";
 
 import styled from "@emotion/styled";
-import { theme } from "@/src/lib/theme";
+import { theme, hoverFill } from "@/src/lib/theme";
 
-export const CollapsedButton = styled.button`
+export const SearchButton = styled.button`
   display: grid;
   place-items: center;
   align-self: center;
@@ -15,10 +15,10 @@ export const CollapsedButton = styled.button`
   background: ${theme.surface.primary};
   color: ${theme.foreground.primary};
   cursor: pointer;
-  transition: filter ${theme.motion.fast};
+  transition: background ${theme.motion.fast} ease;
 
   &:hover {
-    filter: brightness(0.96);
+    background: ${hoverFill(theme.surface.primary)};
   }
 
   &:focus-visible {
@@ -27,7 +27,7 @@ export const CollapsedButton = styled.button`
   }
 `;
 
-export const Form = styled.form`
+export const SearchForm = styled.form`
   display: flex;
   align-items: center;
   gap: ${theme.space.sm};
@@ -43,13 +43,13 @@ export const Form = styled.form`
   }
 `;
 
-export const Glyph = styled.span`
+export const SearchGlyph = styled.span`
   display: grid;
   place-items: center;
   flex: 0 0 auto;
 `;
 
-export const Input = styled.input`
+export const SearchInput = styled.input`
   flex: 1 1 auto;
   min-width: 0;
   border: none;
@@ -66,7 +66,7 @@ export const Input = styled.input`
   }
 `;
 
-export const Clear = styled.button`
+export const SearchClearButton = styled.button`
   display: grid;
   place-items: center;
   flex: 0 0 auto;
@@ -80,6 +80,7 @@ export const Clear = styled.button`
   cursor: pointer;
 
   &:hover {
+    background: ${hoverFill("transparent")};
     color: ${theme.foreground.primary};
   }
 `;

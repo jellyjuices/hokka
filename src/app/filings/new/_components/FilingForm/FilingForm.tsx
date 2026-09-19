@@ -9,7 +9,7 @@ import { Field, Select, TextInput } from "@/src/components/Field";
 import { useLedger, useLedgerActions } from "@/src/context/Ledger";
 import type { FilingType } from "@/src/data/domain.types";
 import { currentPeriod, periodLabel } from "@/src/lib/periods";
-import * as styles from "./FilingForm.styles";
+import { FilingActions, FilingNotice } from "./FilingForm.styles";
 
 function todayIsoDate() {
   return new Date().toISOString().slice(0, 10);
@@ -78,13 +78,13 @@ export function FilingForm() {
         <Field label="Reference number" htmlFor="referenceNumber">
           <TextInput id="referenceNumber" name="referenceNumber" />
         </Field>
-        {error === null ? null : <styles.Notice role="alert">{error}</styles.Notice>}
-        <styles.Actions>
+        {error === null ? null : <FilingNotice role="alert">{error}</FilingNotice>}
+        <FilingActions>
           <LinkButton href="/filings">Cancel</LinkButton>
           <Button type="submit" disabled={isSaving}>
             {isSaving ? "Saving…" : "Save filing"}
           </Button>
-        </styles.Actions>
+        </FilingActions>
       </Card>
     </form>
   );

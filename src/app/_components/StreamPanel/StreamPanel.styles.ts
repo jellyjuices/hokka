@@ -3,7 +3,7 @@
 import styled from "@emotion/styled";
 import { theme } from "@/src/lib/theme";
 
-export const Root = styled.div`
+export const StreamStack = styled.div`
   display: flex;
   flex-direction: column;
   gap: ${theme.space.md};

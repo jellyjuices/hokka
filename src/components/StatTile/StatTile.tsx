@@ -1,5 +1,5 @@
 import { Icon } from "@/src/components/Icon";
-import * as styles from "./StatTile.styles";
+import { TileBadge, TileCaption, TileLabel, TileSurface, TileValue } from "./StatTile.styles";
 import type { StatTileProps } from "./StatTile.types";
 
 export function StatTile({
@@ -12,14 +12,14 @@ export function StatTile({
   badge,
 }: StatTileProps) {
   return (
-    <styles.Root $tone={tone} $size={size}>
-      {badge && <styles.Badge>{badge}</styles.Badge>}
-      <styles.Label>
+    <TileSurface $tone={tone} $size={size}>
+      {badge && <TileBadge>{badge}</TileBadge>}
+      <TileLabel>
         {icon && <Icon name={icon} size={22} />}
         {label}
-      </styles.Label>
-      <styles.Value $size={size}>{value}</styles.Value>
-      {caption && <styles.Caption $tone={tone}>{caption}</styles.Caption>}
-    </styles.Root>
+      </TileLabel>
+      <TileValue $size={size}>{value}</TileValue>
+      {caption && <TileCaption $tone={tone}>{caption}</TileCaption>}
+    </TileSurface>
   );
 }

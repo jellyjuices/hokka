@@ -2,10 +2,10 @@
 
 import styled from "@emotion/styled";
 import Link from "next/link";
-import { theme } from "@/src/lib/theme";
+import { theme, hoverFill } from "@/src/lib/theme";
 import { transientProps } from "@/src/lib/styled";
 
-export const Root = styled(Link, transientProps)<{ $isCollapsed: boolean }>`
+export const NewButtonLink = styled(Link, transientProps)<{ $isCollapsed: boolean }>`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -20,17 +20,17 @@ export const Root = styled(Link, transientProps)<{ $isCollapsed: boolean }>`
   font-weight: 500;
   transition:
     height ${theme.motion.base} ease,
-    filter ${theme.motion.fast} ease;
+    background ${theme.motion.fast} ease;
 
   &:hover {
-    filter: brightness(1.06);
+    background: ${hoverFill(theme.surface.accent)};
   }
 `;
 
-export const Label = styled.span<{ $isCollapsed: boolean }>`
+export const NewButtonLabel = styled.span<{ $isCollapsed: boolean }>`
   overflow: hidden;
   white-space: nowrap;
-  max-width: ${({ $isCollapsed }) => ($isCollapsed ? "0" : "120px")};
+  max-width: ${({ $isCollapsed }) => ($isCollapsed ? "0" : "180px")};
   margin-left: ${({ $isCollapsed }) => ($isCollapsed ? "0" : theme.space.sm)};
   opacity: ${({ $isCollapsed }) => ($isCollapsed ? 0 : 1)};
   transition:

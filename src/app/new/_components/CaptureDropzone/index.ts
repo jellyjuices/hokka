@@ -1,1 +1,0 @@
-export { CaptureDropzone } from "./CaptureDropzone";

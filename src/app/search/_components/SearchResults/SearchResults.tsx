@@ -1,12 +1,11 @@
 "use client";
 
-import { Card } from "@/src/components/Card";
-import { EmptyState } from "@/src/components/EmptyState";
 import { LinkButton } from "@/src/components/Button";
+import { EmptyState } from "@/src/components/EmptyState";
+import { TransactionCard } from "@/src/components/TransactionCard";
 import { useLedger } from "@/src/context/Ledger";
-import { formatCurrency, formatDate } from "@/src/lib/format";
 import { searchTransactions } from "@/src/lib/search";
-import * as styles from "./SearchResults.styles";
+import { ResultCount, ResultItems, ResultLayout } from "./SearchResults.styles";
 import type { SearchResultsProps } from "./SearchResults.types";
 
 export function SearchResults({ query }: SearchResultsProps) {
@@ -15,30 +14,29 @@ export function SearchResults({ query }: SearchResultsProps) {
 
   if (matches.length === 0) {
     return (
-      <Card>
-        <EmptyState
-          icon="search"
-          title={query === "" ? "Nothing searched yet" : "No matches"}
-          description="Search looks at counterparty, category and notes across every recorded transaction."
-          action={
-            <LinkButton href="/transactions/new" tone="accent">
-              Add transaction
-            </LinkButton>
-          }
-        />
-      </Card>
+      <EmptyState
+        icon="search"
+        title={query === "" ? "Nothing searched yet" : "No matches"}
+        description="Search looks at counterparty, category and notes across every recorded transaction."
+        action={
+          <LinkButton href="/transaction/new" tone="accent" trailingIcon="plus">
+            New transaction
+          </LinkButton>
+        }
+      />
     );
   }
 
   return (
-    <Card title={`${matches.length} matches`}>
-      {matches.map((transaction) => (
-        <styles.Row key={transaction.id}>
-          <styles.Counterparty>{transaction.counterparty}</styles.Counterparty>
-          <styles.Meta>{formatDate(transaction.txnDate)}</styles.Meta>
-          <styles.Amount>{formatCurrency(transaction.total)}</styles.Amount>
-        </styles.Row>
-      ))}
-    </Card>
+    <ResultLayout>
+      <ResultCount>{`${matches.length} ${matches.length === 1 ? "match" : "matches"}`}</ResultCount>
+      <ResultItems>
+        {matches.map((transaction) => (
+          <li key={transaction.id}>
+            <TransactionCard transaction={transaction} />
+          </li>
+        ))}
+      </ResultItems>
+    </ResultLayout>
   );
 }

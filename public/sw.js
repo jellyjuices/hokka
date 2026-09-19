@@ -1,12 +1,11 @@
-const CACHE_NAME = "hokka-shell-v1";
+const CACHE_NAME = "hokka-shell-v2";
 
 const APP_SHELL = [
   "/",
   "/transactions",
-  "/transactions/new",
+  "/transaction/new",
   "/filings",
   "/filings/new",
-  "/new",
   "/search",
   "/settings",
   "/manifest.webmanifest",
@@ -42,6 +41,7 @@ function isPrecachedAsset(url) {
   return (
     url.pathname.startsWith("/_next/static/") ||
     url.pathname.startsWith("/logo/") ||
+    url.pathname.startsWith("/ocr/") ||
     url.pathname.startsWith("/icons/")
   );
 }

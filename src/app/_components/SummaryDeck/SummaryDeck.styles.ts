@@ -4,7 +4,7 @@ import styled from "@emotion/styled";
 import { theme } from "@/src/lib/theme";
 import { mediaDown } from "@/src/lib/breakpoints";
 
-export const Root = styled.div`
+export const DeckTrack = styled.div`
   display: contents;
 
   ${mediaDown("smTablet")} {

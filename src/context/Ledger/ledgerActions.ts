@@ -1,5 +1,5 @@
 import { captureDocument } from "@/src/data/capture";
-import type { DocumentKind, Filing, TaxSettings, Transaction } from "@/src/data/domain.types";
+import type { Filing, TaxSettings, Transaction } from "@/src/data/domain.types";
 import { getLocalSettings } from "@/src/data/local";
 import { ensurePeriod, repository } from "@/src/data/repository";
 import { newId } from "@/src/lib/id";
@@ -39,15 +39,11 @@ function closePeriod(id: string) {
   return repository.closePeriod(id);
 }
 
-function capture(file: File, kind: DocumentKind) {
-  return captureDocument(file, kind);
-}
-
 export const ledgerActions: LedgerActionsValue = {
   saveTransaction,
   deleteTransaction,
   saveFiling,
   closePeriod,
   updateSettings,
-  captureDocument: capture,
+  captureDocument,
 };

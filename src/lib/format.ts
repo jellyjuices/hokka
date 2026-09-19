@@ -11,3 +11,10 @@ export function formatPercent(fraction: number) {
     fraction,
   );
 }
+
+export function formatAmount(amount: number) {
+  return new Intl.NumberFormat("en-CA", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(amount);
+}

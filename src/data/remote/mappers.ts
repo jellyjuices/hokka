@@ -10,7 +10,7 @@ import type {
 export function transactionToRow(transaction: Transaction): Omit<TransactionRow, "updated_at"> {
   return {
     id: transaction.id,
-    document_id: transaction.documentId,
+    document_ids: transaction.documentIds,
     direction: transaction.direction,
     counterparty: transaction.counterparty,
     txn_date: transaction.txnDate,
@@ -28,7 +28,7 @@ export function transactionToRow(transaction: Transaction): Omit<TransactionRow,
 export function transactionFromRow(row: TransactionRow): Transaction {
   return {
     id: row.id,
-    documentId: row.document_id,
+    documentIds: row.document_ids ?? [],
     direction: row.direction,
     counterparty: row.counterparty,
     txnDate: row.txn_date,

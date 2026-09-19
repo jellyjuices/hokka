@@ -3,7 +3,7 @@
 import styled from "@emotion/styled";
 import { theme } from "@/src/lib/theme";
 
-export const Root = styled.span`
+export const ChipTag = styled.span`
   display: inline-flex;
   align-items: center;
   padding: ${theme.space.xs} ${theme.space.sm};

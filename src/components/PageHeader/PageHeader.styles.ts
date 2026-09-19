@@ -1,18 +1,21 @@
 "use client";
 
 import styled from "@emotion/styled";
-import { theme } from "@/src/lib/theme";
+import Link from "next/link";
+import { theme, hoverFill } from "@/src/lib/theme";
 import { mediaDown, mediaUp } from "@/src/lib/breakpoints";
 
-export const Root = styled.header`
+export const HeaderBar = styled.header`
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: ${theme.space.md};
-  margin-bottom: ${theme.space.lg};
+  padding: ${theme.space.lg} 0;
 `;
 
-export const Heading = styled.div`
+export const HeaderTitleBlock = styled.div``;
+
+export const HeaderHeading = styled.div`
   display: flex;
   align-items: center;
   gap: ${theme.space.sm};
@@ -20,7 +23,7 @@ export const Heading = styled.div`
   color: ${theme.foreground.primary};
 `;
 
-export const Title = styled.h1`
+export const HeaderTitle = styled.h1`
   margin: 0;
   font-family: ${theme.fontFamily.display};
   font-size: ${theme.fontSize["3xl"]};
@@ -29,19 +32,36 @@ export const Title = styled.h1`
   line-height: 1.1;
 `;
 
-export const WideTitle = styled.span`
+export const HeaderWideTitle = styled.span`
   ${mediaDown("smTablet")} {
     display: none;
   }
 `;
 
-export const NarrowTitle = styled.span`
+export const HeaderNarrowTitle = styled.span`
   ${mediaUp("smTablet")} {
     display: none;
   }
 `;
 
-export const Glyph = styled.span`
+export const HeaderBack = styled(Link)`
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  margin-left: calc(${theme.space.sm} * -1);
+  flex: 0 0 auto;
+  border-radius: ${theme.borderRadius.full};
+  color: ${theme.foreground.primary};
+  transition: background ${theme.motion.fast} ease;
+
+  &:hover {
+    background: ${hoverFill("transparent")};
+  }
+`;
+
+export const HeaderGlyph = styled.span`
   display: grid;
   place-items: center;
   flex: 0 0 auto;
@@ -51,14 +71,14 @@ export const Glyph = styled.span`
   }
 `;
 
-export const Controls = styled.div`
+export const HeaderControls = styled.div`
   display: flex;
   align-items: center;
   gap: ${theme.space.sm};
   flex: 0 0 auto;
 `;
 
-export const Description = styled.p`
+export const HeaderDescription = styled.p`
   margin: ${theme.space.xs} 0 0;
   color: ${theme.foreground.secondary};
   font-size: ${theme.fontSize.sm};

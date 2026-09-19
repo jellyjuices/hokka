@@ -7,6 +7,7 @@ import type {
   TaxSettings,
   Transaction,
 } from "@/src/data/domain.types";
+import type { ReceiptReading } from "@/src/lib/ocr";
 import type { SyncStatus } from "@/src/lib/sync";
 
 export type LedgerProviderProps = {
@@ -37,7 +38,11 @@ export type LedgerActionsValue = {
   saveFiling: (draft: FilingDraft) => Promise<Filing>;
   closePeriod: (id: string) => Promise<TaxPeriod>;
   updateSettings: (patch: Partial<TaxSettings>) => Promise<TaxSettings>;
-  captureDocument: (file: File, kind: DocumentKind) => Promise<StoredDocument>;
+  captureDocument: (
+    file: File,
+    kind: DocumentKind,
+    reading: ReceiptReading | null,
+  ) => Promise<StoredDocument>;
 };
 
 export type SyncStateValue = {

@@ -3,11 +3,11 @@
 import styled from "@emotion/styled";
 import Image from "next/image";
 import Link from "next/link";
-import { theme } from "@/src/lib/theme";
+import { theme, hoverFill } from "@/src/lib/theme";
 import { transientProps } from "@/src/lib/styled";
 import { mediaDown } from "@/src/lib/breakpoints";
 
-export const Root = styled.nav<{ $isCollapsed: boolean }>`
+export const Rail = styled.nav<{ $isCollapsed: boolean }>`
   --nav-item-size: 48px;
   position: sticky;
   top: ${theme.layout.gutter};
@@ -30,14 +30,14 @@ export const Root = styled.nav<{ $isCollapsed: boolean }>`
   }
 `;
 
-export const Head = styled.div<{ $isCollapsed: boolean }>`
+export const RailHead = styled.div<{ $isCollapsed: boolean }>`
   display: flex;
   align-items: center;
   justify-content: ${({ $isCollapsed }) => ($isCollapsed ? "center" : "flex-start")};
   padding: ${theme.space.sm} 0;
 `;
 
-export const Brand = styled(Link, transientProps)<{ $isCollapsed: boolean }>`
+export const RailBrand = styled(Link, transientProps)<{ $isCollapsed: boolean }>`
   display: flex;
   align-items: center;
   min-width: 0;
@@ -45,11 +45,11 @@ export const Brand = styled(Link, transientProps)<{ $isCollapsed: boolean }>`
   border-radius: ${theme.borderRadius.sm};
 `;
 
-export const BrandMark = styled(Image)`
+export const RailBrandMark = styled(Image)`
   flex: 0 0 auto;
 `;
 
-export const BrandName = styled.span<{ $isCollapsed: boolean }>`
+export const RailBrandName = styled.span<{ $isCollapsed: boolean }>`
   overflow: hidden;
   white-space: nowrap;
   font-family: ${theme.fontFamily.display};
@@ -65,7 +65,7 @@ export const BrandName = styled.span<{ $isCollapsed: boolean }>`
     opacity ${theme.motion.fast} ease;
 `;
 
-export const Items = styled.ul`
+export const RailItems = styled.ul`
   display: flex;
   flex-direction: column;
   gap: ${theme.space.sm};
@@ -74,7 +74,7 @@ export const Items = styled.ul`
   list-style: none;
 `;
 
-export const Item = styled(Link, transientProps)<{
+export const RailItem = styled(Link, transientProps)<{
   $isActive: boolean;
   $isCollapsed: boolean;
 }>`
@@ -96,11 +96,12 @@ export const Item = styled(Link, transientProps)<{
 
   &:hover {
     color: ${theme.foreground.accent};
-    background: ${theme.surface.accentSecondary};
+    background: ${({ $isActive }) =>
+      hoverFill($isActive ? theme.surface.accentSecondary : "transparent")};
   }
 `;
 
-export const ItemLabel = styled.span<{ $isCollapsed: boolean }>`
+export const RailItemLabel = styled.span<{ $isCollapsed: boolean }>`
   overflow: hidden;
   white-space: nowrap;
   font-size: ${theme.fontSize.md};
@@ -114,7 +115,7 @@ export const ItemLabel = styled.span<{ $isCollapsed: boolean }>`
     opacity ${theme.motion.fast} ease;
 `;
 
-export const Foot = styled.div`
+export const RailFoot = styled.div`
   display: flex;
   flex-direction: column;
   gap: ${theme.space.md};

@@ -6,7 +6,7 @@ import Link from "next/link";
 import { theme } from "@/src/lib/theme";
 import { mediaUp } from "@/src/lib/breakpoints";
 
-export const Root = styled.header`
+export const TopBar = styled.header`
   display: flex;
   align-items: center;
   padding-bottom: ${theme.space.lg};
@@ -16,7 +16,7 @@ export const Root = styled.header`
   }
 `;
 
-export const Brand = styled(Link)`
+export const TopBarBrand = styled(Link)`
   display: inline-flex;
   align-items: center;
   gap: ${theme.space.sm};
@@ -24,11 +24,11 @@ export const Brand = styled(Link)`
   border-radius: ${theme.borderRadius.sm};
 `;
 
-export const BrandMark = styled(Image)`
+export const TopBarBrandMark = styled(Image)`
   flex: 0 0 auto;
 `;
 
-export const BrandName = styled.span`
+export const TopBarBrandName = styled.span`
   font-family: ${theme.fontFamily.display};
   font-size: ${theme.fontSize["2xl"]};
   font-weight: 500;

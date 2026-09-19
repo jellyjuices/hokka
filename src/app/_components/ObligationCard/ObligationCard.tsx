@@ -3,7 +3,7 @@
 import { Icon } from "@/src/components/Icon";
 import { StatTile } from "@/src/components/StatTile";
 import { SwipeRow } from "@/src/components/SwipeRow";
-import * as styles from "./ObligationCard.styles";
+import { ObligationAction } from "./ObligationCard.styles";
 import type { ObligationCardProps } from "./ObligationCard.types";
 
 const TONES = {
@@ -39,9 +39,9 @@ export function ObligationCard({ obligation, onToggle }: ObligationCardProps) {
         caption={caption}
         badge={
           isActionable && (
-            <styles.Action type="button" onClick={handleToggle} aria-label={actionName}>
+            <ObligationAction type="button" onClick={handleToggle} aria-label={actionName}>
               <Icon name={actionIcon} size={18} weight="bold" />
-            </styles.Action>
+            </ObligationAction>
           )
         }
       />

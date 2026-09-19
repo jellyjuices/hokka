@@ -6,7 +6,7 @@ import { theme } from "@/src/lib/theme";
 import { transientProps } from "@/src/lib/styled";
 import { mediaUp } from "@/src/lib/breakpoints";
 
-export const Root = styled.nav`
+export const BottomBar = styled.nav`
   position: fixed;
   left: 0;
   right: 0;
@@ -25,7 +25,7 @@ export const Root = styled.nav`
   }
 `;
 
-export const Items = styled.ul`
+export const BottomBarItems = styled.ul`
   display: flex;
   flex: 1 1 auto;
   align-items: center;
@@ -41,7 +41,7 @@ export const Items = styled.ul`
   }
 `;
 
-export const Item = styled(Link, transientProps)<{ $isActive: boolean }>`
+export const BottomBarItem = styled(Link, transientProps)<{ $isActive: boolean }>`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -57,7 +57,7 @@ export const Item = styled(Link, transientProps)<{ $isActive: boolean }>`
     color ${theme.motion.fast} ease;
 `;
 
-export const ItemLabel = styled.span`
+export const BottomBarItemLabel = styled.span`
   overflow: hidden;
   max-width: 100%;
   font-size: ${theme.fontSize.xs};

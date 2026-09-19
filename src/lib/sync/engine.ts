@@ -5,34 +5,41 @@ import { pullIntoLocal } from "./pull";
 import { pushOutbox } from "./push";
 
 const PERIODIC_INTERVAL_MS = 5 * 60 * 1000;
-const RETRY_DELAY_MS = 30 * 1000;
+const RECONNECT_INTERVAL_MS = 3 * 60 * 1000;
 const QUEUE_DEBOUNCE_MS = 800;
 
 export function createSyncEngine(deps: SyncEngineDeps): SyncEngine {
   let isStarted = false;
   let inFlight: Promise<void> | null = null;
   let intervalId: number | null = null;
-  let retryId: number | null = null;
+  let reconnectId: number | null = null;
   let debounceId: number | null = null;
   let unsubscribeQueue: (() => void) | null = null;
+  let isWaitingForNetwork = false;
 
-  function clearRetry() {
-    if (retryId === null) return;
-    window.clearTimeout(retryId);
-    retryId = null;
+  function stopWaitingForNetwork() {
+    isWaitingForNetwork = false;
+    if (reconnectId === null) return;
+    window.clearInterval(reconnectId);
+    reconnectId = null;
   }
 
-  function scheduleRetry() {
-    clearRetry();
-    retryId = window.setTimeout(() => {
-      retryId = null;
-      void runSync();
-    }, RETRY_DELAY_MS);
+  // The `online` event is what resumes us; this interval only covers the case where the
+  // browser believes it is online but the server is not reachable, and the case where the
+  // event never fires. Nothing else retries while we are waiting.
+  function waitForNetwork() {
+    isWaitingForNetwork = true;
+    if (reconnectId !== null) return;
+    reconnectId = window.setInterval(() => {
+      if (!isOnline()) return;
+      void syncNow();
+    }, RECONNECT_INTERVAL_MS);
   }
 
   async function runSync() {
     if (!isOnline()) {
       deps.onStatusChanged("offline");
+      waitForNetwork();
       return;
     }
 
@@ -46,17 +53,17 @@ export function createSyncEngine(deps: SyncEngineDeps): SyncEngine {
 
       if (result.blocked) {
         deps.onStatusChanged("error");
-        scheduleRetry();
+        waitForNetwork();
         return;
       }
 
       deps.onErrorChanged(null);
       deps.onStatusChanged("idle");
-      clearRetry();
+      stopWaitingForNetwork();
     } catch (error) {
       deps.onErrorChanged(error instanceof Error ? error.message : "Sync failed");
       deps.onStatusChanged(isOnline() ? "error" : "offline");
-      scheduleRetry();
+      waitForNetwork();
     }
   }
 
@@ -69,27 +76,37 @@ export function createSyncEngine(deps: SyncEngineDeps): SyncEngine {
     return inFlight;
   }
 
+  // Background triggers stand down once a sync has failed; `syncNow` stays open so a
+  // button in the UI can still force an attempt.
+  function requestSync() {
+    if (isWaitingForNetwork) return;
+    void syncNow();
+  }
+
   function handleQueueChanged() {
     if (readOutbox().length === 0) return;
+    if (isWaitingForNetwork) return;
     if (debounceId !== null) window.clearTimeout(debounceId);
     debounceId = window.setTimeout(() => {
       debounceId = null;
-      void syncNow();
+      requestSync();
     }, QUEUE_DEBOUNCE_MS);
   }
 
   function handleOnline() {
+    stopWaitingForNetwork();
     deps.onStatusChanged("idle");
     void syncNow();
   }
 
   function handleOffline() {
     deps.onStatusChanged("offline");
+    waitForNetwork();
   }
 
   function handleVisibility() {
     if (document.visibilityState !== "visible") return;
-    void syncNow();
+    requestSync();
   }
 
   function start() {
@@ -99,9 +116,7 @@ export function createSyncEngine(deps: SyncEngineDeps): SyncEngine {
     window.addEventListener("offline", handleOffline);
     document.addEventListener("visibilitychange", handleVisibility);
     unsubscribeQueue = subscribeOutbox(handleQueueChanged);
-    intervalId = window.setInterval(() => {
-      void syncNow();
-    }, PERIODIC_INTERVAL_MS);
+    intervalId = window.setInterval(requestSync, PERIODIC_INTERVAL_MS);
     void syncNow();
   }
 
@@ -117,7 +132,7 @@ export function createSyncEngine(deps: SyncEngineDeps): SyncEngine {
     intervalId = null;
     if (debounceId !== null) window.clearTimeout(debounceId);
     debounceId = null;
-    clearRetry();
+    stopWaitingForNetwork();
   }
 
   return { start, stop, syncNow };

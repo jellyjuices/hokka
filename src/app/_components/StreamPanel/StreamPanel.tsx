@@ -1,6 +1,6 @@
 import { MetricRow } from "@/src/components/MetricRow";
 import { StatTile } from "@/src/components/StatTile";
-import * as styles from "./StreamPanel.styles";
+import { StreamStack } from "./StreamPanel.styles";
 import type { StreamPanelProps } from "./StreamPanel.types";
 
 export function StreamPanel({
@@ -12,9 +12,9 @@ export function StreamPanel({
   metricValue,
 }: StreamPanelProps) {
   return (
-    <styles.Root>
+    <StreamStack>
       <StatTile label={label} icon={icon} value={value} caption={caption} />
       <MetricRow icon="filings" label={metricLabel} value={metricValue} />
-    </styles.Root>
+    </StreamStack>
   );
 }

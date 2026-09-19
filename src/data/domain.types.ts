@@ -25,7 +25,7 @@ export type StoredDocument = {
 
 export type Transaction = {
   id: string;
-  documentId: string | null;
+  documentIds: string[];
   direction: TransactionDirection;
   counterparty: string;
   txnDate: string;

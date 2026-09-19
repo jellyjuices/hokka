@@ -4,7 +4,7 @@ import styled from "@emotion/styled";
 import { theme } from "@/src/lib/theme";
 import { mediaDown } from "@/src/lib/breakpoints";
 
-export const Root = styled.div`
+export const ShellLayout = styled.div`
   display: flex;
   align-items: flex-start;
   gap: ${theme.layout.railGap};
@@ -17,7 +17,7 @@ export const Root = styled.div`
   }
 `;
 
-export const Main = styled.main`
+export const ShellMain = styled.main`
   flex: 1 1 auto;
   min-width: 0;
   max-width: ${theme.layout.contentMax};

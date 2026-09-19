@@ -1,9 +1,21 @@
 import { Icon } from "@/src/components/Icon";
-import * as styles from "./PageHeader.styles";
+import {
+  HeaderBack,
+  HeaderBar,
+  HeaderControls,
+  HeaderDescription,
+  HeaderGlyph,
+  HeaderHeading,
+  HeaderNarrowTitle,
+  HeaderTitle,
+  HeaderTitleBlock,
+  HeaderWideTitle,
+} from "./PageHeader.styles";
 import type { PageHeaderProps } from "./PageHeader.types";
 
 export function PageHeader({
   title,
+  backHref,
   mobileTitle,
   description,
   icon,
@@ -11,27 +23,32 @@ export function PageHeader({
   action,
 }: PageHeaderProps) {
   return (
-    <styles.Root>
-      <div>
-        <styles.Heading>
-          {icon && (
-            <styles.Glyph>
-              <Icon name={icon} size={28} />
-            </styles.Glyph>
+    <HeaderBar>
+      <HeaderTitleBlock>
+        <HeaderHeading>
+          {backHref && (
+            <HeaderBack href={backHref} aria-label="Go back">
+              <Icon name="arrowLeft" size={28} />
+            </HeaderBack>
           )}
-          <styles.Title>
-            <styles.WideTitle>{title}</styles.WideTitle>
-            <styles.NarrowTitle>{mobileTitle ?? title}</styles.NarrowTitle>
-          </styles.Title>
-        </styles.Heading>
-        {description && <styles.Description>{description}</styles.Description>}
-      </div>
+          {icon && (
+            <HeaderGlyph>
+              <Icon name={icon} size={28} />
+            </HeaderGlyph>
+          )}
+          <HeaderTitle>
+            <HeaderWideTitle>{title}</HeaderWideTitle>
+            <HeaderNarrowTitle>{mobileTitle ?? title}</HeaderNarrowTitle>
+          </HeaderTitle>
+        </HeaderHeading>
+        {description && <HeaderDescription>{description}</HeaderDescription>}
+      </HeaderTitleBlock>
       {(meta || action) && (
-        <styles.Controls>
+        <HeaderControls>
           {meta}
           {action}
-        </styles.Controls>
+        </HeaderControls>
       )}
-    </styles.Root>
+    </HeaderBar>
   );
 }

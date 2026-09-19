@@ -4,7 +4,18 @@ import { useState } from "react";
 import * as Popover from "@radix-ui/react-popover";
 import { Icon } from "@/src/components/Icon";
 import { formatDate } from "@/src/lib/format";
-import * as styles from "./Calendar.styles";
+import {
+  CalendarDay,
+  CalendarDays,
+  CalendarHeader,
+  CalendarMonthLabel,
+  CalendarNavButton,
+  CalendarPanel,
+  CalendarPopover,
+  CalendarTrigger,
+  CalendarWeekday,
+  CalendarWeekdays,
+} from "./Calendar.styles";
 import type { CalendarProps, DatePickerProps } from "./Calendar.types";
 
 const WEEKDAY_LABELS = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
@@ -20,6 +31,10 @@ function toIsoDate(date: Date) {
 function fromIsoDate(isoDate: string) {
   const [year, month, day] = isoDate.split("-").map(Number);
   return new Date(year, month - 1, day);
+}
+
+function dateLabel(date: Date) {
+  return isSameDay(date, new Date()) ? "Today" : formatDate(toIsoDate(date));
 }
 
 function isSameDay(a: Date, b: Date) {
@@ -55,32 +70,32 @@ export function Calendar({ selected, month, onMonthChange, onSelect }: CalendarP
   const today = new Date();
 
   return (
-    <styles.Root>
-      <styles.Header>
-        <styles.NavButton
+    <CalendarPanel>
+      <CalendarHeader>
+        <CalendarNavButton
           type="button"
           aria-label="Previous month"
           onClick={() => onMonthChange(new Date(month.getFullYear(), month.getMonth() - 1, 1))}
         >
           <Icon name="caretLeft" size={16} />
-        </styles.NavButton>
-        <styles.MonthLabel>{MONTH_FORMATTER.format(month)}</styles.MonthLabel>
-        <styles.NavButton
+        </CalendarNavButton>
+        <CalendarMonthLabel>{MONTH_FORMATTER.format(month)}</CalendarMonthLabel>
+        <CalendarNavButton
           type="button"
           aria-label="Next month"
           onClick={() => onMonthChange(new Date(month.getFullYear(), month.getMonth() + 1, 1))}
         >
           <Icon name="caretRight" size={16} />
-        </styles.NavButton>
-      </styles.Header>
-      <styles.Weekdays>
+        </CalendarNavButton>
+      </CalendarHeader>
+      <CalendarWeekdays>
         {WEEKDAY_LABELS.map((label) => (
-          <styles.Weekday key={label}>{label}</styles.Weekday>
+          <CalendarWeekday key={label}>{label}</CalendarWeekday>
         ))}
-      </styles.Weekdays>
-      <styles.Days>
+      </CalendarWeekdays>
+      <CalendarDays>
         {days.map((day) => (
-          <styles.Day
+          <CalendarDay
             key={toIsoDate(day)}
             type="button"
             $muted={day.getMonth() !== month.getMonth()}
@@ -89,10 +104,10 @@ export function Calendar({ selected, month, onMonthChange, onSelect }: CalendarP
             onClick={() => onSelect(day)}
           >
             {day.getDate()}
-          </styles.Day>
+          </CalendarDay>
         ))}
-      </styles.Days>
-    </styles.Root>
+      </CalendarDays>
+    </CalendarPanel>
   );
 }
 
@@ -100,37 +115,53 @@ export function DatePicker({
   id,
   name,
   defaultValue,
+  value,
+  onChange,
   placeholder = "Select a date",
+  tone = "outline",
 }: DatePickerProps) {
   const initial = defaultValue ? fromIsoDate(defaultValue) : null;
   const [open, setOpen] = useState(false);
-  const [selected, setSelected] = useState<Date | null>(initial);
-  const [month, setMonth] = useState<Date>(initial ?? new Date());
+  const [internal, setInternal] = useState<Date | null>(initial);
+  const selected = value === undefined ? internal : value === "" ? null : fromIsoDate(value);
+  const [month, setMonth] = useState<Date>(selected ?? new Date());
 
   function handleSelect(date: Date) {
-    setSelected(date);
+    setInternal(date);
     setMonth(date);
     setOpen(false);
+    onChange?.(toIsoDate(date));
   }
+
+  const label = selected === null ? placeholder : dateLabel(selected);
 
   return (
     <Popover.Root open={open} onOpenChange={setOpen}>
       <Popover.Trigger asChild>
-        <styles.Trigger id={id} type="button">
-          <Icon name="calendar" size={16} />
-          {selected ? formatDate(toIsoDate(selected)) : placeholder}
-        </styles.Trigger>
+        <CalendarTrigger id={id} type="button" $tone={tone}>
+          {tone === "soft" ? (
+            <>
+              {label}
+              <Icon name="calendar" size={20} />
+            </>
+          ) : (
+            <>
+              <Icon name="calendar" size={16} />
+              {label}
+            </>
+          )}
+        </CalendarTrigger>
       </Popover.Trigger>
       <Popover.Portal>
         <Popover.Content asChild sideOffset={8} align="start">
-          <styles.Content>
+          <CalendarPopover>
             <Calendar
               selected={selected}
               month={month}
               onMonthChange={setMonth}
               onSelect={handleSelect}
             />
-          </styles.Content>
+          </CalendarPopover>
         </Popover.Content>
       </Popover.Portal>
       <input type="hidden" name={name} value={selected ? toIsoDate(selected) : ""} />

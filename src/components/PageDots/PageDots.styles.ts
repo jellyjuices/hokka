@@ -1,9 +1,9 @@
 "use client";
 
 import styled from "@emotion/styled";
-import { theme } from "@/src/lib/theme";
+import { theme, hoverFill } from "@/src/lib/theme";
 
-export const Root = styled.div`
+export const DotsRow = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -11,7 +11,7 @@ export const Root = styled.div`
   padding: ${theme.space.md} 0;
 `;
 
-export const Dot = styled.button<{ $isActive: boolean }>`
+export const PageDot = styled.button<{ $isActive: boolean }>`
   display: grid;
   place-items: center;
   width: 32px;
@@ -21,6 +21,11 @@ export const Dot = styled.button<{ $isActive: boolean }>`
   border-radius: ${theme.borderRadius.full};
   background: none;
   cursor: pointer;
+  transition: background ${theme.motion.fast} ease;
+
+  &:hover {
+    background: ${hoverFill("transparent")};
+  }
 
   &::after {
     content: "";

@@ -1,6 +1,6 @@
 @font-face {
   font-family: "PP Neue Montreal";
-  src: url("/logo/fonts/PPNeueMontreal-Light.woff2") format("woff2");
+  src: url("/fonts/PPNeueMontreal-Book.woff2") format("woff2");
   font-weight: 300;
   font-style: normal;
   font-display: swap;
@@ -8,7 +8,7 @@
 
 @font-face {
   font-family: "PP Neue Montreal";
-  src: url("/logo/fonts/PPNeueMontreal-Book.woff2") format("woff2");
+  src: url("/fonts/PPNeueMontreal-Regular.woff2") format("woff2");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -16,7 +16,7 @@
 
 @font-face {
   font-family: "PP Neue Montreal";
-  src: url("/logo/fonts/PPNeueMontreal-Medium.woff2") format("woff2");
+  src: url("/fonts/PPNeueMontreal-Medium.woff2") format("woff2");
   font-weight: 500;
   font-style: normal;
   font-display: swap;
@@ -24,19 +24,12 @@
 
 @font-face {
   font-family: "PP Neue Montreal";
-  src: url("/logo/fonts/PPNeueMontreal-Bold.woff2") format("woff2");
+  src: url("/fonts/PPNeueMontreal-Bold.woff2") format("woff2");
   font-weight: 700;
   font-style: normal;
   font-display: swap;
 }
 
-@font-face {
-  font-family: "PP Neue Montreal";
-  src: url("/logo/fonts/PPNeueMontreal-BoldItalic.woff2") format("woff2");
-  font-weight: 700;
-  font-style: italic;
-  font-display: swap;
-}
 :root {
   --surface-primary: #ffffff;
   --surface-secondary: #f4f1ee;
@@ -139,6 +132,7 @@
 
 * {
   box-sizing: border-box;
+  letter-spacing: 0.03em;
 }
 
 html,

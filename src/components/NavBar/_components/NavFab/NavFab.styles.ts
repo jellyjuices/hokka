@@ -5,7 +5,7 @@ import Link from "next/link";
 import { theme } from "@/src/lib/theme";
 import { mediaUp } from "@/src/lib/breakpoints";
 
-export const Root = styled(Link)`
+export const FabLink = styled(Link)`
   position: fixed;
   right: ${theme.layout.gutter};
   bottom: calc(88px + env(safe-area-inset-bottom));
@@ -18,7 +18,7 @@ export const Root = styled(Link)`
   border-radius: ${theme.borderRadius.full};
   background: ${theme.surface.accent};
   color: ${theme.foreground.inverse};
-  font-size: ${theme.fontSize.lg};
+  font-size: ${theme.fontSize.md};
   font-weight: 500;
 
   ${mediaUp("smTablet")} {

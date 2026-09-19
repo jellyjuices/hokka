@@ -1,7 +1,7 @@
 "use client";
 
 import { ObligationCard } from "../ObligationCard";
-import * as styles from "./ObligationsPanel.styles";
+import { ObligationsFiledGroup, ObligationsStack } from "./ObligationsPanel.styles";
 import type { ObligationsPanelProps } from "./ObligationsPanel.types";
 
 export function ObligationsPanel({ obligations, onToggle }: ObligationsPanelProps) {
@@ -9,15 +9,15 @@ export function ObligationsPanel({ obligations, onToggle }: ObligationsPanelProp
   const collected = obligations.filter((obligation) => obligation.state === "collected");
 
   return (
-    <styles.Root>
+    <ObligationsStack>
       {open.map((obligation) => (
         <ObligationCard key={obligation.id} obligation={obligation} onToggle={onToggle} />
       ))}
-      <styles.History>
+      <ObligationsFiledGroup>
         {collected.map((obligation) => (
           <ObligationCard key={obligation.id} obligation={obligation} onToggle={onToggle} />
         ))}
-      </styles.History>
-    </styles.Root>
+      </ObligationsFiledGroup>
+    </ObligationsStack>
   );
 }

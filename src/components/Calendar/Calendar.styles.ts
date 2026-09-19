@@ -1,21 +1,48 @@
 "use client";
 
+import { css } from "@emotion/react";
 import styled from "@emotion/styled";
-import { theme } from "@/src/lib/theme";
+import { theme, hoverFill } from "@/src/lib/theme";
+import type { DateTone } from "./Calendar.types";
 
-export const Trigger = styled.button`
+const tones: Record<DateTone, ReturnType<typeof css>> = {
+  outline: css`
+    gap: ${theme.space.sm};
+    padding: ${theme.space.sm} ${theme.space.md};
+    border: 1px solid ${theme.surface.tint};
+    border-radius: ${theme.borderRadius.sm};
+    background: ${theme.surface.primary};
+    font-size: 0.9rem;
+
+    &:hover {
+      background: ${hoverFill(theme.surface.primary)};
+    }
+  `,
+  soft: css`
+    justify-content: space-between;
+    gap: ${theme.space.md};
+    min-height: 64px;
+    padding: 0 ${theme.space.lg};
+    border: none;
+    border-radius: ${theme.borderRadius.md};
+    background: ${theme.surface.secondary};
+    font-size: ${theme.fontSize.md};
+
+    &:hover {
+      background: ${hoverFill(theme.surface.secondary)};
+    }
+  `,
+};
+
+export const CalendarTrigger = styled.button<{ $tone: DateTone }>`
   display: inline-flex;
   align-items: center;
-  gap: ${theme.space.sm};
   width: 100%;
-  padding: ${theme.space.sm} ${theme.space.md};
-  border: 1px solid ${theme.surface.tint};
-  border-radius: ${theme.borderRadius.sm};
-  background: ${theme.surface.primary};
   color: ${theme.foreground.primary};
-  font-size: 0.9rem;
   text-align: left;
   cursor: pointer;
+  transition: background ${theme.motion.fast} ease;
+  ${({ $tone }) => tones[$tone]};
 
   &:focus-visible {
     outline: 2px solid ${theme.foreground.accent};
@@ -23,7 +50,7 @@ export const Trigger = styled.button`
   }
 `;
 
-export const Content = styled.div`
+export const CalendarPopover = styled.div`
   background: ${theme.surface.secondary};
   border: 1px solid ${theme.surface.tint};
   border-radius: ${theme.borderRadius.md};
@@ -31,27 +58,27 @@ export const Content = styled.div`
   z-index: 50;
 `;
 
-export const Root = styled.div`
+export const CalendarPanel = styled.div`
   display: flex;
   flex-direction: column;
   gap: ${theme.space.sm};
   width: 16rem;
 `;
 
-export const Header = styled.div`
+export const CalendarHeader = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: ${theme.space.sm};
 `;
 
-export const MonthLabel = styled.span`
+export const CalendarMonthLabel = styled.span`
   font-size: 0.85rem;
   font-weight: 600;
   color: ${theme.foreground.primary};
 `;
 
-export const NavButton = styled.button`
+export const CalendarNavButton = styled.button`
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -64,7 +91,7 @@ export const NavButton = styled.button`
   cursor: pointer;
 
   &:hover {
-    background: ${theme.surface.primary};
+    background: ${hoverFill("transparent")};
     border-color: ${theme.surface.tint};
   }
 
@@ -74,12 +101,12 @@ export const NavButton = styled.button`
   }
 `;
 
-export const Weekdays = styled.div`
+export const CalendarWeekdays = styled.div`
   display: grid;
   grid-template-columns: repeat(7, 1fr);
 `;
 
-export const Weekday = styled.span`
+export const CalendarWeekday = styled.span`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -89,13 +116,13 @@ export const Weekday = styled.span`
   color: ${theme.foreground.disabled};
 `;
 
-export const Days = styled.div`
+export const CalendarDays = styled.div`
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   gap: 2px;
 `;
 
-export const Day = styled.button<{
+export const CalendarDay = styled.button<{
   $muted: boolean;
   $selected: boolean;
   $today: boolean;
@@ -117,7 +144,7 @@ export const Day = styled.button<{
   cursor: pointer;
 
   &:hover {
-    background: ${({ $selected }) => ($selected ? theme.surface.accent : theme.surface.primary)};
+    background: ${({ $selected }) => hoverFill($selected ? theme.surface.accent : "transparent")};
   }
 
   &:focus-visible {

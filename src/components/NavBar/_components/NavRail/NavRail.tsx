@@ -8,7 +8,17 @@ import { NavAccount } from "../NavAccount";
 import { NavNewButton } from "../NavNewButton";
 import { NavSearch } from "../NavSearch";
 import { isNavItemActive } from "../../isNavItemActive";
-import * as styles from "./NavRail.styles";
+import {
+  Rail,
+  RailBrand,
+  RailBrandMark,
+  RailBrandName,
+  RailFoot,
+  RailHead,
+  RailItem,
+  RailItemLabel,
+  RailItems,
+} from "./NavRail.styles";
 import type { NavRailProps } from "./NavRail.types";
 
 export function NavRail({
@@ -36,28 +46,28 @@ export function NavRail({
   }
 
   return (
-    <styles.Root
+    <Rail
       ref={railRef}
       $isCollapsed={isCollapsed}
       aria-label="Primary"
       onMouseEnter={onHoverStart}
       onMouseLeave={onHoverEnd}
     >
-      <styles.Head $isCollapsed={isCollapsed}>
-        <styles.Brand href="/" $isCollapsed={isCollapsed}>
-          <styles.BrandMark src="/logo/ui.svg" alt="" width={26} height={26} />
-          <styles.BrandName $isCollapsed={isCollapsed} aria-hidden={isCollapsed}>
+      <RailHead $isCollapsed={isCollapsed}>
+        <RailBrand href="/" $isCollapsed={isCollapsed}>
+          <RailBrandMark src="/logo/ui.svg" alt="" width={26} height={26} />
+          <RailBrandName $isCollapsed={isCollapsed} aria-hidden={isCollapsed}>
             {brand}
-          </styles.BrandName>
-        </styles.Brand>
-      </styles.Head>
+          </RailBrandName>
+        </RailBrand>
+      </RailHead>
 
-      <styles.Items>
+      <RailItems>
         {NAV_ITEMS.map((item) => {
           const isActive = isNavItemActive(pathname, item.href);
           return (
             <li key={item.href}>
-              <styles.Item
+              <RailItem
                 href={item.href}
                 $isActive={isActive}
                 $isCollapsed={isCollapsed}
@@ -65,16 +75,16 @@ export function NavRail({
                 aria-label={item.label}
               >
                 <Icon name={item.icon} size={24} />
-                <styles.ItemLabel $isCollapsed={isCollapsed} aria-hidden={isCollapsed}>
+                <RailItemLabel $isCollapsed={isCollapsed} aria-hidden={isCollapsed}>
                   {item.label}
-                </styles.ItemLabel>
-              </styles.Item>
+                </RailItemLabel>
+              </RailItem>
             </li>
           );
         })}
-      </styles.Items>
+      </RailItems>
 
-      <styles.Foot>
+      <RailFoot>
         <NavNewButton isCollapsed={isCollapsed} />
         <NavSearch
           isCollapsed={isCollapsed}
@@ -82,7 +92,7 @@ export function NavRail({
           onActivate={handleSearchActivate}
         />
         <NavAccount initials={initials} isCollapsed={isCollapsed} />
-      </styles.Foot>
-    </styles.Root>
+      </RailFoot>
+    </Rail>
   );
 }

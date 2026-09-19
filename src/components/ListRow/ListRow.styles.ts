@@ -3,7 +3,7 @@
 import styled from "@emotion/styled";
 import Link from "next/link";
 import { css } from "@emotion/react";
-import { theme } from "@/src/lib/theme";
+import { theme, hoverFill } from "@/src/lib/theme";
 
 const base = css`
   display: flex;
@@ -16,20 +16,23 @@ const base = css`
   background: ${theme.surface.primary};
 `;
 
-export const Root = styled.div`
+export const RowSurface = styled.div`
   ${base};
 `;
 
-export const RootLink = styled(Link)`
+export const RowLink = styled(Link)`
   ${base};
-  transition: border-color ${theme.motion.fast} ease;
+  transition:
+    background ${theme.motion.fast} ease,
+    border-color ${theme.motion.fast} ease;
 
   &:hover {
+    background: ${hoverFill(theme.surface.primary)};
     border-color: ${theme.foreground.accent};
   }
 `;
 
-export const Body = styled.span`
+export const RowBody = styled.span`
   display: flex;
   flex-direction: column;
   gap: ${theme.space.xs};
@@ -38,13 +41,13 @@ export const Body = styled.span`
   min-width: 0;
 `;
 
-export const Meta = styled.span`
+export const RowMeta = styled.span`
   font-size: ${theme.fontSize.xs};
   color: ${theme.foreground.secondary};
   line-height: 1.2;
 `;
 
-export const Title = styled.span`
+export const RowTitle = styled.span`
   overflow: hidden;
   max-width: 100%;
   text-overflow: ellipsis;
@@ -53,7 +56,7 @@ export const Title = styled.span`
   color: ${theme.foreground.primary};
 `;
 
-export const Value = styled.strong`
+export const RowValue = styled.strong`
   flex: 0 0 auto;
   font-size: ${theme.fontSize.md};
   font-weight: 500;

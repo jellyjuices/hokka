@@ -35,16 +35,23 @@ export async function createBiometricCredential() {
   return toBase64Url(credential.rawId);
 }
 
-export async function assertBiometricCredential(credentialId: string, signal?: AbortSignal) {
+// The transport hint is what keeps the sheet on this device. Without it WebKit
+// weighs a security key and a phone over the air as well, and an enrolment that
+// is neither raises no prompt at all rather than refusing. An abort signal is no
+// help here either: WebKit ignores it and the request it was meant to cancel goes
+// on blocking every later one, so a request is left to finish on its own.
+export async function assertBiometricCredential(credentialId: string) {
   const assertion = await navigator.credentials.get({
-    signal,
     publicKey: {
       challenge: randomBytes(32),
       rpId: window.location.hostname,
-      allowCredentials: [{ type: "public-key", id: fromBase64Url(credentialId) }],
+      allowCredentials: [
+        { type: "public-key", id: fromBase64Url(credentialId), transports: ["internal"] },
+      ],
       userVerification: "required",
       timeout: TIMEOUT,
     },
   });
-  return assertion instanceof PublicKeyCredential;
+  if (!(assertion instanceof PublicKeyCredential)) return false;
+  return toBase64Url(assertion.rawId) === credentialId;
 }

@@ -30,11 +30,11 @@ export function disableBiometrics() {
 
 // A failed or dismissed prompt is not an error state to recover from: the caller
 // falls back to the password, which is the gate the session cookie answers to.
-export async function unlockWithBiometrics(signal?: AbortSignal): Promise<BiometricFailure> {
+export async function unlockWithBiometrics(): Promise<BiometricFailure> {
   const credentialId = readCredentialId();
   if (credentialId === null) return "Biometric unlock is not set up on this device";
   try {
-    if (await assertBiometricCredential(credentialId, signal)) return null;
+    if (await assertBiometricCredential(credentialId)) return null;
     return "That did not match. Use your password";
   } catch (error) {
     if (isCancellation(error)) return "Biometric unlock was dismissed. Use your password";

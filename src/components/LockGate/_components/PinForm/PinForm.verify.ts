@@ -5,6 +5,8 @@ import {
 } from "@/src/lib/devicePassword";
 import { isOnline } from "@/src/lib/platform/connectivity";
 
+const SESSION_ASK_LIMIT = 6 * 1000;
+
 async function verifyOnDevice(password: string): Promise<string | null> {
   if (!hasDevicePassword()) {
     return isOnline()
@@ -46,11 +48,16 @@ export function warmUnlock() {
 }
 
 // Offline, there is nothing to ask: a biometric check is the whole of what this
-// device can verify, and refusing it would strand a ledger that reads locally.
+// device can verify, and refusing it would strand a ledger that reads locally. A
+// sleeping instance is the same answer arriving late, so the ask is capped rather
+// than waited on, which otherwise held the screen open after a fingerprint landed.
 export async function hasLiveSession(): Promise<boolean> {
   if (!isOnline()) return true;
   try {
-    const response = await fetch("/api/unlock", { cache: "no-store" });
+    const response = await fetch("/api/unlock", {
+      cache: "no-store",
+      signal: AbortSignal.timeout(SESSION_ASK_LIMIT),
+    });
     if (!response.ok) return false;
     const body = (await response.json()) as { unlocked?: unknown };
     return body.unlocked === true;

@@ -1,5 +1,11 @@
 import { timingSafeEqual } from "node:crypto";
-import { createSessionCookie, isSessionConfigured } from "@/src/lib/session";
+import { cookies } from "next/headers";
+import {
+  SESSION_COOKIE,
+  createSessionCookie,
+  isSessionConfigured,
+  isValidSessionToken,
+} from "@/src/lib/session";
 import {
   clearFailures,
   clientKey,
@@ -17,6 +23,16 @@ function isMatch(candidate: string) {
   const given = Buffer.from(candidate);
   if (expected.length !== given.length) return false;
   return timingSafeEqual(given, expected);
+}
+
+// Biometrics open the screen, not the gate: this says whether the cookie behind
+// it is still good, so a lapsed session asks for the password instead of
+// prompting for a fingerprint that can never stick.
+export async function GET() {
+  return handleRoute(async () => {
+    const token = (await cookies()).get(SESSION_COOKIE)?.value;
+    return jsonResponse({ unlocked: await isValidSessionToken(token) });
+  });
 }
 
 export async function POST(request: Request) {

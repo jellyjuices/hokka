@@ -1,0 +1,1 @@
+export { BiometricLock } from "./BiometricLock";

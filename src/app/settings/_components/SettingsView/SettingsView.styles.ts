@@ -3,11 +3,17 @@
 import styled from "@emotion/styled";
 import { theme } from "@/src/lib/theme";
 
-export const SettingsStack = styled.form`
+export const SettingsColumn = styled.div`
   display: flex;
   flex-direction: column;
   gap: ${theme.space.md};
   padding-bottom: ${theme.space.xl};
+`;
+
+export const SettingsStack = styled.form`
+  display: flex;
+  flex-direction: column;
+  gap: ${theme.space.md};
 `;
 
 // The unit sits beside the value rather than in the label, so the tile reads

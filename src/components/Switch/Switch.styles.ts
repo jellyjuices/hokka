@@ -19,6 +19,11 @@ export const SwitchRoot = styled(SwitchPrimitive.Root)`
   &[data-state="checked"] {
     background: ${theme.surface.accent};
   }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
 `;
 
 export const SwitchKnob = styled(SwitchPrimitive.Thumb)`

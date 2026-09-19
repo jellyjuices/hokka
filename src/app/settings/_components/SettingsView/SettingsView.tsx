@@ -8,10 +8,12 @@ import { Select } from "@/src/components/Select";
 import { TileInput, TileValue } from "@/src/components/TileInput";
 import { useLedger } from "@/src/context/Ledger";
 import { INCOME_TAX_RATES } from "@/src/data/incomeTaxRates";
+import { BiometricLock } from "./_components/BiometricLock";
 import { ClaimableRates } from "./_components/ClaimableRates";
 import {
   SectionNote,
   SectionTitle,
+  SettingsColumn,
   SettingsSection,
   SettingsStack,
   TileMeasure,
@@ -36,69 +38,79 @@ export function SettingsView() {
         <PageHeader title="Settings" icon="settings" description={isSaving ? "Saving…" : "Saved"} />
       </GridItem>
       <GridItem span={8} spanTablet={12}>
-        <SettingsStack
-          key={isHydrated ? "ready" : "loading"}
-          ref={formRef}
-          onChange={schedule}
-          onBlur={flush}
-          onSubmit={(event) => event.preventDefault()}
-        >
-          <TileInput label="HST rate" htmlFor="hstRate">
-            <TileMeasure>
-              <TileValue
-                id="hstRate"
-                name="hstRate"
-                type="number"
-                defaultValue={settings.hstRate}
-                aria-describedby="hstRateUnit"
-              />
-              <TileUnit id="hstRateUnit">percent</TileUnit>
-            </TileMeasure>
-          </TileInput>
-          <TileInput label="Filing frequency">
-            <Select
-              id="filingFrequency"
-              name="filingFrequency"
-              label="Filing frequency"
-              tone="plain"
-              defaultValue={settings.filingFrequency}
-              options={FREQUENCIES}
-              onChange={schedule}
-            />
-          </TileInput>
-          <TileInput
-            label="Income tax reserve override (%)"
-            htmlFor="incomeTaxReservePct"
-            hint={`Leave blank to estimate the reserve from net income using ${INCOME_TAX_RATES.taxYear} federal and Ontario rates plus CPP.`}
+        <SettingsColumn>
+          <SettingsStack
+            key={isHydrated ? "ready" : "loading"}
+            ref={formRef}
+            onChange={schedule}
+            onBlur={flush}
+            onSubmit={(event) => event.preventDefault()}
           >
-            <TileValue
-              id="incomeTaxReservePct"
-              name="incomeTaxReservePct"
-              type="number"
-              placeholder="Automatic"
-              defaultValue={settings.incomeTaxReservePct ?? ""}
-            />
-          </TileInput>
-          <TileInput label="Fiscal year start">
-            <DatePicker
-              id="fiscalYearStart"
-              name="fiscalYearStart"
-              tone="plain"
-              display="dayMonth"
-              defaultValue={settings.fiscalYearStart}
-              onChange={schedule}
-            />
-          </TileInput>
+            <TileInput label="HST rate" htmlFor="hstRate">
+              <TileMeasure>
+                <TileValue
+                  id="hstRate"
+                  name="hstRate"
+                  type="number"
+                  defaultValue={settings.hstRate}
+                  aria-describedby="hstRateUnit"
+                />
+                <TileUnit id="hstRateUnit">percent</TileUnit>
+              </TileMeasure>
+            </TileInput>
+            <TileInput label="Filing frequency">
+              <Select
+                id="filingFrequency"
+                name="filingFrequency"
+                label="Filing frequency"
+                tone="plain"
+                defaultValue={settings.filingFrequency}
+                options={FREQUENCIES}
+                onChange={schedule}
+              />
+            </TileInput>
+            <TileInput
+              label="Income tax reserve override (%)"
+              htmlFor="incomeTaxReservePct"
+              hint={`Leave blank to estimate the reserve from net income using ${INCOME_TAX_RATES.taxYear} federal and Ontario rates plus CPP.`}
+            >
+              <TileValue
+                id="incomeTaxReservePct"
+                name="incomeTaxReservePct"
+                type="number"
+                placeholder="Automatic"
+                defaultValue={settings.incomeTaxReservePct ?? ""}
+              />
+            </TileInput>
+            <TileInput label="Fiscal year start">
+              <DatePicker
+                id="fiscalYearStart"
+                name="fiscalYearStart"
+                tone="plain"
+                display="dayMonth"
+                defaultValue={settings.fiscalYearStart}
+                onChange={schedule}
+              />
+            </TileInput>
+            <SettingsSection>
+              <SectionTitle>Claimable by category</SectionTitle>
+              <SectionNote>
+                The percentage a new expense starts at. Leave a tile blank to keep the standard
+                rate, and override any single entry on the transaction itself. Changing a rate here
+                leaves entries already logged untouched.
+              </SectionNote>
+              <ClaimableRates overrides={settings.categoryClaimablePct} />
+            </SettingsSection>
+          </SettingsStack>
           <SettingsSection>
-            <SectionTitle>Claimable by category</SectionTitle>
+            <SectionTitle>Device lock</SectionTitle>
             <SectionNote>
-              The percentage a new expense starts at. Leave a tile blank to keep the standard rate,
-              and override any single entry on the transaction itself. Changing a rate here leaves
-              entries already logged untouched.
+              Kept on this device only, never synced. Turning it on registers this device&rsquo;s
+              own fingerprint or face check with the browser.
             </SectionNote>
-            <ClaimableRates overrides={settings.categoryClaimablePct} />
+            <BiometricLock />
           </SettingsSection>
-        </SettingsStack>
+        </SettingsColumn>
       </GridItem>
     </Grid>
   );

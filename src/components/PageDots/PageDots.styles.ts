@@ -7,7 +7,7 @@ export const DotsRow = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: ${theme.space.sm};
+  gap: ${theme.space.xs};
   padding: ${theme.space.md} 0;
 `;
 
@@ -33,7 +33,7 @@ export const PageDot = styled.button<{ $isActive: boolean }>`
     height: 10px;
     border-radius: ${theme.borderRadius.full};
     background: ${({ $isActive }) =>
-      $isActive ? theme.foreground.primary : theme.surface.accentSecondary};
+      $isActive ? theme.foreground.primary : theme.surface.secondary};
     transition: background ${theme.motion.fast} ease;
   }
 `;

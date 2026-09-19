@@ -135,13 +135,13 @@
 * {
   box-sizing: border-box;
   letter-spacing: 0.02em;
+  -webkit-tap-highlight-color: transparent;
 }
 
 html,
 body {
   margin: 0;
   padding: 0;
-  --webkit-tap-highlight-color: transparent;
   -webkit-font-smoothing: antialiased;
 }
 

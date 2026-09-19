@@ -8,6 +8,10 @@ export const ObligationsStack = styled.div`
   display: flex;
   flex-direction: column;
   gap: ${theme.space.md};
+
+  ${mediaDown("smTablet")} {
+    flex: 1;
+  }
 `;
 
 export const ObligationsFiledGroup = styled.div`

@@ -21,11 +21,3 @@
   font-style: normal;
   font-display: swap;
 }
-
-@font-face {
-  font-family: "PP Neue Montreal";
-  src: url("/fonts/PPNeueMontreal-Bold.woff2") format("woff2");
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}

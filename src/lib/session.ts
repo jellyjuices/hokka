@@ -1,24 +1,19 @@
-// The session is a signed expiry stamp, not a store: there is one user, so there is
-// nothing to look up. Signing with PASSWORD means changing the password ends every
-// session that was opened with the old one.
 const COOKIE_NAME = "hokka_session";
 const MAX_AGE_SECONDS = 60 * 60 * 24 * 30;
 const encoder = new TextEncoder();
 
 export const SESSION_COOKIE = COOKIE_NAME;
 
-function secret() {
+function sessionSecret() {
+  return process.env.SESSION_SECRET ?? "";
+}
+
+function password() {
   return process.env.PASSWORD ?? "";
 }
 
-async function signingKey(value: string) {
-  return crypto.subtle.importKey(
-    "raw",
-    encoder.encode(value),
-    { name: "HMAC", hash: "SHA-256" },
-    false,
-    ["sign"],
-  );
+export function isSessionConfigured() {
+  return sessionSecret() !== "" && password() !== "";
 }
 
 function toBase64Url(bytes: ArrayBuffer) {
@@ -26,13 +21,20 @@ function toBase64Url(bytes: ArrayBuffer) {
   return btoa(binary).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
 }
 
-async function sign(payload: string, value: string) {
-  const signature = await crypto.subtle.sign(
-    "HMAC",
-    await signingKey(value),
-    encoder.encode(payload),
+async function passwordDigest() {
+  return toBase64Url(await crypto.subtle.digest("SHA-256", encoder.encode(password())));
+}
+
+async function sign(stamp: string) {
+  const key = await crypto.subtle.importKey(
+    "raw",
+    encoder.encode(sessionSecret()),
+    { name: "HMAC", hash: "SHA-256" },
+    false,
+    ["sign"],
   );
-  return toBase64Url(signature);
+  const payload = `${stamp}.${await passwordDigest()}`;
+  return toBase64Url(await crypto.subtle.sign("HMAC", key, encoder.encode(payload)));
 }
 
 function isSameString(left: string, right: string) {
@@ -45,8 +47,11 @@ function isSameString(left: string, right: string) {
 }
 
 export async function createSessionCookie() {
+  if (!isSessionConfigured()) {
+    throw new Error("The session is not configured: set PASSWORD and SESSION_SECRET");
+  }
   const expiresAt = Math.floor(Date.now() / 1000) + MAX_AGE_SECONDS;
-  const token = `${expiresAt}.${await sign(String(expiresAt), secret())}`;
+  const token = `${expiresAt}.${await sign(String(expiresAt))}`;
   const flags = [
     `${COOKIE_NAME}=${token}`,
     "Path=/",
@@ -59,8 +64,7 @@ export async function createSessionCookie() {
 }
 
 export async function isValidSessionToken(token: string | undefined) {
-  const value = secret();
-  if (value === "" || !token) return false;
+  if (!isSessionConfigured() || !token) return false;
 
   const separator = token.lastIndexOf(".");
   if (separator <= 0) return false;
@@ -69,5 +73,5 @@ export async function isValidSessionToken(token: string | undefined) {
   const expiresAt = Number(stamp);
   if (!Number.isFinite(expiresAt) || expiresAt * 1000 <= Date.now()) return false;
 
-  return isSameString(token.slice(separator + 1), await sign(stamp, value));
+  return isSameString(token.slice(separator + 1), await sign(stamp));
 }

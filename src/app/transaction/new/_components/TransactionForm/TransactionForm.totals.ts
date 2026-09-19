@@ -1,4 +1,5 @@
-import { findCategory } from "@/src/data/categories";
+import { claimablePctFor } from "@/src/data/categories";
+import type { CategoryClaimablePct } from "@/src/data/domain.types";
 import { roundToCents } from "@/src/lib/money";
 import type { TransactionFormState, TransactionTotals } from "./TransactionForm.types";
 
@@ -32,8 +33,8 @@ export function computeTotals(state: TransactionFormState, hstRate: number): Tra
   };
 }
 
-export function defaultClaimablePct(categoryId: string) {
-  return String(findCategory(categoryId)?.defaultClaimablePct ?? 100);
+export function defaultClaimablePct(categoryId: string, overrides: CategoryClaimablePct) {
+  return String(claimablePctFor(categoryId, overrides));
 }
 
 export function hasContent(state: TransactionFormState) {

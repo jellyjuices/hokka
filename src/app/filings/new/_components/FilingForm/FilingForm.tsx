@@ -32,7 +32,6 @@ export function FilingForm({ defaults }: FilingFormProps) {
     return known.map((period) => ({ value: period.id, label: periodLabel(period) }));
   }, [periods, settings.filingFrequency]);
 
-  // A period handed over in the link only wins if it is one of the offered options.
   const selectedPeriod = options.some((option) => option.value === defaults.taxPeriodId)
     ? defaults.taxPeriodId
     : options[0]?.value;

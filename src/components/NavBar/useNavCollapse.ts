@@ -2,8 +2,6 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 
-// DECISION: with the chevron gone there is no control to pin a collapse, so the
-// rail rests collapsed and hover intent is the only thing that opens it.
 const HOVER_INTENT_MS = 1000;
 
 export function useNavCollapse() {
@@ -22,8 +20,6 @@ export function useNavCollapse() {
     setIsExpanded(false);
   }, [clearTimer]);
 
-  // Leaving with the pointer must not yank the rail closed under a focused
-  // control; blurring out of the rail is what closes it in that case.
   const hoverEnd = useCallback(() => {
     const rail = railRef.current;
     if (rail && document.activeElement && rail.contains(document.activeElement)) {

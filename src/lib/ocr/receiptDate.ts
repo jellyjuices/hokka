@@ -1,3 +1,5 @@
+import { toIsoDate } from "@/src/lib/dates";
+
 const MONTH_NAMES = [
   "jan",
   "feb",
@@ -30,10 +32,6 @@ function fullYear(year: number) {
   return year >= 70 ? 1900 + year : 2000 + year;
 }
 
-function pad(value: number) {
-  return String(value).padStart(2, "0");
-}
-
 function boundedIsoDate(year: number, month: number, day: number, today: Date) {
   if (month < 1 || month > 12 || day < 1 || day > 31) return null;
   const candidate = new Date(year, month - 1, day);
@@ -41,7 +39,7 @@ function boundedIsoDate(year: number, month: number, day: number, today: Date) {
   const ahead = (candidate.getTime() - today.getTime()) / 86_400_000;
   if (ahead > FUTURE_TOLERANCE_DAYS) return null;
   if (today.getFullYear() - year > MAX_AGE_YEARS) return null;
-  return `${year}-${pad(month)}-${pad(day)}`;
+  return toIsoDate(candidate);
 }
 
 function fromNumeric(match: RegExpMatchArray, today: Date) {

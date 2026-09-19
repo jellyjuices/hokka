@@ -1,7 +1,5 @@
-// Everything this app stores is a calendar date, never an instant. Reading one off a
-// `Date` in UTC hands you tomorrow all evening in Ontario, so today is read locally and
-// a stored date is parsed locally.
-const MEDIUM_DATE = new Intl.DateTimeFormat("en-CA", { dateStyle: "medium" });
+const MONTH = new Intl.DateTimeFormat("en-CA", { month: "long" });
+const MONTH_AND_YEAR = new Intl.DateTimeFormat("en-CA", { month: "long", year: "numeric" });
 const DAY_AND_MONTH = new Intl.DateTimeFormat("en-CA", { month: "long", day: "numeric" });
 const DAY_MONTH_AND_YEAR = new Intl.DateTimeFormat("en-CA", {
   month: "long",
@@ -19,31 +17,48 @@ export function todayIsoDate() {
   return toIsoDate(new Date());
 }
 
+export function todayDate() {
+  return parseIsoDate(todayIsoDate());
+}
+
+export function currentYear() {
+  return Number(todayIsoDate().slice(0, 4));
+}
+
 export function parseIsoDate(isoDate: string) {
   const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(isoDate);
   if (match === null) return new Date(isoDate);
   return new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3]));
 }
 
-export function formatDate(isoDate: string) {
-  return MEDIUM_DATE.format(parseIsoDate(isoDate));
+export function isSameDay(a: Date, b: Date) {
+  return toIsoDate(a) === toIsoDate(b);
 }
 
-// A recent-activity line reads better relative; a ledger row does not, so this sits
-// beside formatDate rather than replacing it. Comparison is by calendar date rather
-// than by elapsed milliseconds, so the two DST days a year still say "Yesterday".
-export function friendlyDate(isoDate: string, today = todayIsoDate()) {
+export function formatDate(isoDate: string, today = todayIsoDate()) {
   if (isoDate === today) return "Today";
 
-  const todayDate = parseIsoDate(today);
+  const reference = parseIsoDate(today);
   const yesterday = new Date(
-    todayDate.getFullYear(),
-    todayDate.getMonth(),
-    todayDate.getDate() - 1,
+    reference.getFullYear(),
+    reference.getMonth(),
+    reference.getDate() - 1,
   );
   if (isoDate === toIsoDate(yesterday)) return "Yesterday";
 
   const date = parseIsoDate(isoDate);
-  const sameYear = date.getFullYear() === todayDate.getFullYear();
+  const sameYear = date.getFullYear() === reference.getFullYear();
   return sameYear ? DAY_AND_MONTH.format(date) : DAY_MONTH_AND_YEAR.format(date);
+}
+
+export function formatDayAndMonth(isoDate: string) {
+  return DAY_AND_MONTH.format(parseIsoDate(isoDate));
+}
+
+export function formatMonth(isoDate: string) {
+  return MONTH.format(parseIsoDate(isoDate));
+}
+
+export function formatMonthAndYear(isoDate: string) {
+  return MONTH_AND_YEAR.format(parseIsoDate(isoDate));
 }

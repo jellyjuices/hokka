@@ -1,6 +1,5 @@
 import type { FilingFrequency, TaxPeriod } from "@/src/data/domain.types";
-
-const MONTH_NAME = new Intl.DateTimeFormat("en-CA", { month: "long", timeZone: "UTC" });
+import { formatMonth, formatMonthAndYear } from "@/src/lib/dates";
 
 const MONTHS_PER_PERIOD: Record<FilingFrequency, number> = {
   monthly: 1,
@@ -19,16 +18,11 @@ function periodId(frequency: FilingFrequency, year: number, startMonth: number) 
 }
 
 export function periodLabel(period: TaxPeriod) {
-  const start = new Date(period.startDate);
-  const end = new Date(period.endDate);
-  if (period.periodType === "annual") return `${start.getUTCFullYear()}`;
-  if (period.periodType === "monthly")
-    return `${MONTH_NAME.format(start)} ${start.getUTCFullYear()}`;
-  return `${MONTH_NAME.format(start)} – ${MONTH_NAME.format(end)}`;
+  if (period.periodType === "annual") return period.startDate.slice(0, 4);
+  if (period.periodType === "monthly") return formatMonthAndYear(period.startDate);
+  return `${formatMonth(period.startDate)} – ${formatMonth(period.endDate)}`;
 }
 
-// The reference is a calendar date, not an instant: a transaction belongs to the period
-// its date falls in, whatever hour it was entered and whatever the browser's offset is.
 export function currentPeriod(frequency: FilingFrequency, isoDate: string): TaxPeriod {
   const span = MONTHS_PER_PERIOD[frequency];
   const year = Number(isoDate.slice(0, 4));

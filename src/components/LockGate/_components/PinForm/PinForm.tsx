@@ -41,7 +41,7 @@ export function PinForm({ onUnlocked }: PinFormProps) {
       <PinPanel onSubmit={submit}>
         <PinIdentity>
           <PinMark>
-            <Icon name="lock" size={24} />
+            <Icon name="lock" size={24} weight="fill" />
           </PinMark>
           <PinHeading>Hokka</PinHeading>
           <PinIntro>Enter the password to open your ledger on this device.</PinIntro>

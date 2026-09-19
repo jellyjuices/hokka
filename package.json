@@ -11,6 +11,7 @@
     "typecheck": "tsc --noEmit",
     "size": "node scripts/size-check.js",
     "ocr:assets": "node scripts/sync-ocr-assets.js",
+    "icons": "node scripts/generate-icons.js",
     "postinstall": "node scripts/sync-ocr-assets.js",
     "format:check": "prettier --check .",
     "check": "npm run typecheck && npm run lint && npm run format:check && npm run size",
@@ -50,7 +51,9 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.2.12",
+    "png-to-ico": "^3.0.2",
     "prettier": "^3.4.2",
+    "sharp": "^0.35.4",
     "typescript": "^5"
   },
   "prettier": {

@@ -4,7 +4,15 @@ import { useState } from "react";
 import * as Popover from "@radix-ui/react-popover";
 import { Icon } from "@/src/components/Icon";
 import { usePointerFocus } from "@/src/hooks";
-import { formatDate } from "@/src/lib/dates";
+import {
+  formatDate,
+  formatDayAndMonth,
+  formatMonthAndYear,
+  isSameDay,
+  parseIsoDate,
+  toIsoDate,
+  todayDate,
+} from "@/src/lib/dates";
 import {
   CalendarDay,
   CalendarDays,
@@ -20,34 +28,9 @@ import {
 import type { CalendarProps, DateDisplay, DatePickerProps } from "./Calendar.types";
 
 const WEEKDAY_LABELS = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
-const MONTH_FORMATTER = new Intl.DateTimeFormat("en-CA", { month: "long", year: "numeric" });
-const DAY_MONTH_FORMATTER = new Intl.DateTimeFormat("en-CA", { month: "long", day: "numeric" });
-
-function toIsoDate(date: Date) {
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  const day = String(date.getDate()).padStart(2, "0");
-  return `${year}-${month}-${day}`;
-}
-
-function fromIsoDate(isoDate: string) {
-  const [year, month, day] = isoDate.split("-").map(Number);
-  return new Date(year, month - 1, day);
-}
-
-// A recurring date — a fiscal year start — is the same day every year, so its
-// label drops the year and never says "Today": both would read as a one-off.
 function dateLabel(date: Date, display: DateDisplay) {
-  if (display === "dayMonth") return DAY_MONTH_FORMATTER.format(date);
-  return isSameDay(date, new Date()) ? "Today" : formatDate(toIsoDate(date));
-}
-
-function isSameDay(a: Date, b: Date) {
-  return (
-    a.getFullYear() === b.getFullYear() &&
-    a.getMonth() === b.getMonth() &&
-    a.getDate() === b.getDate()
-  );
+  const isoDate = toIsoDate(date);
+  return display === "dayMonth" ? formatDayAndMonth(isoDate) : formatDate(isoDate);
 }
 
 function buildMonthGrid(month: Date) {
@@ -72,7 +55,7 @@ function buildMonthGrid(month: Date) {
 
 export function Calendar({ selected, month, onMonthChange, onSelect }: CalendarProps) {
   const days = buildMonthGrid(month);
-  const today = new Date();
+  const today = todayDate();
 
   return (
     <CalendarPanel>
@@ -84,7 +67,7 @@ export function Calendar({ selected, month, onMonthChange, onSelect }: CalendarP
         >
           <Icon name="caretLeft" size={16} />
         </CalendarNavButton>
-        <CalendarMonthLabel>{MONTH_FORMATTER.format(month)}</CalendarMonthLabel>
+        <CalendarMonthLabel>{formatMonthAndYear(toIsoDate(month))}</CalendarMonthLabel>
         <CalendarNavButton
           type="button"
           aria-label="Next month"
@@ -126,15 +109,15 @@ export function DatePicker({
   tone = "outline",
   display = "full",
 }: DatePickerProps) {
-  const initial = defaultValue ? fromIsoDate(defaultValue) : null;
+  const initial = defaultValue ? parseIsoDate(defaultValue) : null;
   const [open, setOpen] = useState(false);
   const [internal, setInternal] = useState<Date | null>(initial);
-  const selected = value === undefined ? internal : value === "" ? null : fromIsoDate(value);
-  const [month, setMonth] = useState<Date>(selected ?? new Date());
+  const selected = value === undefined ? internal : value === "" ? null : parseIsoDate(value);
+  const [month, setMonth] = useState<Date>(selected ?? todayDate());
   const pointerFocus = usePointerFocus();
 
   function handleOpenChange(next: boolean) {
-    if (next) setMonth(selected ?? new Date());
+    if (next) setMonth(selected ?? todayDate());
     setOpen(next);
   }
 

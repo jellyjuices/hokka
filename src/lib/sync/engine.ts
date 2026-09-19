@@ -24,9 +24,6 @@ export function createSyncEngine(deps: SyncEngineDeps): SyncEngine {
     reconnectId = null;
   }
 
-  // The `online` event is what resumes us; this interval only covers the case where the
-  // browser believes it is online but the server is not reachable, and the case where the
-  // event never fires. Nothing else retries while we are waiting.
   function waitForNetwork() {
     isWaitingForNetwork = true;
     if (reconnectId !== null) return;
@@ -76,8 +73,6 @@ export function createSyncEngine(deps: SyncEngineDeps): SyncEngine {
     return inFlight;
   }
 
-  // Background triggers stand down once a sync has failed; `syncNow` stays open so a
-  // button in the UI can still force an attempt.
   function requestSync() {
     if (isWaitingForNetwork) return;
     void syncNow();

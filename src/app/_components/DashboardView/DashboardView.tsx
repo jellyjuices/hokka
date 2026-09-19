@@ -7,6 +7,7 @@ import { PageDots } from "@/src/components/PageDots";
 import { PageHeader } from "@/src/components/PageHeader";
 import { useMediaQuery, useScrollSnapIndex } from "@/src/hooks";
 import { breakpoints } from "@/src/lib/breakpoints";
+import { currentYear } from "@/src/lib/dates";
 import { formatCurrency } from "@/src/lib/money";
 import { ActivityList } from "../ActivityList";
 import { ObligationHistory } from "../ObligationHistory";
@@ -27,7 +28,7 @@ const SLIDES: DashboardSlide[] = [
 const NARROW_QUERY = `(max-width: ${breakpoints.smTablet}px)`;
 
 export function DashboardView() {
-  const thisYear = new Date().getFullYear();
+  const thisYear = currentYear();
   const [year, setYear] = useState(thisYear);
 
   const isNarrow = useMediaQuery(NARROW_QUERY);

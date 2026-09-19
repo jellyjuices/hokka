@@ -25,14 +25,16 @@ import {
 } from "./TransactionForm.styles";
 import { useAttachments } from "./useAttachments";
 import { useAutofill } from "./useAutofill";
+import { useSharedFiles } from "./useSharedFiles";
 import { useTransactionForm } from "./useTransactionForm";
 import { useTransactionSave } from "./useTransactionSave";
 
 export function TransactionForm() {
-  const documentId = useSearchParams().get("documentId");
+  const params = useSearchParams();
   const form = useTransactionForm();
   const autofill = useAutofill(form);
-  const { attachments, add, remove } = useAttachments(documentId, autofill.offer);
+  const { attachments, add, remove } = useAttachments(params.get("documentId"), autofill.offer);
+  useSharedFiles(params.get("shared") !== null, add);
   const { isSaving, error, save } = useTransactionSave();
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
 

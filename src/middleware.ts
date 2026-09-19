@@ -2,8 +2,6 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { SESSION_COOKIE, isValidSessionToken } from "@/src/lib/session";
 
-// Every route below holds the service role key, so the gate lives here rather than in
-// the UI: a client-side lock is a curtain, not a door.
 const OPEN_PATHS = new Set(["/api/unlock", "/api/health"]);
 
 export const config = { matcher: "/api/:path*" };

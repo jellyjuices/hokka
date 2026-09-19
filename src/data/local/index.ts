@@ -32,3 +32,5 @@ export {
   savePendingFile,
 } from "./pendingFiles";
 export type { PendingFile } from "./pendingFiles.types";
+export { takeSharedFiles } from "./shareInbox";
+export type { SharedFile } from "./shareInbox.types";

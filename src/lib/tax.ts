@@ -22,8 +22,6 @@ type TransactionSums = {
   netIncome: number;
 };
 
-// Every figure below answers a different question about the same rows, so they are
-// gathered in one walk rather than five filters over the same array.
 function sumTransactions(transactions: Transaction[]): TransactionSums {
   const sums: TransactionSums = {
     incomeTotal: 0,

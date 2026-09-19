@@ -1,5 +1,3 @@
-// Both browser signals the app watches — connectivity and the unlock flag — are read
-// with useSyncExternalStore, which wants one subscriber set and one way to publish.
 export function createSubscribers() {
   const listeners = new Set<() => void>();
 

@@ -6,9 +6,8 @@ import type { Obligation, ObligationState } from "../ObligationCard";
 import { useLedger } from "@/src/context/Ledger";
 import { findCategory } from "@/src/data/categories";
 import type { FilingType, Transaction } from "@/src/data/domain.types";
-import { todayIsoDate } from "@/src/lib/dates";
+import { currentYear, formatDate, todayIsoDate } from "@/src/lib/dates";
 import { formatCurrency } from "@/src/lib/money";
-import { friendlyDate } from "@/src/lib/dates";
 import { currentPeriod, periodLabel } from "@/src/lib/periods";
 import { calculatePeriodTotals } from "@/src/lib/tax";
 
@@ -33,7 +32,7 @@ function toActivityItem(transaction: Transaction): ActivityItem {
   const category = findCategory(transaction.category);
   return {
     id: transaction.id,
-    meta: `${friendlyDate(transaction.txnDate)}${category === null ? "" : ` · ${category.label}`}`,
+    meta: `${formatDate(transaction.txnDate)}${category === null ? "" : ` · ${category.label}`}`,
     title: transaction.counterparty === "" ? "Untitled entry" : transaction.counterparty,
     value: formatCurrency(transaction.total),
     href: "/transactions",
@@ -45,8 +44,6 @@ function obligationState(amount: number, isFiled: boolean): ObligationState {
   return amount === 0 ? "collecting" : "claimable";
 }
 
-// Filing happens in one place — the filing log — so an obligation links into that form
-// with the period, type and amount already chosen rather than writing anything itself.
 function toObligation(seed: ObligationSeed): Obligation {
   const state = obligationState(seed.amount, seed.isFiled);
   const amount = Math.abs(seed.amount);
@@ -71,7 +68,7 @@ export function useDashboardTotals(year: number) {
   const { transactions, filings, settings } = useLedger();
 
   return useMemo(() => {
-    const isCurrentYear = year === new Date().getFullYear();
+    const isCurrentYear = year === currentYear();
     const reference = isCurrentYear ? todayIsoDate() : `${year}-12-31`;
     const period = currentPeriod(settings.filingFrequency, reference);
 

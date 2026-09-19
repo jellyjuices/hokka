@@ -1,13 +1,46 @@
 {
+  "id": "/",
   "name": "Hokka",
   "short_name": "Hokka",
   "description": "HST and income-tax tracking for a single Ontario sole proprietor.",
+  "lang": "en-CA",
+  "dir": "ltr",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
-  "orientation": "portrait",
+  "display_override": ["standalone", "minimal-ui"],
+  "orientation": "any",
   "background_color": "#ffffff",
   "theme_color": "#ffffff",
+  "categories": ["finance", "business", "productivity"],
+  "prefer_related_applications": false,
+  "launch_handler": {
+    "client_mode": ["navigate-existing", "auto"]
+  },
+  "share_target": {
+    "action": "/share-target",
+    "method": "POST",
+    "enctype": "multipart/form-data",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "url": "url",
+      "files": [
+        {
+          "name": "file",
+          "accept": [
+            "image/*",
+            "image/jpeg",
+            "image/png",
+            "image/webp",
+            "image/heic",
+            "image/heif",
+            "application/pdf"
+          ]
+        }
+      ]
+    }
+  },
   "icons": [
     {
       "src": "/logo/favicon.svg",
@@ -16,10 +49,69 @@
       "purpose": "any"
     },
     {
+      "src": "/logo/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/logo/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
       "src": "/logo/logo-maskable.svg",
       "sizes": "any",
       "type": "image/svg+xml",
-      "purpose": "maskable"
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/logo/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "New transaction",
+      "short_name": "New",
+      "description": "Log an invoice or a receipt.",
+      "url": "/transaction/new",
+      "icons": [
+        {
+          "src": "/logo/icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Log a filing",
+      "short_name": "Filing",
+      "description": "Record an HST remittance.",
+      "url": "/filings/new",
+      "icons": [
+        {
+          "src": "/logo/icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Search",
+      "short_name": "Search",
+      "description": "Find a transaction.",
+      "url": "/search",
+      "icons": [
+        {
+          "src": "/logo/icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
     }
   ]
 }

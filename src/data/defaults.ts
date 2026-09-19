@@ -7,4 +7,5 @@ export const DEFAULT_SETTINGS: TaxSettings = {
   incomeTaxReservePct: null,
   fiscalYearStart: "2026-01-01",
   isHstRegistered: true,
+  categoryClaimablePct: {},
 };

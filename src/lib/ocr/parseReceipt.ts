@@ -1,6 +1,7 @@
 import { classifyReceipt } from "./classify";
 import { extractItems, extractVendor } from "./fields";
 import { extractDate } from "./receiptDate";
+import { toIsoDate } from "@/src/lib/dates";
 import { isCloseEnough } from "./amounts";
 import type { OcrPage, ParsedReceipt, ParseReceiptOptions } from "./ocr.types";
 import { extractTotals, totalsFromItems } from "./totals";
@@ -9,12 +10,6 @@ const RECONCILED_WEIGHT = 0.4;
 const DATE_WEIGHT = 0.2;
 const VENDOR_WEIGHT = 0.2;
 const ITEMS_WEIGHT = 0.2;
-
-function toIsoDate(date: Date) {
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  const day = String(date.getDate()).padStart(2, "0");
-  return `${date.getFullYear()}-${month}-${day}`;
-}
 
 function sumOf(amounts: number[]) {
   return amounts.reduce((running, amount) => running + amount, 0);

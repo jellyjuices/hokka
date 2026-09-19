@@ -109,7 +109,9 @@ export function hydrateLocalStore(): Promise<void> {
         }),
       );
       tables = loaded;
-      settings = (await readValue<TaxSettings>(SETTINGS_KEY)) ?? DEFAULT_SETTINGS;
+      // A snapshot written before a settings field existed is still a valid snapshot,
+      // so the stored object lands on top of the defaults rather than replacing them.
+      settings = { ...DEFAULT_SETTINGS, ...((await readValue<TaxSettings>(SETTINGS_KEY)) ?? {}) };
       publish();
     })();
   }

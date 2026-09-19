@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 import { useLedger } from "@/src/context/Ledger";
 import { categoriesFor } from "@/src/data/categories";
 import type { ParsedReceipt } from "@/src/lib/ocr";
-import type { TransactionDirection } from "@/src/data/domain.types";
+import type { CategoryClaimablePct, TransactionDirection } from "@/src/data/domain.types";
 import { todayIsoDate } from "@/src/lib/dates";
 import { newId } from "@/src/lib/platform/id";
 import {
@@ -50,10 +50,17 @@ function itemsFrom(parsed: ParsedReceipt): TransactionItem[] {
   ];
 }
 
-function categoryPatch(current: TransactionFormState, parsed: ParsedReceipt) {
+function categoryPatch(
+  current: TransactionFormState,
+  parsed: ParsedReceipt,
+  overrides: CategoryClaimablePct,
+) {
   if (current.direction !== "expense") return null;
   if (current.categoryId !== "" || parsed.categoryId === null) return null;
-  return { categoryId: parsed.categoryId, claimablePct: defaultClaimablePct(parsed.categoryId) };
+  return {
+    categoryId: parsed.categoryId,
+    claimablePct: defaultClaimablePct(parsed.categoryId, overrides),
+  };
 }
 
 function withTrailingRow(items: TransactionItem[]) {
@@ -83,7 +90,10 @@ export function useTransactionForm() {
   }
 
   function setCategory(categoryId: string) {
-    patch({ categoryId, claimablePct: defaultClaimablePct(categoryId) });
+    patch({
+      categoryId,
+      claimablePct: defaultClaimablePct(categoryId, settings.categoryClaimablePct),
+    });
   }
 
   function setItem(id: string, field: "name" | "amount", value: string) {
@@ -109,7 +119,7 @@ export function useTransactionForm() {
   function applyParsed(parsed: ParsedReceipt) {
     setState((current) => ({
       ...current,
-      ...categoryPatch(current, parsed),
+      ...categoryPatch(current, parsed, settings.categoryClaimablePct),
       counterparty: parsed.counterparty || current.counterparty,
       title: current.title === "" ? parsed.counterparty : current.title,
       txnDate: parsed.txnDate || current.txnDate,

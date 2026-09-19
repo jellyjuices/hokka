@@ -119,6 +119,7 @@ export function settingsToRow(settings: TaxSettings): Omit<TaxSettingsRow, "upda
     income_tax_reserve_pct: settings.incomeTaxReservePct,
     fiscal_year_start: settings.fiscalYearStart,
     is_hst_registered: settings.isHstRegistered,
+    category_claimable_pct: settings.categoryClaimablePct,
   };
 }
 
@@ -131,5 +132,6 @@ export function settingsFromRow(row: TaxSettingsRow): TaxSettings {
       row.income_tax_reserve_pct === null ? null : Number(row.income_tax_reserve_pct),
     fiscalYearStart: row.fiscal_year_start,
     isHstRegistered: row.is_hst_registered,
+    categoryClaimablePct: row.category_claimable_pct ?? {},
   };
 }

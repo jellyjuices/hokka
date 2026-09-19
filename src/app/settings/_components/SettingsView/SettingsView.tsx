@@ -8,7 +8,15 @@ import { Select } from "@/src/components/Select";
 import { TileInput, TileValue } from "@/src/components/TileInput";
 import { useLedger } from "@/src/context/Ledger";
 import { INCOME_TAX_RATES } from "@/src/data/incomeTaxRates";
-import { SettingsStack, TileMeasure, TileUnit } from "./SettingsView.styles";
+import { ClaimableRates } from "./_components/ClaimableRates";
+import {
+  SectionNote,
+  SectionTitle,
+  SettingsSection,
+  SettingsStack,
+  TileMeasure,
+  TileUnit,
+} from "./SettingsView.styles";
 import { useSettingsAutosave } from "./useSettingsAutosave";
 
 const FREQUENCIES = [
@@ -81,6 +89,15 @@ export function SettingsView() {
               onChange={schedule}
             />
           </TileInput>
+          <SettingsSection>
+            <SectionTitle>Claimable by category</SectionTitle>
+            <SectionNote>
+              The percentage a new expense starts at. Leave a tile blank to keep the standard rate,
+              and override any single entry on the transaction itself. Changing a rate here leaves
+              entries already logged untouched.
+            </SectionNote>
+            <ClaimableRates overrides={settings.categoryClaimablePct} />
+          </SettingsSection>
         </SettingsStack>
       </GridItem>
     </Grid>

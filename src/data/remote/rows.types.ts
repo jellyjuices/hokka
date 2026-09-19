@@ -61,5 +61,6 @@ export type TaxSettingsRow = {
   income_tax_reserve_pct: number | null;
   fiscal_year_start: string;
   is_hst_registered: boolean;
+  category_claimable_pct: Record<string, number> | null;
   updated_at: string;
 };

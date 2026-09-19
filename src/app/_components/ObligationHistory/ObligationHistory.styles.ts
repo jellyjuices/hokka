@@ -1,0 +1,28 @@
+"use client";
+
+import styled from "@emotion/styled";
+import { theme } from "@/src/lib/theme";
+import { mediaUp } from "@/src/lib/breakpoints";
+
+export const Root = styled.section`
+  display: flex;
+  flex-direction: column;
+  gap: ${theme.space.md};
+
+  ${mediaUp("smTablet")} {
+    display: none;
+  }
+`;
+
+export const Title = styled.h2`
+  margin: 0;
+  font-size: ${theme.fontSize.lg};
+  font-weight: 500;
+  letter-spacing: -0.01em;
+`;
+
+export const Hint = styled.p`
+  margin: 0;
+  color: ${theme.foreground.secondary};
+  font-size: ${theme.fontSize.sm};
+`;

@@ -1,0 +1,10 @@
+node_modules/
+.next/
+out/
+build/
+.code-review-graph/
+.env*
+.DS_Store
+*.tsbuildinfo
+next-env.d.ts
+!.env.example

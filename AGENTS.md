@@ -1,0 +1,60 @@
+# Hokka — architecture
+
+A single-user PWA that tracks paid invoices and business receipts for an Ontario sole proprietor, splits every entry into a pre-tax amount and an HST amount, and reports net HST owing plus an income-tax reserve.
+
+House style is [REPO_GUIDELINES.md](../REPO_GUIDELINES.md). The product plan is [hst-expense-manager-project.md](../hst-expense-manager-project.md); where the two disagree about the product, the plan wins, and where they disagree about code shape, the guidelines win.
+
+## Stack
+
+TypeScript, React 19, Next.js App Router, Emotion, Radix primitives, Phosphor icons. No Tailwind, no CSS modules, no second headless library, no state-management library.
+
+## Invariants
+
+| Rule                                                                    | Why                                                                                                                                                                                                                                                                                                                              |
+| ----------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Every transaction stores `subtotal`, `hstAmount` and `total` separately | The pre-tax amount drives the income-tax deduction; the HST amount drives the Input Tax Credit. They are different numbers answering different questions.                                                                                                                                                                        |
+| `claimablePct` lives on the transaction, defaulted from the category    | Meals cap at 50%, personal items at 0%. Storing the percentage on the row keeps historical entries correct when a category default changes.                                                                                                                                                                                      |
+| No stored balances                                                      | Every dashboard figure is recalculated on read by [src/lib/tax.ts](src/lib/tax.ts). A cached "current owing" drifts; a derived one cannot.                                                                                                                                                                                       |
+| The income-tax reserve rate is derived, not configured                  | [src/lib/incomeTax.ts](src/lib/incomeTax.ts) runs net income through the federal and Ontario brackets plus self-employed CPP in [src/data/incomeTaxRates.ts](src/data/incomeTaxRates.ts). `settings.incomeTaxReservePct` is `null` by default and only overrides that estimate when set.                                         |
+| Filings are inserts, never edits                                        | Logging a remittance adds a `filings` row and the dashboard nets it out. History stays intact for a CRA review.                                                                                                                                                                                                                  |
+| Data access goes through the port                                       | Every read and write crosses [src/data/repository.types.ts](src/data/repository.types.ts), so the storage driver stays swappable. Nothing above it knows Supabase exists.                                                                                                                                                        |
+| Writes land locally, then queue                                         | The repository writes the IndexedDB mirror and enqueues an outbox op; it never awaits the network. A form submitted on a subway platform is saved, not lost. See [docs/data-layer.md](docs/data-layer.md).                                                                                                                       |
+| Screens read the mirror, never the network                              | [src/context/Ledger](src/context/Ledger) subscribes to the local stores with `useSyncExternalStore`, so a write shows up before it syncs and a pull shows up without a refetch.                                                                                                                                                  |
+| A receipt file leaves the device only once                              | The blob sits in IndexedDB until R2 confirms the upload, then it is deleted. The row stays in the mirror so the app still reads offline.                                                                                                                                                                                         |
+| No Supabase or R2 credential reaches the browser                        | Every call goes through a route handler in [src/app/api](src/app/api), which holds the service role key and signs R2 URLs. RLS is on with no policies, so the anon key opens nothing.                                                                                                                                            |
+| Ten colour tokens, and no eleventh                                      | Five `surface.*` roles and five `foreground.*` roles, declared in [src/app/globals.css](src/app/globals.css) and reached only through [src/lib/theme.ts](src/lib/theme.ts). A style that wants another colour is a design decision, not a code one.                                                                              |
+| Everything else is a named scale on the same object                     | `fontFamily`, `fontSize` (`xs`–`5xl`), `borderRadius` (`xs`–`xl`, `full`), `space`, `layout`, `motion`. No one-off tokens for a single component's height or inset — those are local values in that component's styles.                                                                                                          |
+| Every page lays out on the same grid                                    | 12 columns, a 40px gutter and a 40px column gap, capped at 900px and 1440px above the `desktop` breakpoint. Declared in [src/app/globals.css](src/app/globals.css), consumed only through [src/components/Grid](src/components/Grid). A page that lays itself out by hand drifts from every other page.                          |
+| The rail is sticky, the content scrolls                                 | [src/components/AppShell](src/components/AppShell) holds the rail 40px to the left of the content at every width and lets the right column run past the fold. Rail width, collapsed width and the gap are tokens, not literals.                                                                                                  |
+| The summary deck is one DOM tree at every width                         | [src/app/_components/SummaryDeck](src/app/_components/SummaryDeck) is `display: contents` above `smTablet`, so its three panels are grid items of the page grid; below it, the same element becomes an edge-bleeding scroll-snap carousel. One tree means no layout hook, no hydration flash and no second copy to keep in step. |
+| Every gesture has a button                                              | [src/components/SwipeRow](src/components/SwipeRow) commits its action on a horizontal drag, but the same action is always present as a real focusable control in the card it wraps. The revealed panel is `aria-hidden`. A swipe is an accelerator, never the only way to reach something.                                       |
+| The rail opens on hover intent only                                     | [src/components/NavBar/useNavCollapse.ts](src/components/NavBar/useNavCollapse.ts) rests the rail collapsed and expands it after a 2s hover, closing again on mouse-out, outside click or Escape. There is no pin and no chevron, so nothing about the open state survives a navigation.                                         |
+
+## Orientation
+
+- Domain types: [src/data/domain.types.ts](src/data/domain.types.ts)
+- Calculation engine: [src/lib/tax.ts](src/lib/tax.ts), period boundaries in [src/lib/periods.ts](src/lib/periods.ts)
+- Categories and their claimable defaults: [src/data/categories.ts](src/data/categories.ts)
+- Navigation entries: [src/components/NavBar/NavBar.registry.ts](src/components/NavBar/NavBar.registry.ts)
+- Page grid and layout tokens: [src/components/Grid](src/components/Grid), [src/app/globals.css](src/app/globals.css)
+- Shell and navigation: [src/components/AppShell](src/components/AppShell), [src/components/NavBar](src/components/NavBar)
+- Icon registry: [src/components/Icon/Icon.registry.ts](src/components/Icon/Icon.registry.ts)
+- Offline mirror, outbox and queued files: [src/data/local](src/data/local)
+- Sync engine: [src/lib/sync](src/lib/sync)
+- Server-side Postgres access: [src/data/server](src/data/server), schema in [supabase/migrations](supabase/migrations)
+- API routes: [src/app/api](src/app/api)
+- How the whole thing fits together: [docs/data-layer.md](docs/data-layer.md)
+- Design tokens: [src/app/globals.css](src/app/globals.css), typed in [src/lib/theme.ts](src/lib/theme.ts)
+- Dashboard composition: [src/app/_components/DashboardView](src/app/_components/DashboardView)
+- Gesture hooks: [src/hooks/useSwipeAction.ts](src/hooks/useSwipeAction.ts), [src/hooks/useScrollSnapIndex.ts](src/hooks/useScrollSnapIndex.ts)
+
+## Tooling
+
+`scripts/` is plain Node, ESLint-ignored, never imported by app code. The codemods share [scripts/lib/module-paths.js](scripts/lib/module-paths.js), which is the one place that knows this repo resolves `@/` to the repo root — change an alias in `tsconfig.json` and change it there too. Commands are listed in [.claude/CLAUDE.md](.claude/CLAUDE.md).
+
+## Current state
+
+Routes, components, the calculation engine, the offline data layer and the Supabase and R2 wiring
+are in place and the gates are green. Still open: OCR (`parseDocument` in
+[src/data/capture.ts](src/data/capture.ts) returns `null`), the zip bundle export (only CSV is
+implemented), and unit tests. Build phases are in §9 of the project plan.

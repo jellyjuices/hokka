@@ -1,0 +1,26 @@
+import { LinkButton } from "@/src/components/Button";
+import { Grid, GridItem } from "@/src/components/Grid";
+import { PageHeader } from "@/src/components/PageHeader";
+import { TransactionList } from "./_components/TransactionList";
+
+export default function TransactionsPage() {
+  return (
+    <Grid>
+      <GridItem>
+        <PageHeader
+          title="Transactions"
+          icon="transactions"
+          description="Every invoice and receipt you have recorded."
+          action={
+            <LinkButton href="/transactions/new" tone="accent">
+              Add transaction
+            </LinkButton>
+          }
+        />
+      </GridItem>
+      <GridItem>
+        <TransactionList />
+      </GridItem>
+    </Grid>
+  );
+}

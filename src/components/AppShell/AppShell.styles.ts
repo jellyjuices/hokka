@@ -1,0 +1,26 @@
+"use client";
+
+import styled from "@emotion/styled";
+import { theme } from "@/src/lib/theme";
+import { mediaDown } from "@/src/lib/breakpoints";
+
+export const Root = styled.div`
+  display: flex;
+  align-items: flex-start;
+  gap: ${theme.layout.railGap};
+  min-height: 100dvh;
+  padding: ${theme.layout.gutter};
+
+  ${mediaDown("smTablet")} {
+    gap: 0;
+    padding-bottom: calc(88px + env(safe-area-inset-bottom));
+  }
+`;
+
+export const Main = styled.main`
+  flex: 1 1 auto;
+  min-width: 0;
+  max-width: ${theme.layout.contentMax};
+  display: flex;
+  flex-direction: column;
+`;

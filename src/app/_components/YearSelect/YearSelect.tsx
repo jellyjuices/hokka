@@ -2,7 +2,7 @@
 
 import * as Select from "@radix-ui/react-select";
 import { Icon } from "@/src/components/Icon";
-import { YearMenu, YearOption, YearTrigger } from "./YearSelect.styles";
+import { YearIcon, YearMenu, YearOption, YearTrigger } from "./YearSelect.styles";
 import type { YearSelectProps } from "./YearSelect.types";
 
 export function YearSelect({ value, years, onChange }: YearSelectProps) {
@@ -10,9 +10,9 @@ export function YearSelect({ value, years, onChange }: YearSelectProps) {
     <Select.Root value={String(value)} onValueChange={(next) => onChange(Number(next))}>
       <YearTrigger aria-label="Tax year">
         <Select.Value />
-        <Select.Icon>
+        <YearIcon>
           <Icon name="caretDown" size={18} />
-        </Select.Icon>
+        </YearIcon>
       </YearTrigger>
       <Select.Portal>
         <YearMenu position="popper" sideOffset={8}>

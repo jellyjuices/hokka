@@ -13,12 +13,12 @@ export const FabLink = styled(Link)`
   display: inline-flex;
   align-items: center;
   gap: ${theme.space.sm};
-  min-height: 48px;
-  padding: 0 ${theme.space.md};
+  min-height: 56px;
+  padding: 0 ${theme.space.lg};
   border-radius: ${theme.borderRadius.full};
   background: ${theme.surface.accent};
   color: ${theme.foreground.inverse};
-  font-size: ${theme.fontSize.sm};
+  font-size: ${theme.fontSize.md};
   font-weight: 500;
 
   ${mediaUp("smTablet")} {

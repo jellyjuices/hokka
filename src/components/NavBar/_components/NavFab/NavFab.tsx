@@ -5,7 +5,7 @@ export function NavFab() {
   return (
     <FabLink href="/transaction/new" aria-label="New transaction">
       New
-      <Icon name="plus" size={24} />
+      <Icon name="plus" size={28} />
     </FabLink>
   );
 }

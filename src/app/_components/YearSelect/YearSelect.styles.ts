@@ -49,3 +49,8 @@ export const YearOption = styled(Select.Item)`
     background: ${hoverFill("transparent")};
   }
 `;
+
+export const YearIcon = styled(Select.Icon)`
+  display: flex;
+  align-items: center;
+`;

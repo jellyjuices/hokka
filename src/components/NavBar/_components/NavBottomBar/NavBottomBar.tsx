@@ -35,7 +35,7 @@ export function NavBottomBar({ initials }: NavBottomBarProps) {
           );
         })}
       </BottomBarItems>
-      <NavAccount initials={initials} isCollapsed isCompact />
+      <NavAccount initials={initials} isCollapsed />
     </BottomBar>
   );
 }

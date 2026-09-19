@@ -76,7 +76,7 @@ export function PinForm({ onUnlocked }: PinFormProps) {
             {isChecking ? "Checking" : "Unlock"}
           </Button>
           {biometrics.isEnrolled && (
-            <Button type="button" tone="ghost" isBlock onClick={() => void biometrics.attempt()}>
+            <Button type="button" tone="quiet" isBlock onClick={() => void biometrics.attempt()}>
               {biometrics.status === "prompting" ? "Waiting for you" : "Use biometrics"}
             </Button>
           )}

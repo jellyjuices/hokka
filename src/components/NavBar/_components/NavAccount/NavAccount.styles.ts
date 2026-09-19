@@ -7,6 +7,7 @@ import { transientProps } from "@/src/lib/theme";
 
 export const AccountLink = styled(Link, transientProps)<{
   $isCollapsed: boolean;
+  $isCompact: boolean;
   $isSelected: boolean;
 }>`
   display: flex;
@@ -29,14 +30,16 @@ export const AccountLink = styled(Link, transientProps)<{
   &:hover {
     background: ${hoverFill("transparent")};
   }
+
+  ${({ $isCompact }) => ($isCompact ? "width: 44px; height: 44px;" : "")}
 `;
 
-export const AccountAvatar = styled.span`
+export const AccountAvatar = styled.span<{ $isCompact: boolean }>`
   display: grid;
   place-items: center;
   flex: 0 0 auto;
-  width: 32px;
-  height: 32px;
+  width: ${({ $isCompact }) => ($isCompact ? "28px" : "32px")};
+  height: ${({ $isCompact }) => ($isCompact ? "28px" : "32px")};
   border-radius: ${theme.borderRadius.full};
   background: ${theme.surface.accentSecondary};
   color: ${theme.foreground.accent};

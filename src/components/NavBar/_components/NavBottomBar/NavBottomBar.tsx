@@ -28,14 +28,14 @@ export function NavBottomBar({ initials }: NavBottomBarProps) {
                 $isActive={isActive}
                 aria-current={isActive ? "page" : undefined}
               >
-                <Icon name={item.icon} size={32} />
+                <Icon name={item.icon} size={20} />
                 <BottomBarItemLabel>{item.label}</BottomBarItemLabel>
               </BottomBarItem>
             </li>
           );
         })}
       </BottomBarItems>
-      <NavAccount initials={initials} isCollapsed />
+      <NavAccount initials={initials} isCollapsed isCompact />
     </BottomBar>
   );
 }

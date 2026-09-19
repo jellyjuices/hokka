@@ -8,17 +8,18 @@ import { mediaUp } from "@/src/lib/breakpoints";
 
 export const BottomBar = styled.nav`
   position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  left: ${theme.space.md};
+  right: ${theme.space.md};
+  bottom: calc(${theme.space.sm} + env(safe-area-inset-bottom));
   z-index: 30;
   display: flex;
   align-items: center;
-  gap: ${theme.space.sm};
-  padding: ${theme.space.sm} ${theme.space.md};
-  padding-bottom: calc(${theme.space.sm} + env(safe-area-inset-bottom));
-  border-top: 1px solid ${theme.surface.tint};
+  gap: ${theme.space.xs};
+  padding: ${theme.space.xs};
+  border-radius: ${theme.borderRadius.full};
+  border: 1px solid ${theme.surface.tint};
   background: ${theme.surface.primary};
+  box-shadow: 0 8px 24px color-mix(in srgb, ${theme.foreground.primary} 12%, transparent);
 
   ${mediaUp("smTablet")} {
     display: none;
@@ -47,8 +48,8 @@ export const BottomBarItem = styled(Link, transientProps)<{ $isActive: boolean }
   align-items: center;
   justify-content: center;
   gap: ${theme.space.xs};
-  min-height: 56px;
-  padding: ${theme.space.sm} ${theme.space.xs};
+  min-height: 44px;
+  padding: ${theme.space.xs};
   border-radius: ${theme.borderRadius.full};
   color: ${({ $isActive }) => ($isActive ? theme.foreground.accent : theme.foreground.secondary)};
   background: ${({ $isActive }) => ($isActive ? theme.surface.accentSecondary : "transparent")};

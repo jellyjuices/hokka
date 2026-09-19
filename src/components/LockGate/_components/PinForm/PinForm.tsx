@@ -1,20 +1,17 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useRef, useState, type FormEvent } from "react";
 import { Button } from "@/src/components/Button";
-import { Field, TextInput } from "@/src/components/Field";
 import { Icon } from "@/src/components/Icon";
+import { TileInput } from "@/src/components/TileInput";
 import {
   PinChoice,
   PinError,
-  PinHeading,
-  PinIdentity,
-  PinIntro,
   PinMark,
   PinPanel,
   PinReveal,
-  PinRevealToggle,
   PinScreen,
+  PinValue,
 } from "./PinForm.styles";
 import { verifyPassword } from "./PinForm.verify";
 import { useBiometricUnlock } from "./useBiometricUnlock";
@@ -22,14 +19,12 @@ import type { PinFormProps } from "./PinForm.types";
 
 export function PinForm({ onUnlocked }: PinFormProps) {
   const biometrics = useBiometricUnlock(onUnlocked);
-  const [isPasswordRequested, setIsPasswordRequested] = useState(false);
+  const passwordRef = useRef<HTMLInputElement>(null);
   const [password, setPassword] = useState("");
+  const [isRevealed, setIsRevealed] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isChecking, setIsChecking] = useState(false);
-  const [isVisible, setIsVisible] = useState(false);
 
-  const isPasswordShown =
-    !biometrics.isEnrolled || biometrics.status === "failed" || isPasswordRequested;
   const message = error ?? biometrics.error;
 
   async function submit(event: FormEvent<HTMLFormElement>) {
@@ -50,76 +45,40 @@ export function PinForm({ onUnlocked }: PinFormProps) {
   return (
     <PinScreen>
       <PinPanel onSubmit={submit}>
-        <PinIdentity>
-          <PinMark>
-            <Icon name={isPasswordShown ? "lock" : "biometrics"} size={24} weight="fill" />
-          </PinMark>
-          <PinHeading>Hokka</PinHeading>
-          <PinIntro>
-            {isPasswordShown
-              ? "Enter the password to open your ledger on this device."
-              : "Confirm it is you to open your ledger on this device."}
-          </PinIntro>
-        </PinIdentity>
-        {isPasswordShown && (
-          <Field label="Password" htmlFor="unlock-password">
-            <PinReveal>
-              <TextInput
-                id="unlock-password"
-                name="password"
-                type={isVisible ? "text" : "password"}
-                autoComplete="current-password"
-                autoFocus
-                value={password}
-                onChange={(event) => setPassword(event.target.value)}
-              />
-              <PinRevealToggle
-                type="button"
-                aria-label={isVisible ? "Hide password" : "Show password"}
-                aria-pressed={isVisible}
-                aria-controls="unlock-password"
-                onClick={() => setIsVisible((visible) => !visible)}
-              >
-                <Icon name={isVisible ? "eyeOff" : "eye"} size={20} />
-              </PinRevealToggle>
-            </PinReveal>
-          </Field>
-        )}
+        <PinMark src="/logo/logo-full.svg" alt="Hokka" width={72} height={72} priority />
+        <TileInput onClick={() => passwordRef.current?.focus()}>
+          <PinValue
+            ref={passwordRef}
+            id="unlock-password"
+            name="password"
+            type={isRevealed ? "text" : "password"}
+            autoComplete="current-password"
+            aria-label="Password"
+            placeholder="Enter your password"
+            autoFocus
+            value={password}
+            onChange={(event) => setPassword(event.target.value)}
+          />
+          <PinReveal
+            type="button"
+            aria-label={isRevealed ? "Hide password" : "Show password"}
+            aria-pressed={isRevealed}
+            onClick={() => setIsRevealed((revealed) => !revealed)}
+          >
+            <Icon name={isRevealed ? "eyeOff" : "eye"} />
+          </PinReveal>
+        </TileInput>
         {message && <PinError role="alert">{message}</PinError>}
-        {isPasswordShown ? (
-          <PinChoice>
-            <Button type="submit" isBlock disabled={isChecking || password === ""}>
-              {isChecking ? "Checking" : "Unlock"}
+        <PinChoice>
+          <Button type="submit" isBlock disabled={isChecking || password === ""}>
+            {isChecking ? "Checking" : "Unlock"}
+          </Button>
+          {biometrics.isEnrolled && (
+            <Button type="button" tone="ghost" isBlock onClick={() => void biometrics.attempt()}>
+              {biometrics.status === "prompting" ? "Waiting for you" : "Use biometrics"}
             </Button>
-            {biometrics.isEnrolled && (
-              <Button
-                type="button"
-                tone="ghost"
-                isBlock
-                leadingIcon="biometrics"
-                disabled={biometrics.status === "prompting"}
-                onClick={() => void biometrics.attempt()}
-              >
-                {biometrics.status === "failed" ? "Try biometrics again" : "Use biometrics"}
-              </Button>
-            )}
-          </PinChoice>
-        ) : (
-          <PinChoice>
-            <Button
-              type="button"
-              isBlock
-              leadingIcon="biometrics"
-              disabled={biometrics.status === "prompting"}
-              onClick={() => void biometrics.attempt()}
-            >
-              {biometrics.status === "prompting" ? "Waiting for you" : "Unlock with biometrics"}
-            </Button>
-            <Button type="button" tone="ghost" isBlock onClick={() => setIsPasswordRequested(true)}>
-              Use password instead
-            </Button>
-          </PinChoice>
-        )}
+          )}
+        </PinChoice>
       </PinPanel>
     </PinScreen>
   );

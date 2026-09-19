@@ -7,7 +7,7 @@ export function NavNewButton({ isCollapsed }: NavNewButtonProps) {
     <NewButtonLink href="/transaction/new" $isCollapsed={isCollapsed} aria-label="New transaction">
       <Icon name="plus" size={24} />
       <NewButtonLabel $isCollapsed={isCollapsed} aria-hidden={isCollapsed}>
-        New transaction
+        New
       </NewButtonLabel>
     </NewButtonLink>
   );

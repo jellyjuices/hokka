@@ -15,3 +15,14 @@ export function formatCurrency(amount: number) {
 export function formatAmount(amount: number) {
   return DECIMAL.format(amount);
 }
+
+export function toAmount(value: string) {
+  const parsed = Number(value);
+  return Number.isFinite(parsed) ? parsed : 0;
+}
+
+export function sanitizeAmount(value: string) {
+  const cleaned = value.replace(/[^0-9.]/g, "");
+  const [whole, ...rest] = cleaned.split(".");
+  return rest.length === 0 ? whole : `${whole}.${rest.join("").slice(0, 2)}`;
+}

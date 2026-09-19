@@ -14,7 +14,7 @@ export const ShellLayout = styled.div`
 
   ${mediaDown("smTablet")} {
     gap: 0;
-    padding-bottom: calc(88px + env(safe-area-inset-bottom));
+    padding-bottom: calc(76px + env(safe-area-inset-bottom));
   }
 `;
 

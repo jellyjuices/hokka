@@ -1,6 +1,6 @@
 import type { TransactionDraft } from "@/src/context/Ledger";
+import { toAmount } from "@/src/lib/money";
 import type { TransactionFormState, TransactionTotals } from "./TransactionForm.types";
-import { toAmount } from "./TransactionForm.totals";
 
 export function buildDraft(
   state: TransactionFormState,

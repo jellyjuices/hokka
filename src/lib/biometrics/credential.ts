@@ -47,8 +47,9 @@ export async function createBiometricCredential() {
   return toBase64Url(credential.rawId);
 }
 
-export async function assertBiometricCredential(credentialId: string) {
+export async function assertBiometricCredential(credentialId: string, signal?: AbortSignal) {
   const assertion = await navigator.credentials.get({
+    signal,
     publicKey: {
       challenge: randomBytes(32),
       rpId: window.location.hostname,

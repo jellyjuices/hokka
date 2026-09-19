@@ -4,7 +4,7 @@ import { FabLink } from "./NavFab.styles";
 export function NavFab() {
   return (
     <FabLink href="/transaction/new" aria-label="New transaction">
-      New transaction
+      New
       <Icon name="plus" size={24} />
     </FabLink>
   );

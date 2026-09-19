@@ -54,7 +54,7 @@ export function DashboardView() {
           action={
             <DashboardAction>
               <LinkButton href="/transaction/new" tone="accent" trailingIcon="plus">
-                New transaction
+                New
               </LinkButton>
             </DashboardAction>
           }

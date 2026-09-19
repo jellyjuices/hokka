@@ -1,4 +1,3 @@
-import { LinkButton } from "@/src/components/Button";
 import { Grid, GridItem } from "@/src/components/Grid";
 import { PageHeader } from "@/src/components/PageHeader";
 import type { FilingType } from "@/src/data/domain.types";
@@ -17,13 +16,9 @@ export default async function NewFilingPage({ searchParams }: NewFilingPageProps
   return (
     <Grid>
       <GridItem>
-        <PageHeader
-          title="Log a filing"
-          description="Period, amount, and date. Nothing is overwritten."
-          action={<LinkButton href="/filings">Cancel</LinkButton>}
-        />
+        <PageHeader title="Log a filing" mobileTitle="Filing" backHref="/filings" />
       </GridItem>
-      <GridItem span={8} spanTablet={12}>
+      <GridItem span={10} spanTablet={12}>
         <FilingForm
           defaults={{ taxPeriodId: period, filingType: toFilingType(type), amountFiled: amount }}
         />

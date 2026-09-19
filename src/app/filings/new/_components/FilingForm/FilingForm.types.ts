@@ -9,3 +9,12 @@ export type FilingDefaults = {
 export type FilingFormProps = {
   defaults: FilingDefaults;
 };
+
+export type FilingFormState = {
+  filingType: FilingType;
+  taxPeriodId: string;
+  filedDate: string;
+  amountFiled: string;
+  referenceNumber: string;
+  notes: string;
+};

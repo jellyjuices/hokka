@@ -33,6 +33,19 @@ const tones: Record<SelectTone, ReturnType<typeof css>> = {
       background: ${hoverFill(theme.surface.primary)};
     }
   `,
+  soft: css`
+    width: 100%;
+    min-height: 64px;
+    padding: 0 ${theme.space.lg};
+    border: none;
+    border-radius: ${theme.borderRadius.md};
+    background: ${theme.surface.secondary};
+    font-size: ${theme.fontSize.md};
+
+    &:hover {
+      background: ${hoverFill(theme.surface.secondary)};
+    }
+  `,
   plain: css`
     width: auto;
     justify-content: flex-end;

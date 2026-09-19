@@ -3,10 +3,10 @@ import { forgetCredentialId, readCredentialId, saveCredentialId } from "./store"
 import { hasPlatformAuthenticator } from "./support";
 import type { BiometricFailure } from "./biometrics.types";
 
-const CANCELLED = "NotAllowedError";
+const CANCELLED = ["NotAllowedError", "AbortError"];
 
 function isCancellation(error: unknown) {
-  return error instanceof DOMException && error.name === CANCELLED;
+  return error instanceof DOMException && CANCELLED.includes(error.name);
 }
 
 export async function enableBiometrics(): Promise<BiometricFailure> {
@@ -30,11 +30,11 @@ export function disableBiometrics() {
 
 // A failed or dismissed prompt is not an error state to recover from: the caller
 // falls back to the password, which is the gate the session cookie answers to.
-export async function unlockWithBiometrics(): Promise<BiometricFailure> {
+export async function unlockWithBiometrics(signal?: AbortSignal): Promise<BiometricFailure> {
   const credentialId = readCredentialId();
   if (credentialId === null) return "Biometric unlock is not set up on this device";
   try {
-    if (await assertBiometricCredential(credentialId)) return null;
+    if (await assertBiometricCredential(credentialId, signal)) return null;
     return "That did not match. Use your password";
   } catch (error) {
     if (isCancellation(error)) return "Biometric unlock was dismissed. Use your password";

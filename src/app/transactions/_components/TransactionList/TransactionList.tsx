@@ -30,7 +30,7 @@ export function TransactionList() {
         description="Log an invoice or a receipt and the HST split is tracked from there."
         action={
           <LinkButton href="/transaction/new" tone="accent" trailingIcon="plus">
-            New transaction
+            New
           </LinkButton>
         }
       />

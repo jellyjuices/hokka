@@ -13,7 +13,7 @@ export default function TransactionsPage() {
           description="Every invoice and receipt you have recorded."
           action={
             <LinkButton href="/transaction/new" tone="accent" trailingIcon="plus">
-              New transaction
+              New
             </LinkButton>
           }
         />

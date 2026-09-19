@@ -1,4 +1,4 @@
-export type SelectTone = "chip" | "outline" | "plain";
+export type SelectTone = "chip" | "outline" | "soft" | "plain";
 
 export type SelectOption = {
   value: string;

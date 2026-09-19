@@ -7,18 +7,19 @@ import type { NavAccountProps } from "./NavAccount.types";
 
 const HREF = "/settings";
 
-export function NavAccount({ initials, isCollapsed = false }: NavAccountProps) {
+export function NavAccount({ initials, isCollapsed = false, isCompact = false }: NavAccountProps) {
   const isSelected = isNavItemActive(usePathname(), HREF);
 
   return (
     <AccountLink
       href={HREF}
       $isCollapsed={isCollapsed}
+      $isCompact={isCompact}
       $isSelected={isSelected}
       aria-current={isSelected ? "page" : undefined}
       aria-label="Settings"
     >
-      <AccountAvatar>{initials.slice(0, 1)}</AccountAvatar>
+      <AccountAvatar $isCompact={isCompact}>{initials.slice(0, 1)}</AccountAvatar>
       <AccountLabel $isCollapsed={isCollapsed} aria-hidden={isCollapsed}>
         {initials}
       </AccountLabel>

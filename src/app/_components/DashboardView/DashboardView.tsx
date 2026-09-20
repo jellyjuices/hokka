@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import {
+  InvoiceIcon,
   CoinsIcon,
   MoneyIcon,
   PlusIcon,
@@ -17,7 +18,6 @@ import { breakpoints } from "@/src/lib/breakpoints";
 import { currentYear } from "@/src/lib/dates";
 import { formatCurrency } from "@/src/lib/money";
 import { ActivityList } from "../ActivityList";
-import { ObligationHistory } from "../ObligationHistory";
 import { ObligationsPanel } from "../ObligationsPanel";
 import { StreamPanel } from "../StreamPanel";
 import { SummaryDeck } from "../SummaryDeck";
@@ -41,7 +41,7 @@ export function DashboardView() {
   const isNarrow = useMediaQuery(NARROW_QUERY);
   const { trackRef, activeIndex, goTo } = useScrollSnapIndex(isNarrow ? SLIDES.length : 0);
 
-  const { yearTotals, obligations, incomeItems, expenseItems, recentItems } =
+  const { yearTotals, obligations, incomeItems, expenseItems, recentItems, filingItems } =
     useDashboardTotals(year);
 
   return (
@@ -127,6 +127,18 @@ export function DashboardView() {
           icon={CoinsIcon}
         />
       </GridItem>
+      <GridItem span={4}>
+        <ActivityList
+          visibility="wide"
+          title="Filing history"
+          items={filingItems}
+          emptyTitle="No filings yet"
+          ctaHref="/filings"
+          ctaLabel="See all filings"
+          icon={InvoiceIcon}
+        />
+      </GridItem>
+
       <GridItem>
         <ActivityList
           visibility="narrow"
@@ -135,12 +147,6 @@ export function DashboardView() {
           emptyTitle="Nothing recorded yet"
           ctaHref="/transactions"
           ctaLabel="See all transactions"
-        />
-      </GridItem>
-
-      <GridItem>
-        <ObligationHistory
-          obligations={obligations.filter((obligation) => obligation.state === "collected")}
         />
       </GridItem>
     </Grid>

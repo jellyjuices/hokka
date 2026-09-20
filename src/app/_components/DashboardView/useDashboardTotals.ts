@@ -6,7 +6,7 @@ import type { ActivityItem } from "../ActivityList";
 import type { Obligation, ObligationState } from "../ObligationCard";
 import { useLedger } from "@/src/context/Ledger";
 import { findCategory } from "@/src/data/categories";
-import type { FilingType, Transaction } from "@/src/data/domain.types";
+import type { Filing, FilingType, Transaction } from "@/src/data/domain.types";
 import { currentYear, formatDate, todayIsoDate } from "@/src/lib/dates";
 import { formatCurrency } from "@/src/lib/money";
 import { currentPeriod, periodLabel } from "@/src/lib/periods";
@@ -29,6 +29,11 @@ function inYear(isoDate: string, year: number) {
   return isoDate.startsWith(String(year));
 }
 
+const FILING_TYPE_LABEL: Record<FilingType, string> = {
+  hst: "HST filed",
+  income_tax: "Income tax filed",
+};
+
 function toActivityItem(transaction: Transaction): ActivityItem {
   const category = findCategory(transaction.category);
   return {
@@ -38,6 +43,22 @@ function toActivityItem(transaction: Transaction): ActivityItem {
     value: formatCurrency(transaction.total),
     href: "/transactions",
   };
+}
+
+function toFilingItem(filing: Filing): ActivityItem {
+  return {
+    id: filing.id,
+    meta: `${formatDate(filing.filedDate)}${filing.referenceNumber === "" ? "" : ` · ${filing.referenceNumber}`}`,
+    title: FILING_TYPE_LABEL[filing.filingType],
+    value: formatCurrency(filing.amountFiled),
+    href: "/filings",
+  };
+}
+
+type DatedItem = { sortDate: string; item: ActivityItem };
+
+function byRecency(a: DatedItem, b: DatedItem) {
+  return b.sortDate.localeCompare(a.sortDate);
 }
 
 function obligationState(amount: number, isFiled: boolean): ObligationState {
@@ -118,7 +139,23 @@ export function useDashboardTotals(year: number) {
       ],
       incomeItems: income.slice(0, RECENT_LIMIT).map(toActivityItem),
       expenseItems: expenses.slice(0, RECENT_LIMIT).map(toActivityItem),
-      recentItems: yearTransactions.slice(0, RECENT_LIMIT).map(toActivityItem),
+      recentItems: [
+        ...yearTransactions.map((transaction) => ({
+          sortDate: transaction.txnDate,
+          item: toActivityItem(transaction),
+        })),
+        ...yearFilings.map((filing) => ({
+          sortDate: filing.filedDate,
+          item: toFilingItem(filing),
+        })),
+      ]
+        .sort(byRecency)
+        .slice(0, RECENT_LIMIT)
+        .map(({ item }) => item),
+      filingItems: yearFilings
+        .map((filing) => ({ sortDate: filing.filedDate, item: toFilingItem(filing) }))
+        .sort(byRecency)
+        .map(({ item }) => item),
     };
   }, [filings, settings, transactions, year]);
 }

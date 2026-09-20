@@ -21,11 +21,6 @@ export function useBiometricUnlock(onUnlocked: () => void) {
   const isBusy = useRef(false);
   const hasTried = useRef(false);
 
-  // WebKit holds one WebAuthn request per page and cannot be talked out of it, so
-  // a second prompt raised over a live one never resolves and takes the screen
-  // with it. One at a time is the whole rule. A prompt nobody asked for also says
-  // nothing when it fails, because an error over an untouched screen reads as a
-  // refusal of a password that was never typed.
   const attempt = useCallback(
     async (isSilent: boolean) => {
       if (isBusy.current) return;
@@ -45,8 +40,6 @@ export function useBiometricUnlock(onUnlocked: () => void) {
     [onUnlocked],
   );
 
-  // A hidden tab raises a prompt nobody is there to answer, and that one blocks
-  // the prompt they will ask for when they come back.
   useEffect(() => {
     if (!isEnrolled || hasTried.current || document.visibilityState === "hidden") return;
     hasTried.current = true;

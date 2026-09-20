@@ -9,9 +9,6 @@ import type { CardWrapperDirection } from "./CardWrapper.types";
 const OUTER = theme.borderRadius.lg;
 const INNER = theme.borderRadius.sm;
 
-// Every rule carries a pseudo-class so it out-ranks the radius a tile sets on
-// itself: a plain `& > *` ties with the tile's own class and then loses on
-// whichever order Emotion happened to inject the two.
 const grouped: Record<CardWrapperDirection, ReturnType<typeof css>> = {
   row: css`
     & > * {

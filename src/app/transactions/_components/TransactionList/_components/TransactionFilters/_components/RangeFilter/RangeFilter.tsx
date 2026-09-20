@@ -46,7 +46,7 @@ export function RangeFilter({ range, onChange }: RangeFilterProps) {
           <DatePicker
             id="range-from"
             name="rangeFrom"
-            tone="soft"
+            variant="secondary"
             placeholder="From"
             value={range.from}
             onChange={(from) => onChange({ ...range, from })}
@@ -54,7 +54,7 @@ export function RangeFilter({ range, onChange }: RangeFilterProps) {
           <DatePicker
             id="range-to"
             name="rangeTo"
-            tone="soft"
+            variant="secondary"
             placeholder="To"
             value={range.to}
             onChange={(to) => onChange({ ...range, to })}

@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { FunnelSimpleIcon, PlusIcon, CardsThreeIcon } from "@phosphor-icons/react/dist/ssr";
 import { LinkButton } from "@/src/components/Button";
 import { EmptyState } from "@/src/components/EmptyState";
 import { Icon } from "@/src/components/Icon";
@@ -25,12 +26,12 @@ export function TransactionList() {
   if (transactions.length === 0) {
     return (
       <EmptyState
-        icon={<Icon name="receipt" size={32} weight="fill" />}
+        icon={<Icon name={CardsThreeIcon} size={32} weight="fill" />}
         title={isHydrated ? "No transactions yet" : "Loading transactions…"}
-        description="Log an invoice or a receipt and the HST split is tracked from there."
+        description="Log an invoice or a receipt."
         action={
-          <LinkButton href="/transaction/new" tone="accent" trailingIcon="plus">
-            New
+          <LinkButton href="/transaction/new" variant="tertiary" trailingIcon={PlusIcon}>
+            New item
           </LinkButton>
         }
       />
@@ -48,7 +49,7 @@ export function TransactionList() {
       {pendingCount > 0 && <ListNotice>{`${pendingCount} waiting to sync`}</ListNotice>}
       {visible.length === 0 ? (
         <EmptyState
-          icon={<Icon name="filter" size={32} weight="fill" />}
+          icon={<Icon name={FunnelSimpleIcon} size={32} weight="fill" />}
           title="Nothing matches these filters"
           description="Widen the type, category or year to see more."
         />

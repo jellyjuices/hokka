@@ -32,9 +32,6 @@ export const CATEGORIES: Category[] = [
     color: "teal",
   },
   {
-    // Business-use-of-home is the share of the home given over to the work, not the
-    // whole bill. 20% stands in for a room in a house; the real figure is the owner's
-    // floor-area ratio, which is why the settings screen can override it.
     id: "home_office",
     label: "Home office",
     direction: "expense",
@@ -43,8 +40,6 @@ export const CATEGORIES: Category[] = [
   },
   { id: "travel", label: "Travel", direction: "expense", defaultClaimablePct: 100, color: "sky" },
   {
-    // ITA 67.1 caps business meals and entertainment at half, for both the deduction
-    // and the Input Tax Credit.
     id: "meals",
     label: "Meals & entertainment",
     direction: "expense",
@@ -57,13 +52,6 @@ export const CATEGORIES: Category[] = [
     direction: "expense",
     defaultClaimablePct: 100,
     color: "slate",
-  },
-  {
-    id: "personal",
-    label: "Personal (not claimable)",
-    direction: "expense",
-    defaultClaimablePct: 0,
-    color: "rose",
   },
 ];
 

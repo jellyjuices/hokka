@@ -42,8 +42,6 @@ function storedPusher<Name extends EntityName>(
   };
 }
 
-// Keyed by EntityName rather than tested with a chain of ifs: the map has to name every
-// entity, so a new one is a type error here instead of a silent settings push.
 const PUSH_UPSERT: { [Name in EntityName]: (id: string) => Promise<void> } = {
   transaction: storedPusher("transaction", (id) => getLocalRecord("transactions", id)),
   filing: storedPusher("filing", (id) => getLocalRecord("filings", id)),

@@ -1,13 +1,14 @@
 "use client";
 
-import { Icon } from "@/src/components/Icon";
+import { CoinsIcon, HandCoinsIcon } from "@phosphor-icons/react/dist/ssr";
+import { Icon, type IconName } from "@/src/components/Icon";
 import type { TransactionDirection } from "@/src/data/domain.types";
 import { ToggleOption, ToggleTrack } from "./DirectionToggle.styles";
 import type { DirectionToggleProps } from "./DirectionToggle.types";
 
-const OPTIONS: { direction: TransactionDirection; label: string; icon: "coins" | "invoice" }[] = [
-  { direction: "expense", label: "Expense", icon: "coins" },
-  { direction: "income", label: "Invoice", icon: "invoice" },
+const OPTIONS: { direction: TransactionDirection; label: string; icon: IconName }[] = [
+  { direction: "expense", label: "Expense", icon: CoinsIcon },
+  { direction: "income", label: "Invoice", icon: HandCoinsIcon },
 ];
 
 export function DirectionToggle({ value, onChange }: DirectionToggleProps) {

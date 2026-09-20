@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, type ChangeEvent } from "react";
+import { PlusIcon, ReceiptIcon, TrashIcon } from "@phosphor-icons/react/dist/ssr";
 import { Button } from "@/src/components/Button";
 import { Icon } from "@/src/components/Icon";
 import { FileInput } from "@/src/components/Input";
@@ -50,14 +51,14 @@ export function AttachmentGallery({
                 unoptimized
               />
             ) : (
-              <Icon name="receipt" size={32} />
+              <Icon name={ReceiptIcon} size={32} />
             )}
             <GalleryRemove
               type="button"
               aria-label={`Remove ${attachment.name}`}
               onClick={() => onRemove(attachment.id)}
             >
-              <Icon name="trash" size={16} />
+              <Icon name={TrashIcon} size={16} />
             </GalleryRemove>
           </GalleryTile>
         ))}
@@ -69,7 +70,7 @@ export function AttachmentGallery({
           onChange={handleChange}
         />
         <GalleryAdd type="button" onClick={() => inputRef.current?.click()}>
-          <Icon name="plus" size={24} />
+          <Icon name={PlusIcon} size={24} />
           Add more
         </GalleryAdd>
       </GalleryGrid>

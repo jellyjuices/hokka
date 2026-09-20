@@ -1,4 +1,5 @@
 import * as Dialog from "@radix-ui/react-dialog";
+import { XIcon } from "@phosphor-icons/react/dist/ssr";
 import { Icon } from "@/src/components/Icon";
 import {
   ModalClose,
@@ -23,7 +24,7 @@ export function Modal({ open, onOpenChange, title, description, footer, children
               {description && <ModalDescription>{description}</ModalDescription>}
             </div>
             <ModalClose aria-label="Close">
-              <Icon name="close" size={18} />
+              <Icon name={XIcon} size={18} />
             </ModalClose>
           </ModalHeader>
           {children}

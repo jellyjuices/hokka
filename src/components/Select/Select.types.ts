@@ -1,4 +1,4 @@
-export type SelectTone = "chip" | "outline" | "soft" | "plain";
+export type SelectVariant = "primary" | "outlined" | "secondary" | "ghost";
 
 export type SelectOption = {
   value: string;
@@ -13,6 +13,6 @@ export type SelectProps = {
   value?: string;
   defaultValue?: string;
   placeholder?: string;
-  tone?: SelectTone;
+  variant?: SelectVariant;
   onChange?: (value: string) => void;
 };

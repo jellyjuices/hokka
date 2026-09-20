@@ -7,19 +7,19 @@ export function StatTile({
   value,
   caption,
   icon,
-  tone = "neutral",
+  variant = "secondary",
   size = "display",
   badge,
 }: StatTileProps) {
   return (
-    <TileSurface $tone={tone} $size={size}>
+    <TileSurface $variant={variant} $size={size}>
       {badge && <TileBadge>{badge}</TileBadge>}
       <TileLabel>
         {icon && <Icon name={icon} size={22} />}
         {label}
       </TileLabel>
       <TileValue $size={size}>{value}</TileValue>
-      {caption && <TileCaption $tone={tone}>{caption}</TileCaption>}
+      {caption && <TileCaption $variant={variant}>{caption}</TileCaption>}
     </TileSurface>
   );
 }

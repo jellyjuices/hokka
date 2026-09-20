@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, type ChangeEvent } from "react";
+import { CameraIcon, ReceiptIcon, UploadSimpleIcon } from "@phosphor-icons/react/dist/ssr";
 import { Button } from "@/src/components/Button";
 import { Icon } from "@/src/components/Icon";
 import { FileInput } from "@/src/components/Input";
@@ -39,7 +40,7 @@ export function AttachmentBar({ attachments, onFilesChosen, onOpenGallery }: Att
             {attachment.isImage ? (
               <StackImage src={attachment.previewUrl} alt="" fill sizes="72px" unoptimized />
             ) : (
-              <Icon name="receipt" size={26} />
+              <Icon name={ReceiptIcon} size={26} />
             )}
             {depth === 0 && <StackCount>{attachments.length}</StackCount>}
           </StackThumb>
@@ -64,10 +65,18 @@ export function AttachmentBar({ attachments, onFilesChosen, onOpenGallery }: Att
         capture="environment"
         onChange={handleChange}
       />
-      <Button tone="quiet" trailingIcon="upload" onClick={() => uploadRef.current?.click()}>
+      <Button
+        variant="secondary"
+        trailingIcon={UploadSimpleIcon}
+        onClick={() => uploadRef.current?.click()}
+      >
         Upload
       </Button>
-      <CameraButton tone="accent" trailingIcon="camera" onClick={() => cameraRef.current?.click()}>
+      <CameraButton
+        variant="primary"
+        trailingIcon={CameraIcon}
+        onClick={() => cameraRef.current?.click()}
+      >
         Snap a pic
       </CameraButton>
     </BarRow>

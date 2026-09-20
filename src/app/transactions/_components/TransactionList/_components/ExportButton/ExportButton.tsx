@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/src/components/Button";
+import { DownloadSimpleIcon } from "@phosphor-icons/react/dist/ssr";
 import { buildLedgerCsv, ledgerCsvFileName } from "@/src/lib/ledgerCsv";
 import { downloadText } from "@/src/lib/platform/download";
 import type { ExportButtonProps } from "./ExportButton.types";
@@ -15,9 +16,9 @@ export function ExportButton({ transactions, range }: ExportButtonProps) {
   return (
     <Button
       type="button"
-      tone="soft"
+      variant="tertiary"
       size="sm"
-      leadingIcon="download"
+      leadingIcon={DownloadSimpleIcon}
       disabled={transactions.length === 0}
       onClick={handleExport}
     >

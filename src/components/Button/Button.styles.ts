@@ -5,9 +5,9 @@ import styled from "@emotion/styled";
 import Link from "next/link";
 import { theme, hoverFill } from "@/src/lib/theme";
 import { transientProps } from "@/src/lib/theme";
-import type { ButtonSize, ButtonTone } from "./Button.types";
+import type { ButtonSize, ButtonVariant } from "./Button.types";
 
-function tone(background: string, color: string) {
+function variantStyle(background: string, color: string) {
   return css`
     background: ${background};
     color: ${color};
@@ -18,11 +18,11 @@ function tone(background: string, color: string) {
   `;
 }
 
-const tones: Record<ButtonTone, ReturnType<typeof css>> = {
-  accent: tone(theme.surface.accent, theme.foreground.inverse),
-  soft: tone(theme.surface.accentSecondary, theme.foreground.accent),
-  quiet: tone(theme.surface.secondary, theme.foreground.primary),
-  ghost: tone("transparent", theme.foreground.secondary),
+const variants: Record<ButtonVariant, ReturnType<typeof css>> = {
+  primary: variantStyle(theme.surface.accent, theme.foreground.inverse),
+  secondary: variantStyle(theme.surface.secondary, theme.foreground.primary),
+  tertiary: variantStyle(theme.surface.accentSecondary, theme.foreground.accent),
+  ghost: variantStyle("transparent", theme.foreground.secondary),
 };
 
 const sizes: Record<ButtonSize, ReturnType<typeof css>> = {
@@ -64,10 +64,10 @@ const base = css`
   }
 `;
 
-type Variant = { $tone: ButtonTone; $size: ButtonSize; $isBlock: boolean };
+type Variant = { $variant: ButtonVariant; $size: ButtonSize; $isBlock: boolean };
 
-const variant = ({ $tone, $size, $isBlock }: Variant) => css`
-  ${tones[$tone]};
+const variant = ({ $variant, $size, $isBlock }: Variant) => css`
+  ${variants[$variant]};
   ${sizes[$size]};
   ${
     $isBlock &&

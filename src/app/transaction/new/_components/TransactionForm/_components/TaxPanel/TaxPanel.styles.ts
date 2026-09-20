@@ -1,7 +1,7 @@
 "use client";
 
 import styled from "@emotion/styled";
-import { outlineField } from "@/src/components/Input";
+import { Input, InputShell } from "@/src/components/Input";
 import { theme } from "@/src/lib/theme";
 import { mediaDown } from "@/src/lib/breakpoints";
 
@@ -11,20 +11,8 @@ export const TaxGroup = styled.div`
   gap: ${theme.space.sm};
 `;
 
-export const TaxRow = styled.div`
-  display: flex;
-  align-items: center;
+export const TaxRow = styled(InputShell)`
   justify-content: space-between;
-  gap: ${theme.space.md};
-  min-height: 64px;
-  padding: 0 ${theme.space.lg};
-  border-radius: ${theme.borderRadius.md};
-  background: ${theme.surface.secondary};
-`;
-
-export const TaxLabel = styled.label`
-  color: ${theme.foreground.primary};
-  font-size: ${theme.fontSize.md};
 `;
 
 export const ModifierRow = styled.div`
@@ -37,27 +25,7 @@ export const ModifierRow = styled.div`
   }
 `;
 
-export const ModifierField = styled.label`
-  ${outlineField};
+export const ModifierField = styled(Input)`
   justify-content: space-between;
-  cursor: text;
-`;
-
-export const ModifierLabel = styled.span`
-  flex: 0 0 auto;
-  color: ${theme.foreground.primary};
-  font-size: ${theme.fontSize.md};
-  white-space: nowrap;
-`;
-
-export const ModifierValue = styled.span`
-  display: inline-flex;
-  flex: 1 1 auto;
-  min-width: 0;
-  align-items: center;
-  justify-content: flex-end;
-  gap: ${theme.space.xs};
-  color: ${theme.foreground.primary};
-  font-size: ${theme.fontSize.md};
   font-weight: 500;
 `;

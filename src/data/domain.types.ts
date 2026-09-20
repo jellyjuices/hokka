@@ -5,8 +5,6 @@ export type FilingFrequency = "monthly" | "quarterly" | "annual";
 export type PeriodStatus = "open" | "filed";
 export type FilingType = "hst" | "income_tax";
 
-// The claimable percentage a category starts a transaction at, keyed by category id.
-// An absent key means the category's own rule-of-thumb default still applies.
 export type CategoryClaimablePct = Record<string, number>;
 
 export type TaxSettings = {

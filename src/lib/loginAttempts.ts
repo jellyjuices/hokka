@@ -1,16 +1,8 @@
-// An unlimited guess rate turns one password into an online brute force, so failures
-// are counted per client and the door closes for a while once they pile up. The store
-// is in-process: there is one user and one small instance, and a counter that resets
-// on redeploy still costs an attacker far more than no counter at all.
 const WINDOW_MS = 15 * 60 * 1000;
 const MAX_FAILURES = 5;
 
 const failures = new Map<string, { count: number; firstAt: number }>();
 
-// Only production counts, so a mistyped password while developing never locks the
-// app. The switch is the build mode rather than the client address, because
-// x-forwarded-for is set by the caller: trusting a loopback value in it would let
-// anyone claim to be localhost and skip the limit entirely.
 function isEnforced() {
   return process.env.NODE_ENV === "production";
 }

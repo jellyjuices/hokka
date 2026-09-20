@@ -18,10 +18,10 @@ export function AutofillPrompt({
       title="Read this receipt?"
       footer={
         <>
-          <Button tone="quiet" onClick={onReference}>
+          <Button variant="secondary" onClick={onReference}>
             Add as reference
           </Button>
-          <Button tone="accent" onClick={onAutofill}>
+          <Button variant="primary" onClick={onAutofill}>
             Overwrite
           </Button>
         </>

@@ -1,37 +1,31 @@
 "use client";
 
-import { TileInput, TileValue } from "@/src/components/TileInput";
+import { Input } from "@/src/components/Input";
 import { categoriesFor } from "@/src/data/categories";
-import { TileMeasure, TileUnit } from "../../SettingsView.styles";
 import { claimableFieldName } from "../../SettingsView.patch";
 import type { ClaimableRatesProps } from "./ClaimableRates.types";
 
 export function ClaimableRates({ overrides }: ClaimableRatesProps) {
-  return (
-    <>
-      {categoriesFor("expense").map((category) => {
-        const field = claimableFieldName(category.id);
-        const unit = `${field}Unit`;
+  return categoriesFor("expense").map(({ id, label, defaultClaimablePct }) => {
+    const field = claimableFieldName(id);
 
-        return (
-          <TileInput key={category.id} label={category.label} htmlFor={field}>
-            <TileMeasure>
-              <TileValue
-                id={field}
-                name={field}
-                type="number"
-                min={0}
-                max={100}
-                step={1}
-                placeholder={String(category.defaultClaimablePct)}
-                defaultValue={overrides[category.id] ?? ""}
-                aria-describedby={unit}
-              />
-              <TileUnit id={unit}>percent</TileUnit>
-            </TileMeasure>
-          </TileInput>
-        );
-      })}
-    </>
-  );
+    return (
+      <Input
+        key={id}
+        id={field}
+        name={field}
+        variant="filled"
+        label={label}
+        align="end"
+        appendValue="%"
+        type="number"
+        min={0}
+        max={100}
+        step={1}
+        placeholder={String(defaultClaimablePct)}
+        defaultValue={overrides[id] ?? ""}
+        aria-label={`${label}, claimable percent`}
+      />
+    );
+  });
 }

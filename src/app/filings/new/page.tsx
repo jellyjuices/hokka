@@ -16,7 +16,7 @@ export default async function NewFilingPage({ searchParams }: NewFilingPageProps
   return (
     <Grid>
       <GridItem>
-        <PageHeader title="Log a filing" mobileTitle="Filing" backHref="/filings" />
+        <PageHeader title="Add Filing" mobileTitle="Filing" backHref="/filings" />
       </GridItem>
       <GridItem span={10} spanTablet={12}>
         <FilingForm

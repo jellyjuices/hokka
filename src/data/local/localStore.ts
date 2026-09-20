@@ -71,8 +71,6 @@ function tableFor<Name extends LocalCollectionName>(collection: Name) {
   return tables[collection] as Record<string, LocalRecordMap[Name]>;
 }
 
-// Only the collections that changed are rebuilt. The rest keep their array identity, so
-// a screen reading filings does not re-render because a transaction was saved.
 function publish(changed: LocalCollectionName[] = COLLECTION_NAMES) {
   const next: LocalSnapshot = { ...snapshot, settings, isHydrated: true };
   for (const collection of changed) resort(collection, next);
@@ -110,8 +108,7 @@ export function hydrateLocalStore(): Promise<void> {
         }),
       );
       tables = loaded;
-      // A snapshot written before a settings field existed is still a valid snapshot,
-      // so the stored object lands on top of the defaults rather than replacing them.
+
       settings = { ...DEFAULT_SETTINGS, ...((await readValue<TaxSettings>(SETTINGS_KEY)) ?? {}) };
       publish();
     })();
@@ -135,8 +132,6 @@ export async function removeLocalRecord(collection: LocalCollectionName, id: str
   await persist(collection);
 }
 
-// A pull brings every collection at once, so the whole batch lands on one publish rather
-// than dragging the screens through four intermediate states.
 export async function mergeLocalBatch(batches: LocalMergeBatch[]) {
   const changed: LocalCollectionName[] = [];
 

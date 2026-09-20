@@ -7,23 +7,23 @@ import type { Attachment, AutofillNotice } from "./TransactionForm.types";
 import type { TransactionFormApi } from "./useTransactionForm";
 
 const READING: AutofillNotice = {
-  tone: "reading",
+  variant: "info",
   text: "Reading the receipt on this device…",
 };
 const UNREADABLE: AutofillNotice = {
-  tone: "warn",
+  variant: "warning",
   text: "Nothing readable in that file yet, so it is attached as a reference.",
 };
 const UNSURE: AutofillNotice = {
-  tone: "warn",
+  variant: "warning",
   text: "Read with low confidence, so check the vendor, date and amounts before saving.",
 };
 const FAILED: AutofillNotice = {
-  tone: "warn",
+  variant: "warning",
   text: "The reader could not start, so the file is attached as a reference.",
 };
 const SURE: AutofillNotice = {
-  tone: "good",
+  variant: "success",
   text: "Read with high confidence, so the amounts below came off the receipt.",
 };
 const SURE_ENOUGH = 0.6;

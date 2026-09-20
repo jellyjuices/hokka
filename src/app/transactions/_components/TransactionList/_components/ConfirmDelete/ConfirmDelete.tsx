@@ -19,10 +19,10 @@ export function ConfirmDelete({
       title="Delete this transaction?"
       footer={
         <>
-          <Button tone="quiet" onClick={() => onOpenChange(false)}>
+          <Button variant="secondary" onClick={() => onOpenChange(false)}>
             Keep it
           </Button>
-          <Button tone="accent" disabled={isDeleting} onClick={onConfirm}>
+          <Button variant="primary" disabled={isDeleting} onClick={onConfirm}>
             {isDeleting ? "Deleting…" : "Delete"}
           </Button>
         </>

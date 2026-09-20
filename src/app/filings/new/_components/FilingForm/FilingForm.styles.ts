@@ -2,8 +2,8 @@
 
 import styled from "@emotion/styled";
 import { Button } from "@/src/components/Button";
-import { DisplayInput, SoftField } from "@/src/components/Input";
-import { theme, numeric } from "@/src/lib/theme";
+import { Input } from "@/src/components/Input";
+import { theme } from "@/src/lib/theme";
 import { mediaDown } from "@/src/lib/breakpoints";
 
 export const FormRoot = styled.form`
@@ -13,22 +13,9 @@ export const FormRoot = styled.form`
   padding-bottom: ${theme.space.lg};
 `;
 
-export const AmountRow = styled.label`
-  display: flex;
-  align-items: center;
-  gap: ${theme.space.sm};
-  cursor: text;
-`;
-
-export const AmountPrefix = styled.span`
-  color: ${theme.foreground.disabled};
-  font-family: ${theme.fontFamily.display};
-  font-size: ${theme.fontSize["4xl"]};
-  font-weight: 400;
-`;
-
-export const AmountInput = styled(DisplayInput)`
-  ${numeric}
+export const NoteField = styled(Input)`
+  align-items: flex-start;
+  padding: ${theme.space.lg};
 `;
 
 export const PairRow = styled.div`
@@ -39,11 +26,6 @@ export const PairRow = styled.div`
   ${mediaDown("mobile")} {
     grid-template-columns: minmax(0, 1fr);
   }
-`;
-
-export const NoteField = styled(SoftField)`
-  align-items: flex-start;
-  padding: ${theme.space.lg};
 `;
 
 export const FormNotice = styled.p`

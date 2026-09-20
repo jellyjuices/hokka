@@ -6,3 +6,5 @@ export { useReducedMotion } from "./useReducedMotion";
 export { useScrollSnapIndex } from "./useScrollSnapIndex";
 export { useSwipeAction } from "./useSwipeAction";
 export type { SwipeActionOptions, SwipeActionState } from "./useSwipeAction";
+export { useSwipeDismiss } from "./useSwipeDismiss";
+export type { SwipeDismissOptions, SwipeDismissState } from "./useSwipeDismiss";

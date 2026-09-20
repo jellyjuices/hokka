@@ -1,3 +1,4 @@
+import { CoinsIcon, HandCoinsIcon, PaperclipIcon } from "@phosphor-icons/react/dist/ssr";
 import { Icon } from "@/src/components/Icon";
 import { findCategory } from "@/src/data/categories";
 import { formatCurrency } from "@/src/lib/money";
@@ -26,7 +27,7 @@ export function TransactionCard({ transaction, action }: TransactionCardProps) {
   return (
     <CardShell>
       <CardGlyph $isIncome={isIncome}>
-        <Icon name={isIncome ? "invoice" : "coins"} size={24} />
+        <Icon name={isIncome ? HandCoinsIcon : CoinsIcon} size={24} />
       </CardGlyph>
       <CardBody>
         <CardTitle>{title}</CardTitle>
@@ -42,7 +43,7 @@ export function TransactionCard({ transaction, action }: TransactionCardProps) {
           )}
           {attachmentCount > 0 && (
             <CardMetaBadge aria-label={`${attachmentCount} attached`}>
-              <Icon name="paperclip" size={14} />
+              <Icon name={PaperclipIcon} size={14} />
               {attachmentCount}
             </CardMetaBadge>
           )}

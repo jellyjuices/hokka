@@ -1,6 +1,7 @@
 "use client";
 
 import { Icon } from "@/src/components/Icon";
+import { ReceiptIcon } from "@phosphor-icons/react/dist/ssr";
 import { DASH_RADIUS, DashedOutline, DropLabel, DropPanel, DropScrim } from "./DropZone.styles";
 import type { DropZoneProps } from "./DropZone.types";
 import { useFileDrop } from "./useFileDrop";
@@ -16,7 +17,7 @@ export function DropZone({ onFiles, label = "Drop to create transaction" }: Drop
         <DashedOutline aria-hidden focusable="false">
           <rect x="0" y="0" width="100%" height="100%" rx={DASH_RADIUS} ry={DASH_RADIUS} />
         </DashedOutline>
-        <Icon name="receipt" size={40} />
+        <Icon name={ReceiptIcon} size={40} />
         <DropLabel>{label}</DropLabel>
       </DropPanel>
     </DropScrim>

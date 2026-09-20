@@ -15,8 +15,6 @@ export function claimableFieldName(categoryId: string) {
   return `claimablePct.${categoryId}`;
 }
 
-// A blank tile is not a zero: it drops the override and hands the category back to its
-// own default, the way a blank reserve hands the rate back to the bracket estimate.
 function readClaimable(form: FormData, current: CategoryClaimablePct): CategoryClaimablePct {
   const next = { ...current };
 

@@ -1,6 +1,7 @@
 "use client";
 
 import * as Select from "@radix-ui/react-select";
+import { CaretDownIcon, PlusIcon } from "@phosphor-icons/react/dist/ssr";
 import { Icon } from "@/src/components/Icon";
 import { usePointerFocus } from "@/src/hooks";
 import {
@@ -22,7 +23,7 @@ export function CategoryPicker({ value, categories, onChange }: CategoryPickerPr
         {selected === null ? null : <CategorySwatch $color={selected.color} aria-hidden />}
         <Select.Value placeholder="Category" />
         <TriggerIcon>
-          <Icon name={value === "" ? "plus" : "caretDown"} size={18} />
+          <Icon name={value === "" ? PlusIcon : CaretDownIcon} size={18} />
         </TriggerIcon>
       </CategoryTrigger>
       <Select.Portal>

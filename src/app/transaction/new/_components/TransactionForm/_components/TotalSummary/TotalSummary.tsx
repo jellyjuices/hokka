@@ -1,4 +1,5 @@
 import { AnimatedNumber } from "@/src/components/AnimatedNumber";
+import { ArrowElbowDownRightIcon, CurrencyDollarIcon } from "@phosphor-icons/react/dist/ssr";
 import { Icon } from "@/src/components/Icon";
 import { formatAmount } from "@/src/lib/money";
 import {
@@ -20,7 +21,7 @@ export function TotalSummary({ direction, total, claimBack }: TotalSummaryProps)
     <SummaryBlock>
       <SummaryRow>
         <SummaryLabel>
-          <Icon name="dollar" size={26} />
+          <Icon name={CurrencyDollarIcon} size={26} />
           Total
         </SummaryLabel>
         <SummaryAmount>
@@ -30,7 +31,7 @@ export function TotalSummary({ direction, total, claimBack }: TotalSummaryProps)
       </SummaryRow>
       {!!claimBack && (
         <SummaryNote>
-          <Icon name="claim" size={18} />
+          <Icon name={ArrowElbowDownRightIcon} size={18} />
           {note}
         </SummaryNote>
       )}

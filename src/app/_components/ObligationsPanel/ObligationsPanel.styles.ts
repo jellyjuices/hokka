@@ -8,10 +8,15 @@ import { mediaDown } from "@/src/lib/breakpoints";
 export const ObligationsStack = styled.div`
   display: flex;
   flex-direction: column;
+  flex: 1;
   gap: ${theme.space.md};
 
-  ${mediaDown("smTablet")} {
+  > :first-child {
     flex: 1;
+
+    > * {
+      flex: 1;
+    }
   }
 `;
 

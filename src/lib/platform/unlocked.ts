@@ -5,11 +5,6 @@ const STORAGE_KEY = "hokka:unlocked-until";
 
 export const LOCK_AFTER_MINUTES = 5;
 
-// The stamp lives in sessionStorage, so closing the app or the tab locks the
-// ledger with no timer involved. IDLE_LIMIT closes it after a spell of no input,
-// and HIDDEN_GRACE shortens that the moment the tab goes away — short, because a
-// hidden tab may be a phone in someone else's hand, but not instant, because
-// attaching a receipt sends you to a photo picker and back.
 const IDLE_LIMIT = LOCK_AFTER_MINUTES * 60 * 1000;
 const HIDDEN_GRACE = 60 * 1000;
 const REFRESH_STEP = 10 * 1000;
@@ -51,8 +46,6 @@ function onActivity() {
   moveExpiry(next);
 }
 
-// A background tab has its timers throttled, so the grace may lapse without the
-// timeout ever firing. Coming back is the second place the clock is read.
 function onVisibilityChange() {
   const expiry = readExpiry();
   const isHidden = document.visibilityState === "hidden";

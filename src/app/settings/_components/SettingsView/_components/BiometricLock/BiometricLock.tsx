@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useSyncExternalStore } from "react";
 import { Switch } from "@/src/components/Switch";
-import { TileInput } from "@/src/components/TileInput";
+import { InputShell } from "@/src/components/Input";
 import {
   disableBiometrics,
   enableBiometrics,
@@ -11,7 +11,6 @@ import {
   hasPlatformAuthenticator,
   subscribeBiometrics,
 } from "@/src/lib/biometrics";
-import { LOCK_AFTER_MINUTES } from "@/src/lib/platform/unlocked";
 import { LockNote } from "./BiometricLock.styles";
 
 const UNSUPPORTED = "This device has no fingerprint or face unlock, so the password stands alone.";
@@ -49,7 +48,12 @@ export function BiometricLock() {
 
   return (
     <>
-      <TileInput label="Unlock with biometrics" htmlFor="biometricLock">
+      <InputShell
+        variant="filled"
+        label="Unlock with biometrics"
+        htmlFor="biometricLock"
+        isPressable
+      >
         <Switch
           id="biometricLock"
           checked={isEnabled}
@@ -57,12 +61,9 @@ export function BiometricLock() {
           onCheckedChange={(checked) => void toggle(checked)}
           label="Unlock with biometrics"
         />
-      </TileInput>
+      </InputShell>
       <LockNote role={error === null ? undefined : "alert"}>
-        {error ??
-          (isAvailable
-            ? `The ledger locks itself after ${LOCK_AFTER_MINUTES} minutes, when you leave the tab and when the app closes. The password always opens it if biometrics will not.`
-            : UNSUPPORTED)}
+        {error ?? (isAvailable || UNSUPPORTED)}
       </LockNote>
     </>
   );

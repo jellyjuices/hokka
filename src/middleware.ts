@@ -5,9 +5,6 @@ import { SESSION_COOKIE, isValidSessionToken } from "@/src/lib/session";
 
 const OPEN_PATHS = new Set(["/api/unlock", "/api/health"]);
 
-// The open paths are kept out of the matcher, not just waved through inside it: an
-// early return still costs the invocation, and the unlock request is the one nobody
-// is waiting on twice. OPEN_PATHS stays as the second lock on the same door.
 export const config = { matcher: "/api/((?!unlock$|health$).*)" };
 
 export async function middleware(request: NextRequest) {

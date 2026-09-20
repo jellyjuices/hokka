@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { CalendarBlankIcon, CaretLeftIcon, CaretRightIcon } from "@phosphor-icons/react/dist/ssr";
 import * as Popover from "@radix-ui/react-popover";
 import { Icon } from "@/src/components/Icon";
 import { usePointerFocus } from "@/src/hooks";
@@ -65,7 +66,7 @@ export function Calendar({ selected, month, onMonthChange, onSelect }: CalendarP
           aria-label="Previous month"
           onClick={() => onMonthChange(new Date(month.getFullYear(), month.getMonth() - 1, 1))}
         >
-          <Icon name="caretLeft" size={16} />
+          <Icon name={CaretLeftIcon} size={16} />
         </CalendarNavButton>
         <CalendarMonthLabel>{formatMonthAndYear(toIsoDate(month))}</CalendarMonthLabel>
         <CalendarNavButton
@@ -73,7 +74,7 @@ export function Calendar({ selected, month, onMonthChange, onSelect }: CalendarP
           aria-label="Next month"
           onClick={() => onMonthChange(new Date(month.getFullYear(), month.getMonth() + 1, 1))}
         >
-          <Icon name="caretRight" size={16} />
+          <Icon name={CaretRightIcon} size={16} />
         </CalendarNavButton>
       </CalendarHeader>
       <CalendarWeekdays>
@@ -106,7 +107,7 @@ export function DatePicker({
   value,
   onChange,
   placeholder = "Select a date",
-  tone = "outline",
+  variant = "outlined",
   display = "full",
 }: DatePickerProps) {
   const initial = defaultValue ? parseIsoDate(defaultValue) : null;
@@ -133,16 +134,16 @@ export function DatePicker({
   return (
     <Popover.Root open={open} onOpenChange={handleOpenChange}>
       <Popover.Trigger asChild>
-        <CalendarTrigger id={id} type="button" $tone={tone} {...pointerFocus}>
-          {tone === "outline" ? (
+        <CalendarTrigger id={id} type="button" $variant={variant} {...pointerFocus}>
+          {variant === "outlined" ? (
             <>
-              <Icon name="calendar" size={16} />
+              <Icon name={CalendarBlankIcon} size={16} />
               {label}
             </>
           ) : (
             <>
               {label}
-              <Icon name="calendar" size={20} />
+              <Icon name={CalendarBlankIcon} size={20} />
             </>
           )}
         </CalendarTrigger>

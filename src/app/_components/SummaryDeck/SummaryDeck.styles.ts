@@ -7,6 +7,11 @@ import { mediaDown } from "@/src/lib/breakpoints";
 export const DeckTrack = styled.div`
   display: contents;
 
+  > * {
+    display: flex;
+    flex-direction: column;
+  }
+
   ${mediaDown("smTablet")} {
     --slide-peek: 44px;
     display: flex;
@@ -25,8 +30,6 @@ export const DeckTrack = styled.div`
     }
 
     > * {
-      display: flex;
-      flex-direction: column;
       flex: 0 0 calc(100% - var(--slide-peek));
       scroll-snap-align: start;
       scroll-snap-stop: always;

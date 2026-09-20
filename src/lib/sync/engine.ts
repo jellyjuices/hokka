@@ -1,6 +1,6 @@
 import { hydrateLocalStore, hydrateOutbox, readOutbox, subscribeOutbox } from "@/src/data/local";
 import { isOnline } from "@/src/lib/platform/connectivity";
-import type { SyncEngine, SyncEngineDeps } from "./engine.types";
+import type { SyncEngine, SyncEngineDeps, SyncEvent } from "./engine.types";
 import { pullIntoLocal } from "./pull";
 import { pushOutbox } from "./push";
 
@@ -16,6 +16,26 @@ export function createSyncEngine(deps: SyncEngineDeps): SyncEngine {
   let debounceId: number | null = null;
   let unsubscribeQueue: (() => void) | null = null;
   let isWaitingForNetwork = false;
+  let hasReportedOffline = false;
+  let hasReportedFailure = false;
+
+  function reportOffline() {
+    if (hasReportedOffline) return;
+    hasReportedOffline = true;
+    deps.onEvent({ kind: "offline" });
+  }
+
+  function reportOnline() {
+    if (!hasReportedOffline) return;
+    hasReportedOffline = false;
+    deps.onEvent({ kind: "online" });
+  }
+
+  function reportFailure(event: SyncEvent) {
+    if (hasReportedFailure) return;
+    hasReportedFailure = true;
+    deps.onEvent(event);
+  }
 
   function stopWaitingForNetwork() {
     isWaitingForNetwork = false;
@@ -36,6 +56,7 @@ export function createSyncEngine(deps: SyncEngineDeps): SyncEngine {
   async function runSync() {
     if (!isOnline()) {
       deps.onStatusChanged("offline");
+      reportOffline();
       waitForNetwork();
       return;
     }
@@ -48,18 +69,26 @@ export function createSyncEngine(deps: SyncEngineDeps): SyncEngine {
       await pullIntoLocal();
       deps.onSyncedAtChanged(Date.now());
 
+      reportOnline();
+      if (result.pushed > 0) deps.onEvent({ kind: "pushed", count: result.pushed });
+
       if (result.blocked) {
         deps.onStatusChanged("error");
+        reportFailure({ kind: "blocked" });
         waitForNetwork();
         return;
       }
 
       deps.onErrorChanged(null);
       deps.onStatusChanged("idle");
+      hasReportedFailure = false;
       stopWaitingForNetwork();
     } catch (error) {
-      deps.onErrorChanged(error instanceof Error ? error.message : "Sync failed");
+      const message = error instanceof Error ? error.message : "Sync failed";
+      deps.onErrorChanged(message);
       deps.onStatusChanged(isOnline() ? "error" : "offline");
+      if (isOnline()) reportFailure({ kind: "failed", message });
+      else reportOffline();
       waitForNetwork();
     }
   }
@@ -96,6 +125,7 @@ export function createSyncEngine(deps: SyncEngineDeps): SyncEngine {
 
   function handleOffline() {
     deps.onStatusChanged("offline");
+    reportOffline();
     waitForNetwork();
   }
 

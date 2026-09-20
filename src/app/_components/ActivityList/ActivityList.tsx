@@ -1,4 +1,5 @@
 import { LinkButton } from "@/src/components/Button";
+import { ArrowRightIcon, ReceiptIcon } from "@phosphor-icons/react/dist/ssr";
 import { EmptyState } from "@/src/components/EmptyState";
 import { Icon } from "@/src/components/Icon";
 import { ListRow } from "@/src/components/ListRow";
@@ -18,13 +19,14 @@ export function ActivityList({
   ctaHref,
   ctaLabel,
   visibility = "all",
+  icon = ReceiptIcon,
 }: ActivityListProps) {
   return (
     <ActivitySection $visibility={visibility}>
       <ActivityTitle>{title}</ActivityTitle>
       {items.length === 0 ? (
         <EmptyState
-          icon={<Icon name="receipt" size={32} weight="fill" />}
+          icon={<Icon name={icon} size={32} weight="fill" />}
           title={emptyTitle}
           description={emptyDescription}
         />
@@ -39,7 +41,7 @@ export function ActivityList({
       )}
       {items.length !== 0 && (
         <ActivityFooter>
-          <LinkButton href={ctaHref} tone="soft" isBlock trailingIcon="arrowRight">
+          <LinkButton href={ctaHref} variant="secondary" isBlock trailingIcon={ArrowRightIcon}>
             {ctaLabel}
           </LinkButton>
         </ActivityFooter>

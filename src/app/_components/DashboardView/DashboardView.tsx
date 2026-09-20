@@ -1,6 +1,13 @@
 "use client";
 
 import { useState } from "react";
+import {
+  CoinsIcon,
+  MoneyIcon,
+  PlusIcon,
+  SquaresFourIcon,
+  CurrencyDollarIcon,
+} from "@phosphor-icons/react/dist/ssr";
 import { LinkButton } from "@/src/components/Button";
 import { Grid, GridItem } from "@/src/components/Grid";
 import { PageDots } from "@/src/components/PageDots";
@@ -43,7 +50,7 @@ export function DashboardView() {
         <PageHeader
           title="Dashboard"
           mobileTitle={SLIDES[activeIndex].label}
-          icon="dashboard"
+          icon={SquaresFourIcon}
           meta={
             <YearSelect
               value={year}
@@ -53,8 +60,8 @@ export function DashboardView() {
           }
           action={
             <DashboardAction>
-              <LinkButton href="/transaction/new" tone="accent" trailingIcon="plus">
-                New
+              <LinkButton href="/transaction/new" variant="primary" trailingIcon={PlusIcon}>
+                New item
               </LinkButton>
             </DashboardAction>
           }
@@ -65,7 +72,7 @@ export function DashboardView() {
         <GridItem span={4}>
           <StreamPanel
             label="Income"
-            icon="money"
+            icon={MoneyIcon}
             value={yearTotals.incomeTotal}
             caption="This year"
             metricLabel="HST collected"
@@ -75,14 +82,14 @@ export function DashboardView() {
         <GridItem span={4}>
           <StreamPanel
             label="Expenses"
-            icon="coins"
+            icon={CoinsIcon}
             value={yearTotals.expenseTotal}
             caption="This year"
-            metricLabel="Total ITCs"
+            metricLabel="ITCs earned"
             metricValue={formatCurrency(yearTotals.itcClaimed)}
           />
         </GridItem>
-        <GridItem span={4} rowSpan={2}>
+        <GridItem span={4}>
           <ObligationsPanel obligations={obligations} />
         </GridItem>
       </SummaryDeck>
@@ -98,7 +105,6 @@ export function DashboardView() {
           />
         </DashboardPagination>
       </GridItem>
-
       <GridItem span={4}>
         <ActivityList
           visibility="wide"
@@ -107,6 +113,7 @@ export function DashboardView() {
           emptyTitle="No invoices yet"
           ctaHref="/transactions"
           ctaLabel="See all invoices"
+          icon={CurrencyDollarIcon}
         />
       </GridItem>
       <GridItem span={4}>
@@ -117,6 +124,7 @@ export function DashboardView() {
           emptyTitle="No expenses yet"
           ctaHref="/transactions"
           ctaLabel="See all expenses"
+          icon={CoinsIcon}
         />
       </GridItem>
       <GridItem>

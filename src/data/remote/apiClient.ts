@@ -39,8 +39,6 @@ export async function apiRequest<T>(path: string, init: RequestInit = {}): Promi
   }
 
   if (!response.ok) {
-    // The session cookie has expired or the password changed: drop the UI's copy of the
-    // session so the lock screen comes back instead of every sync failing in silence.
     if (response.status === UNAUTHORIZED) clearUnlocked();
     const message = await response.text().catch(() => response.statusText);
     throw new ApiError(message || response.statusText, response.status);

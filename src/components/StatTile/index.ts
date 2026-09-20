@@ -1,2 +1,2 @@
 export { StatTile } from "./StatTile";
-export type { StatTileProps, StatTileTone } from "./StatTile.types";
+export type { StatTileProps, StatTileVariant } from "./StatTile.types";

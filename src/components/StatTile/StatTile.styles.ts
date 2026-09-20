@@ -3,14 +3,14 @@
 import { css } from "@emotion/react";
 import styled from "@emotion/styled";
 import { theme, numeric } from "@/src/lib/theme";
-import type { StatTileSize, StatTileTone } from "./StatTile.types";
+import type { StatTileSize, StatTileVariant } from "./StatTile.types";
 
-const tones: Record<StatTileTone, ReturnType<typeof css>> = {
-  neutral: css`
+const variants: Record<StatTileVariant, ReturnType<typeof css>> = {
+  secondary: css`
     background: ${theme.surface.secondary};
     color: ${theme.foreground.primary};
   `,
-  accent: css`
+  primary: css`
     background: ${theme.surface.accent};
     color: ${theme.foreground.inverse};
   `,
@@ -25,7 +25,7 @@ const sizes: Record<StatTileSize, ReturnType<typeof css>> = {
   `,
 };
 
-export const TileSurface = styled.div<{ $tone: StatTileTone; $size: StatTileSize }>`
+export const TileSurface = styled.div<{ $variant: StatTileVariant; $size: StatTileSize }>`
   position: relative;
   display: flex;
   flex-direction: column;
@@ -33,7 +33,7 @@ export const TileSurface = styled.div<{ $tone: StatTileTone; $size: StatTileSize
   gap: ${theme.space.xs};
   padding: ${theme.space.xl};
   border-radius: ${theme.borderRadius.lg};
-  ${({ $tone }) => tones[$tone]};
+  ${({ $variant }) => variants[$variant]};
   ${({ $size }) => sizes[$size]};
 `;
 
@@ -54,10 +54,10 @@ export const TileValue = styled.strong<{ $size: StatTileSize }>`
   line-height: 1.1;
 `;
 
-export const TileCaption = styled.span<{ $tone: StatTileTone }>`
+export const TileCaption = styled.span<{ $variant: StatTileVariant }>`
   font-size: ${theme.fontSize.sm};
-  color: ${({ $tone }) => ($tone === "accent" ? "inherit" : theme.foreground.secondary)};
-  opacity: ${({ $tone }) => ($tone === "accent" ? 0.86 : 1)};
+  color: ${({ $variant }) => ($variant === "primary" ? "inherit" : theme.foreground.secondary)};
+  opacity: ${({ $variant }) => ($variant === "primary" ? 0.86 : 1)};
 `;
 
 export const TileBadge = styled.div`

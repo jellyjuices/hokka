@@ -88,8 +88,8 @@
       ]
     },
     {
-      "name": "Log a filing",
-      "short_name": "Filing",
+      "name": "Add Filing",
+      "short_name": "Add Filing",
       "description": "Record an HST remittance.",
       "url": "/filings/new",
       "icons": [

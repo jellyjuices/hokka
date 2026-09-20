@@ -17,9 +17,6 @@ async function verifyOnDevice(password: string): Promise<string | null> {
   return "That password is not right";
 }
 
-// The server owns the password, so it answers whenever it can be reached. When it
-// cannot, the verifier this device kept from its last real unlock answers instead,
-// which keeps the password working when biometrics do not.
 export async function verifyPassword(password: string): Promise<string | null> {
   if (!isOnline()) return verifyOnDevice(password);
   try {
@@ -39,18 +36,11 @@ export async function verifyPassword(password: string): Promise<string | null> {
   }
 }
 
-// Hosting puts an idle instance to sleep, and the first request after that pays for
-// waking it. Spending that wait while the password is still being typed is the
-// difference between a gate that opens and a gate that thinks about it.
 export function warmUnlock() {
   if (!isOnline()) return;
   void fetch("/api/unlock", { cache: "no-store" }).catch(() => undefined);
 }
 
-// Offline, there is nothing to ask: a biometric check is the whole of what this
-// device can verify, and refusing it would strand a ledger that reads locally. A
-// sleeping instance is the same answer arriving late, so the ask is capped rather
-// than waited on, which otherwise held the screen open after a fingerprint landed.
 export async function hasLiveSession(): Promise<boolean> {
   if (!isOnline()) return true;
   try {

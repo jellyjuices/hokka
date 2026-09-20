@@ -3,12 +3,8 @@ import { deleteValue, listKeys, readValue, writeValue } from "@/src/lib/storage/
 import { isIdbAvailable } from "@/src/lib/storage/idb";
 import type { SharedFile } from "./shareInbox.types";
 
-// public/sw.js writes these keys when the share sheet POSTs to /share-target. The prefix and
-// the record shape are repeated there because a service worker cannot import from the bundle.
 const SHARE_INBOX_PREFIX = "share.inbox.v1.";
 
-// The localStorage fallback behind keyval cannot hold a Blob, so a browser without IndexedDB
-// hands the files over in memory instead. The handoff is one client-side navigation long.
 let held: File[] = [];
 
 export async function saveSharedFiles(files: File[]): Promise<void> {

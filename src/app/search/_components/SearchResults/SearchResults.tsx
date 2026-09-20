@@ -1,6 +1,7 @@
 "use client";
 
 import { LinkButton } from "@/src/components/Button";
+import { ArrowLeftIcon, MagnifyingGlassIcon } from "@phosphor-icons/react/dist/ssr";
 import { EmptyState } from "@/src/components/EmptyState";
 import { Icon } from "@/src/components/Icon";
 import { TransactionCard } from "@/src/components/TransactionCard";
@@ -16,11 +17,11 @@ export function SearchResults({ query }: SearchResultsProps) {
   if (matches.length === 0) {
     return (
       <EmptyState
-        icon={<Icon name="search" size={32} weight="bold" />}
+        icon={<Icon name={MagnifyingGlassIcon} size={32} weight="bold" />}
         title={query === "" ? "Nothing searched yet" : "No matches"}
         description="Search looks at counterparty, category and notes across every recorded transaction."
         action={
-          <LinkButton href="/" tone="accent" leadingIcon="arrowLeft">
+          <LinkButton href="/" variant="primary" leadingIcon={ArrowLeftIcon}>
             Back to dashboard
           </LinkButton>
         }

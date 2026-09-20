@@ -28,7 +28,7 @@ export function NavBottomBar({ initials }: NavBottomBarProps) {
                 $isActive={isActive}
                 aria-current={isActive ? "page" : undefined}
               >
-                <Icon name={item.icon} size={20} />
+                <Icon name={item.icon} size={20} weight={isActive ? "fill" : "regular"} />
                 <BottomBarItemLabel>{item.label}</BottomBarItemLabel>
               </BottomBarItem>
             </li>

@@ -1,4 +1,5 @@
 import { AnimatedNumber } from "@/src/components/AnimatedNumber";
+import { ArrowElbowDownRightIcon, CurrencyDollarIcon } from "@phosphor-icons/react/dist/ssr";
 import { Icon } from "@/src/components/Icon";
 import { formatAmount, roundToCents } from "@/src/lib/money";
 import {
@@ -21,7 +22,7 @@ export function FilingSummary({ amountFiled, outstanding, periodTitle }: FilingS
     <SummaryBlock>
       <SummaryRow>
         <SummaryLabel>
-          <Icon name="dollar" size={26} />
+          <Icon name={CurrencyDollarIcon} size={26} />
           Filing
         </SummaryLabel>
         <SummaryAmount>
@@ -31,7 +32,7 @@ export function FilingSummary({ amountFiled, outstanding, periodTitle }: FilingS
       </SummaryRow>
       {outstanding > 0 && (
         <SummaryNote>
-          <Icon name="claim" size={18} />
+          <Icon name={ArrowElbowDownRightIcon} size={18} />
           {note}
         </SummaryNote>
       )}

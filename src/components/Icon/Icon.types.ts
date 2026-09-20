@@ -1,4 +1,6 @@
-import type { IconName } from "./Icon.registry";
+import type { Icon as PhosphorIcon } from "@phosphor-icons/react";
+
+export type IconName = PhosphorIcon;
 
 export type IconProps = {
   name: IconName;

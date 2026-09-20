@@ -30,7 +30,6 @@ function amount(value: number) {
   return roundToCents(value).toFixed(2);
 }
 
-// Income is never pro-rated: claimablePct caps an expense deduction, not revenue.
 function claimableShare(transaction: Transaction) {
   return transaction.direction === "expense" ? transaction.claimablePct / 100 : 1;
 }

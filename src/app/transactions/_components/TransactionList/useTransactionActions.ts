@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { ReceiptIcon, TrashIcon } from "@phosphor-icons/react/dist/ssr";
 import { useLedgerActions } from "@/src/context/Ledger";
 import type { Transaction } from "@/src/data/domain.types";
 import { documentFileUrl } from "@/src/data/remote";
@@ -23,14 +24,14 @@ export function useTransactionActions() {
       items.push({
         id: "open",
         label: transaction.documentIds.length > 1 ? "Open first attachment" : "Open attachment",
-        icon: "receipt",
+        icon: ReceiptIcon,
         onSelect: () => openAttachment(transaction),
       });
     }
     items.push({
       id: "delete",
       label: "Delete",
-      icon: "trash",
+      icon: TrashIcon,
       isDestructive: true,
       onSelect: () => setPending(transaction),
     });

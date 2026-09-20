@@ -1,6 +1,7 @@
 "use client";
 
 import { Icon } from "@/src/components/Icon";
+import { FunnelSimpleIcon, XIcon } from "@phosphor-icons/react/dist/ssr";
 import { Select } from "@/src/components/Select";
 import { CATEGORIES } from "@/src/data/categories";
 import type { TransactionDirection } from "@/src/data/domain.types";
@@ -61,12 +62,12 @@ export function TransactionFilters({
       <RangeFilter range={filter.range} onChange={(range) => onChange({ ...filter, range })} />
       <FilterSpacer />
       <FilterCount>
-        <Icon name="filter" size={16} />
+        <Icon name={FunnelSimpleIcon} size={16} />
         {`${resultCount} shown`}
       </FilterCount>
       {isFiltered(filter) && (
         <FilterReset type="button" onClick={() => onChange(NO_FILTER)}>
-          <Icon name="close" size={14} />
+          <Icon name={XIcon} size={14} />
           Clear
         </FilterReset>
       )}

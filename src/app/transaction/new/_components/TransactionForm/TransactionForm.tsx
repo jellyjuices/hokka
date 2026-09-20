@@ -1,12 +1,12 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
+import { ArrowRightIcon, UserIcon } from "@phosphor-icons/react/dist/ssr";
 import { useSearchParams } from "next/navigation";
 import { DatePicker } from "@/src/components/Calendar";
 import { CardWrapper } from "@/src/components/CardWrapper";
 import { DropZone } from "@/src/components/DropZone";
-import { Icon } from "@/src/components/Icon";
-import { SoftField, TextInput } from "@/src/components/Input";
+import { Input } from "@/src/components/Input";
 import { AttachmentBar } from "./_components/AttachmentBar";
 import { AttachmentGallery } from "./_components/AttachmentGallery";
 import { AutofillNotice } from "./_components/AutofillNotice";
@@ -59,6 +59,8 @@ export function TransactionForm() {
       {autofill.notice !== null && <AutofillNotice notice={autofill.notice} />}
       <HeadRow>
         <TitleInput
+          variant="plain"
+          scale="display"
           value={form.state.title}
           placeholder="Untitled..."
           aria-label="Transaction name"
@@ -83,19 +85,18 @@ export function TransactionForm() {
         <DatePicker
           id="txnDate"
           name="txnDate"
-          tone="soft"
+          variant="secondary"
           value={form.state.txnDate}
           onChange={form.setDate}
         />
-        <SoftField htmlFor="counterparty">
-          <TextInput
-            id="counterparty"
-            value={form.state.counterparty}
-            placeholder="Vendor"
-            onChange={(event) => form.setCounterparty(event.target.value)}
-          />
-          <Icon name="vendor" size={22} />
-        </SoftField>
+        <Input
+          id="counterparty"
+          variant="filled"
+          icon={UserIcon}
+          value={form.state.counterparty}
+          placeholder="Vendor"
+          onChange={(event) => form.setCounterparty(event.target.value)}
+        />
       </CardWrapper>
       {form.state.subtotal === null ? (
         <LineItems
@@ -127,7 +128,7 @@ export function TransactionForm() {
         <SubmitButton
           type="submit"
           size="lg"
-          trailingIcon="arrowRight"
+          trailingIcon={ArrowRightIcon}
           disabled={isSaving || autofill.isReading}
         >
           {isSaving ? "Saving…" : "Submit"}

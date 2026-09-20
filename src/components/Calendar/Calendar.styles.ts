@@ -3,10 +3,10 @@
 import { css } from "@emotion/react";
 import styled from "@emotion/styled";
 import { theme, hoverFill } from "@/src/lib/theme";
-import type { DateTone } from "./Calendar.types";
+import type { DateVariant } from "./Calendar.types";
 
-const tones: Record<DateTone, ReturnType<typeof css>> = {
-  outline: css`
+const variants: Record<DateVariant, ReturnType<typeof css>> = {
+  outlined: css`
     gap: ${theme.space.sm};
     padding: ${theme.space.sm} ${theme.space.md};
     border: 1px solid ${theme.surface.tint};
@@ -18,7 +18,7 @@ const tones: Record<DateTone, ReturnType<typeof css>> = {
       background: ${hoverFill(theme.surface.primary)};
     }
   `,
-  soft: css`
+  secondary: css`
     justify-content: space-between;
     gap: ${theme.space.md};
     min-height: 64px;
@@ -32,7 +32,7 @@ const tones: Record<DateTone, ReturnType<typeof css>> = {
       background: ${hoverFill(theme.surface.secondary)};
     }
   `,
-  plain: css`
+  ghost: css`
     width: auto;
     justify-content: flex-end;
     gap: ${theme.space.md};
@@ -43,7 +43,7 @@ const tones: Record<DateTone, ReturnType<typeof css>> = {
   `,
 };
 
-export const CalendarTrigger = styled.button<{ $tone: DateTone }>`
+export const CalendarTrigger = styled.button<{ $variant: DateVariant }>`
   display: inline-flex;
   align-items: center;
   width: 100%;
@@ -51,7 +51,7 @@ export const CalendarTrigger = styled.button<{ $tone: DateTone }>`
   text-align: left;
   cursor: pointer;
   transition: background ${theme.motion.fast} ease;
-  ${({ $tone }) => tones[$tone]};
+  ${({ $variant }) => variants[$variant]};
 
   &:focus-visible {
     outline: 2px solid ${theme.foreground.accent};

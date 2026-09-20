@@ -3,11 +3,11 @@
 import { css } from "@emotion/react";
 import styled from "@emotion/styled";
 import * as RadixSelect from "@radix-ui/react-select";
-import { theme, hoverFill } from "@/src/lib/theme";
-import type { SelectTone } from "./Select.types";
+import { theme, hoverFill, transientProps } from "@/src/lib/theme";
+import type { SelectVariant } from "./Select.types";
 
-const tones: Record<SelectTone, ReturnType<typeof css>> = {
-  chip: css`
+const variants: Record<SelectVariant, ReturnType<typeof css>> = {
+  primary: css`
     width: auto;
     min-height: 44px;
     padding: 0 ${theme.space.md} 0 ${theme.space.lg};
@@ -20,7 +20,7 @@ const tones: Record<SelectTone, ReturnType<typeof css>> = {
       background: ${hoverFill(theme.surface.secondary)};
     }
   `,
-  outline: css`
+  outlined: css`
     width: 100%;
     min-height: 44px;
     padding: ${theme.space.sm} ${theme.space.md};
@@ -33,7 +33,7 @@ const tones: Record<SelectTone, ReturnType<typeof css>> = {
       background: ${hoverFill(theme.surface.primary)};
     }
   `,
-  soft: css`
+  secondary: css`
     width: 100%;
     min-height: 64px;
     padding: 0 ${theme.space.lg};
@@ -46,7 +46,7 @@ const tones: Record<SelectTone, ReturnType<typeof css>> = {
       background: ${hoverFill(theme.surface.secondary)};
     }
   `,
-  plain: css`
+  ghost: css`
     width: auto;
     justify-content: flex-end;
     padding: 0;
@@ -56,7 +56,9 @@ const tones: Record<SelectTone, ReturnType<typeof css>> = {
   `,
 };
 
-export const SelectTrigger = styled(RadixSelect.Trigger)<{ $tone: SelectTone }>`
+export const SelectTrigger = styled(RadixSelect.Trigger, transientProps)<{
+  $variant: SelectVariant;
+}>`
   display: inline-flex;
   align-items: center;
   justify-content: space-between;
@@ -65,7 +67,7 @@ export const SelectTrigger = styled(RadixSelect.Trigger)<{ $tone: SelectTone }>`
   text-align: left;
   cursor: pointer;
   transition: background ${theme.motion.fast} ease;
-  ${({ $tone }) => tones[$tone]};
+  ${({ $variant }) => variants[$variant]};
 
   &:focus-visible {
     outline: 2px solid ${theme.foreground.accent};

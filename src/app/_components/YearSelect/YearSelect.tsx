@@ -1,6 +1,7 @@
 "use client";
 
 import * as Select from "@radix-ui/react-select";
+import { CaretDownIcon } from "@phosphor-icons/react/dist/ssr";
 import { Icon } from "@/src/components/Icon";
 import { YearIcon, YearMenu, YearOption, YearTrigger } from "./YearSelect.styles";
 import type { YearSelectProps } from "./YearSelect.types";
@@ -11,7 +12,7 @@ export function YearSelect({ value, years, onChange }: YearSelectProps) {
       <YearTrigger aria-label="Tax year">
         <Select.Value />
         <YearIcon>
-          <Icon name="caretDown" size={18} />
+          <Icon name={CaretDownIcon} size={18} />
         </YearIcon>
       </YearTrigger>
       <Select.Portal>

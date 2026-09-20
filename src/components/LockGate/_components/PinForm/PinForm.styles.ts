@@ -2,7 +2,6 @@
 
 import styled from "@emotion/styled";
 import Image from "next/image";
-import { TileValue } from "@/src/components/TileInput";
 import { theme, hoverFill } from "@/src/lib/theme";
 
 export const PinScreen = styled.div`
@@ -62,8 +61,4 @@ export const PinReveal = styled.button`
     background: ${hoverFill("transparent")};
     color: ${theme.foreground.primary};
   }
-`;
-
-export const PinValue = styled(TileValue)`
-  text-align: left;
 `;

@@ -1,4 +1,5 @@
 import { Icon } from "@/src/components/Icon";
+import { ArrowLeftIcon } from "@phosphor-icons/react/dist/ssr";
 import {
   HeaderBack,
   HeaderBar,
@@ -10,6 +11,7 @@ import {
   HeaderTitle,
   HeaderTitleBlock,
   HeaderWideTitle,
+  ActionWrappper,
 } from "./PageHeader.styles";
 import type { PageHeaderProps } from "./PageHeader.types";
 
@@ -28,7 +30,7 @@ export function PageHeader({
         <HeaderHeading>
           {backHref && (
             <HeaderBack href={backHref} aria-label="Go back">
-              <Icon name="arrowLeft" size={28} />
+              <Icon name={ArrowLeftIcon} size={28} />
             </HeaderBack>
           )}
           {icon && (
@@ -46,7 +48,7 @@ export function PageHeader({
       {(meta || action) && (
         <HeaderControls>
           {meta}
-          {action}
+          <ActionWrappper>{action}</ActionWrappper>
         </HeaderControls>
       )}
     </HeaderBar>

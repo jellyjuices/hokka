@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
+import { ArrowElbowDownRightIcon, PiggyBankIcon } from "@phosphor-icons/react/dist/ssr";
 import type { ActivityItem } from "../ActivityList";
 import type { Obligation, ObligationState } from "../ObligationCard";
 import { useLedger } from "@/src/context/Ledger";
@@ -98,7 +99,7 @@ export function useDashboardTotals(year: number) {
           id: `reserve-${year}`,
           label: "Set aside",
           caption: `For ${year} taxes`,
-          icon: "reserve",
+          icon: PiggyBankIcon,
           amount: yearTotals.incomeTaxSetAside,
           taxPeriodId: String(year),
           filingType: "income_tax",
@@ -106,9 +107,9 @@ export function useDashboardTotals(year: number) {
         }),
         toObligation({
           id: `hst-${period.id}`,
-          label: periodTotals.netHstOwing < 0 ? "Claim HST" : "Remit HST",
+          label: periodTotals.netHstOwing < 0 ? "Claim HST" : "HST owed",
           caption: `This period (${periodTitle})`,
-          icon: "claim",
+          icon: ArrowElbowDownRightIcon,
           amount: periodTotals.netHstOwing,
           taxPeriodId: period.id,
           filingType: "hst",

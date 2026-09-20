@@ -19,8 +19,6 @@ export function forgetCredentialId() {
   subscribers.publish();
 }
 
-// The enrolment is the setting: a credential on this device means the toggle is
-// on, so the two can never drift apart.
 export function getBiometricsSnapshot() {
   return readCredentialId() !== null;
 }

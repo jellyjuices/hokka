@@ -2,7 +2,7 @@
 
 import styled from "@emotion/styled";
 import { Button } from "@/src/components/Button";
-import { DisplayInput } from "@/src/components/Input";
+import { Input } from "@/src/components/Input";
 import { theme } from "@/src/lib/theme";
 import { mediaDown } from "@/src/lib/breakpoints";
 
@@ -47,7 +47,7 @@ export const AttachCell = styled.div`
   }
 `;
 
-export const TitleInput = styled(DisplayInput)`
+export const TitleInput = styled(Input)`
   grid-area: title;
 `;
 

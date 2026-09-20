@@ -15,9 +15,6 @@ type EntityEndpoint = {
   method: "POST" | "PUT";
 };
 
-// The one list of what this ledger stores. Every dispatch over an entity — the outbox
-// pusher, the route handlers, the server writer, the payload checks — is a map keyed by
-// EntityName, so a sixth entity fails to compile until each of them handles it.
 export const ENTITIES: { [Name in EntityName]: EntityEndpoint } = {
   transaction: { path: "/transactions", method: "POST" },
   filing: { path: "/filings", method: "POST" },

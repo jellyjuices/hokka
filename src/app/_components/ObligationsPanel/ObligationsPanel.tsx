@@ -11,16 +11,20 @@ export function ObligationsPanel({ obligations }: ObligationsPanelProps) {
 
   return (
     <ObligationsStack>
-      <CardWrapper direction="column">
-        {open.map((obligation) => (
-          <ObligationCard key={obligation.id} obligation={obligation} />
-        ))}
-      </CardWrapper>
-      <ObligationsFiledGroup direction="column">
-        {collected.map((obligation) => (
-          <ObligationCard key={obligation.id} obligation={obligation} />
-        ))}
-      </ObligationsFiledGroup>
+      {open.length > 0 && (
+        <CardWrapper direction="column">
+          {open.map((obligation) => (
+            <ObligationCard key={obligation.id} obligation={obligation} />
+          ))}
+        </CardWrapper>
+      )}
+      {collected.length > 0 && (
+        <ObligationsFiledGroup direction="column">
+          {collected.map((obligation) => (
+            <ObligationCard key={obligation.id} obligation={obligation} />
+          ))}
+        </ObligationsFiledGroup>
+      )}
     </ObligationsStack>
   );
 }

@@ -1,4 +1,5 @@
 import { LinkButton } from "@/src/components/Button";
+import { InvoiceIcon, PlusIcon } from "@phosphor-icons/react/dist/ssr";
 import { Grid, GridItem } from "@/src/components/Grid";
 import { PageHeader } from "@/src/components/PageHeader";
 import { FilingLog } from "./_components/FilingLog";
@@ -9,11 +10,11 @@ export default function FilingsPage() {
       <GridItem>
         <PageHeader
           title="Filings"
-          icon="filings"
-          description="Logged remittances net out of the dashboard without deleting history."
+          icon={InvoiceIcon}
+          description="Tax filings logged and net HST claimed."
           action={
-            <LinkButton href="/filings/new" tone="accent">
-              Log a filing
+            <LinkButton href="/filings/new" variant="primary" trailingIcon={PlusIcon}>
+              Add Filing
             </LinkButton>
           }
         />

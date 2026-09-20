@@ -1,13 +1,14 @@
 "use client";
 
-import { Icon } from "@/src/components/Icon";
+import { ArrowElbowDownRightIcon, PiggyBankIcon } from "@phosphor-icons/react/dist/ssr";
+import { Icon, type IconName } from "@/src/components/Icon";
 import type { FilingType } from "@/src/data/domain.types";
 import { ToggleOption, ToggleTrack } from "./FilingTypeToggle.styles";
 import type { FilingTypeToggleProps } from "./FilingTypeToggle.types";
 
-const OPTIONS: { filingType: FilingType; label: string; icon: "claim" | "reserve" }[] = [
-  { filingType: "hst", label: "HST", icon: "claim" },
-  { filingType: "income_tax", label: "Income tax", icon: "reserve" },
+const OPTIONS: { filingType: FilingType; label: string; icon: IconName }[] = [
+  { filingType: "hst", label: "HST", icon: ArrowElbowDownRightIcon },
+  { filingType: "income_tax", label: "Income tax", icon: PiggyBankIcon },
 ];
 
 export function FilingTypeToggle({ value, onChange }: FilingTypeToggleProps) {

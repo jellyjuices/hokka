@@ -3,6 +3,8 @@ import { AppShell } from "@/src/components/AppShell";
 import { LockGate } from "@/src/components/LockGate";
 import { EmotionRegistry } from "@/src/context/EmotionRegistry";
 import { LedgerProvider } from "@/src/context/Ledger";
+import { ToastProvider } from "@/src/context/Toast";
+import { InputModality } from "@/src/components/InputModality";
 import { ServiceWorker } from "@/src/components/ServiceWorker";
 import "./fonts.css";
 import "./globals.css";
@@ -43,11 +45,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <body>
         <EmotionRegistry>
-          <LockGate>
-            <LedgerProvider>
-              <AppShell>{children}</AppShell>
-            </LedgerProvider>
-          </LockGate>
+          <ToastProvider>
+            <LockGate>
+              <LedgerProvider>
+                <AppShell>{children}</AppShell>
+              </LedgerProvider>
+            </LockGate>
+          </ToastProvider>
+          <InputModality />
           <ServiceWorker />
         </EmotionRegistry>
       </body>

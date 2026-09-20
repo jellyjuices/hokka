@@ -1,14 +1,19 @@
 "use client";
 
 import { CardWrapper } from "@/src/components/CardWrapper";
+import {
+  CurrencyDollarIcon,
+  ListBulletsIcon,
+  PlusIcon,
+  XIcon,
+} from "@phosphor-icons/react/dist/ssr";
 import { Icon } from "@/src/components/Icon";
-import { TextInput } from "@/src/components/Input";
 import {
   ItemAdd,
   ItemAmount,
-  ItemCurrency,
   ItemLine,
   ItemList,
+  ItemName,
   ItemRemove,
   ItemRow,
   ItemSlot,
@@ -27,11 +32,11 @@ export function LineItems({ items, onAdd, onAddSubtotal, onItemChange, onRemove 
       <CardWrapper>
         <ItemsPill type="button" onClick={onAdd}>
           Add items
-          <Icon name="list" size={22} />
+          <Icon name={ListBulletsIcon} size={22} />
         </ItemsPill>
         <SubtotalPill type="button" onClick={onAddSubtotal}>
           Add subtotal
-          <Icon name="dollar" size={22} />
+          <Icon name={CurrencyDollarIcon} size={22} />
         </SubtotalPill>
       </CardWrapper>
     );
@@ -44,14 +49,18 @@ export function LineItems({ items, onAdd, onAddSubtotal, onItemChange, onRemove 
         return (
           <ItemLine key={item.id}>
             <ItemRow>
-              <TextInput
+              <ItemName
+                variant="plain"
                 value={item.name}
                 placeholder="Item name..."
                 aria-label="Item name"
                 onChange={(event) => onItemChange(item.id, "name", event.target.value)}
               />
-              <ItemCurrency aria-hidden="true">$</ItemCurrency>
               <ItemAmount
+                variant="plain"
+                scale="lg"
+                align="end"
+                prependValue="$"
                 value={item.amount}
                 placeholder="0.00"
                 inputMode="decimal"
@@ -64,7 +73,7 @@ export function LineItems({ items, onAdd, onAddSubtotal, onItemChange, onRemove 
                   aria-label="Remove item"
                   onClick={() => onRemove(item.id)}
                 >
-                  <Icon name="close" size={16} />
+                  <Icon name={XIcon} size={16} />
                 </ItemRemove>
               )}
             </ItemRow>
@@ -77,7 +86,7 @@ export function LineItems({ items, onAdd, onAddSubtotal, onItemChange, onRemove 
                 aria-label="Add another item"
                 onClick={onAdd}
               >
-                <Icon name="plus" size={16} weight="bold" />
+                <Icon name={PlusIcon} size={16} weight="bold" />
               </ItemAdd>
             </ItemSlot>
           </ItemLine>

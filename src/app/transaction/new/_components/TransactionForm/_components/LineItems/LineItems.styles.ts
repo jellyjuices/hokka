@@ -2,11 +2,9 @@
 
 import styled from "@emotion/styled";
 import { keyframes } from "@emotion/react";
-import { AmountInput, outlineField } from "@/src/components/Input";
+import { Input, InputShell } from "@/src/components/Input";
 import { theme, hoverFill } from "@/src/lib/theme";
 
-// The rows take over from the "Add items" tile, so they start on its footprint
-// and open out to the full width from the same edge.
 const openFromStart = keyframes`
   from { width: 50%; }
   to { width: 100%; }
@@ -57,21 +55,18 @@ export const ItemsPill = styled.button`
   }
 `;
 
-export const ItemRow = styled.div`
-  ${outlineField};
+export const ItemRow = styled(InputShell)`
   flex: 1 1 auto;
   background: ${theme.surface.primary};
 `;
 
-export const ItemAmount = styled(AmountInput)`
-  flex: 0 0 auto;
-  width: 6rem;
-  font-size: ${theme.fontSize.lg};
+export const ItemName = styled(Input)`
+  flex: 1 1 auto;
 `;
 
-export const ItemCurrency = styled.span`
-  color: ${theme.foreground.primary};
-  font-size: ${theme.fontSize.lg};
+export const ItemAmount = styled(Input)`
+  flex: 0 0 auto;
+  width: 6rem;
 `;
 
 export const ItemRemove = styled.button`

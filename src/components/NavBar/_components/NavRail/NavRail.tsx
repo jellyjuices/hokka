@@ -74,7 +74,7 @@ export function NavRail({
                 aria-current={isActive ? "page" : undefined}
                 aria-label={item.label}
               >
-                <Icon name={item.icon} size={24} />
+                <Icon name={item.icon} size={24} weight={isActive ? "fill" : "regular"} />
                 <RailItemLabel $isCollapsed={isCollapsed} aria-hidden={isCollapsed}>
                   {item.label}
                 </RailItemLabel>

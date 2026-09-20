@@ -1,11 +1,11 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { MagnifyingGlassIcon, XIcon } from "@phosphor-icons/react/dist/ssr";
 import { useState } from "react";
 import type { ChangeEvent, FormEvent } from "react";
 import { Icon } from "@/src/components/Icon";
-import { TextInput } from "@/src/components/Input";
-import { SearchButton, SearchClearButton, SearchForm, SearchGlyph } from "./NavSearch.styles";
+import { SearchButton, SearchClearButton, SearchField, SearchForm } from "./NavSearch.styles";
 import type { NavSearchProps } from "./NavSearch.types";
 
 export function NavSearch({ isCollapsed, inputRef, onActivate }: NavSearchProps) {
@@ -31,29 +31,31 @@ export function NavSearch({ isCollapsed, inputRef, onActivate }: NavSearchProps)
   if (isCollapsed) {
     return (
       <SearchButton type="button" onClick={onActivate} aria-label="Search">
-        <Icon name="search" size={24} />
+        <Icon name={MagnifyingGlassIcon} size={24} />
       </SearchButton>
     );
   }
 
   return (
     <SearchForm role="search" onSubmit={handleSubmit}>
-      <SearchGlyph>
-        <Icon name="search" size={24} />
-      </SearchGlyph>
-      <TextInput
+      <SearchField
         ref={inputRef}
+        variant="plain"
+        icon={MagnifyingGlassIcon}
+        iconSide="leading"
+        iconSize={24}
         type="search"
         value={query}
         onChange={handleChange}
         placeholder="Search"
         aria-label="Search transactions"
-      />
-      {query !== "" && (
-        <SearchClearButton type="button" onClick={handleClear} aria-label="Clear search">
-          <Icon name="close" size={18} />
-        </SearchClearButton>
-      )}
+      >
+        {query !== "" && (
+          <SearchClearButton type="button" onClick={handleClear} aria-label="Clear search">
+            <Icon name={XIcon} size={18} />
+          </SearchClearButton>
+        )}
+      </SearchField>
     </SearchForm>
   );
 }

@@ -3,7 +3,7 @@ import { ButtonBase, ButtonLink } from "./Button.styles";
 import type { ButtonProps, LinkButtonProps } from "./Button.types";
 
 export function Button({
-  tone = "accent",
+  variant = "primary",
   size = "md",
   isBlock = false,
   type = "button",
@@ -13,7 +13,7 @@ export function Button({
   ...rest
 }: ButtonProps) {
   return (
-    <ButtonBase type={type} $tone={tone} $size={size} $isBlock={isBlock} {...rest}>
+    <ButtonBase type={type} $variant={variant} $size={size} $isBlock={isBlock} {...rest}>
       {leadingIcon && <Icon name={leadingIcon} size={20} />}
       {children}
       {trailingIcon && <Icon name={trailingIcon} size={20} />}
@@ -23,7 +23,7 @@ export function Button({
 
 export function LinkButton({
   href,
-  tone = "quiet",
+  variant = "primary",
   size = "md",
   isBlock = false,
   leadingIcon,
@@ -31,7 +31,7 @@ export function LinkButton({
   children,
 }: LinkButtonProps) {
   return (
-    <ButtonLink href={href} $tone={tone} $size={size} $isBlock={isBlock}>
+    <ButtonLink href={href} $variant={variant} $size={size} $isBlock={isBlock}>
       {leadingIcon && <Icon name={leadingIcon} size={20} />}
       {children}
       {trailingIcon && <Icon name={trailingIcon} size={20} />}

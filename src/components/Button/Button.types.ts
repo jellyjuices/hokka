@@ -1,11 +1,11 @@
 import type { ButtonHTMLAttributes, ReactNode } from "react";
 import type { IconName } from "@/src/components/Icon";
 
-export type ButtonTone = "accent" | "soft" | "quiet" | "ghost";
+export type ButtonVariant = "primary" | "secondary" | "tertiary" | "ghost";
 export type ButtonSize = "sm" | "md" | "lg";
 
 type Shared = {
-  tone?: ButtonTone;
+  variant?: ButtonVariant;
   size?: ButtonSize;
   isBlock?: boolean;
   leadingIcon?: IconName;

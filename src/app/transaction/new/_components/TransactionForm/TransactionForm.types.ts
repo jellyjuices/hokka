@@ -37,9 +37,9 @@ export type Attachment = {
   documentId: string | null;
 };
 
-export type AutofillTone = "reading" | "good" | "warn";
+export type AutofillVariant = "info" | "success" | "warning";
 
 export type AutofillNotice = {
-  tone: AutofillTone;
+  variant: AutofillVariant;
   text: string;
 };

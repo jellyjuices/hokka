@@ -37,11 +37,6 @@ export function hasDevicePassword() {
   return readVerifier() !== null;
 }
 
-// The server holds the password, so a device with no connection has nothing to ask.
-// What it keeps instead is a slow-derived verifier, written on every unlock that the
-// server did answer, so the password still opens the screen on a subway platform and
-// biometrics are never the only way in. It opens the screen, never the gate: no
-// session cookie is minted here, and the first API call to come back 401 re-locks.
 export async function rememberDevicePassword(password: string) {
   const salt = new Uint8Array(SALT_BYTES);
   crypto.getRandomValues(salt);

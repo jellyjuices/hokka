@@ -1,6 +1,7 @@
 "use client";
 
 import styled from "@emotion/styled";
+import { Input } from "@/src/components/Input";
 import { theme, hoverFill } from "@/src/lib/theme";
 
 export const SearchButton = styled.button`
@@ -43,10 +44,9 @@ export const SearchForm = styled.form`
   }
 `;
 
-export const SearchGlyph = styled.span`
-  display: grid;
-  place-items: center;
-  flex: 0 0 auto;
+export const SearchField = styled(Input)`
+  flex: 1 1 auto;
+  gap: ${theme.space.sm};
 `;
 
 export const SearchClearButton = styled.button`

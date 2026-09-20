@@ -14,9 +14,6 @@ type SyncedKey = { id: string; updated_at: string };
 
 type Cursor = { updatedAt: string; id: string };
 
-// The cursor carries the id as well as the timestamp. A whole page of rows written in the
-// same millisecond would otherwise leave a timestamp-only cursor pointing at itself, and
-// every row sharing that timestamp past the page would never be fetched.
 function pageAfter(cursor: Cursor) {
   return [
     `updated_at.gt."${cursor.updatedAt}"`,

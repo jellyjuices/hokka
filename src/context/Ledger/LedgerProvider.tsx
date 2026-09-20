@@ -23,7 +23,9 @@ import {
   subscribeConnectivity,
 } from "@/src/lib/platform/connectivity";
 import { createSyncEngine, type SyncStatus } from "@/src/lib/sync";
+import { useToast } from "@/src/context/Toast";
 import { ledgerActions } from "./ledgerActions";
+import { toastForSyncEvent } from "./syncToasts";
 import type {
   LedgerActionsValue,
   LedgerDataValue,
@@ -44,6 +46,8 @@ export function LedgerProvider({ children }: LedgerProviderProps) {
     getConnectivityServerSnapshot,
   );
 
+  const { showToast } = useToast();
+
   const [status, setStatus] = useState<SyncStatus>("idle");
   const [lastError, setLastError] = useState<string | null>(null);
   const [lastSyncedAt, setLastSyncedAt] = useState<number | null>(null);
@@ -53,6 +57,7 @@ export function LedgerProvider({ children }: LedgerProviderProps) {
       onStatusChanged: setStatus,
       onErrorChanged: setLastError,
       onSyncedAtChanged: setLastSyncedAt,
+      onEvent: (event) => showToast(toastForSyncEvent(event)),
     }),
   );
 

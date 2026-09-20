@@ -25,9 +25,6 @@ function isMatch(candidate: string) {
   return timingSafeEqual(given, expected);
 }
 
-// Biometrics open the screen, not the gate: this says whether the cookie behind
-// it is still good, so a lapsed session asks for the password instead of
-// prompting for a fingerprint that can never stick.
 export async function GET() {
   return handleRoute(async () => {
     const token = (await cookies()).get(SESSION_COOKIE)?.value;

@@ -11,6 +11,10 @@ export const HeaderBar = styled.header`
   justify-content: space-between;
   gap: ${theme.space.md};
   padding: ${theme.space.lg} 0;
+
+  ${mediaDown("smTablet")} {
+    padding: 0 0 ${theme.space.lg};
+  }
 `;
 
 export const HeaderTitleBlock = styled.div``;
@@ -81,4 +85,10 @@ export const HeaderDescription = styled.p`
   margin: ${theme.space.xs} 0 0;
   color: ${theme.foreground.secondary};
   font-size: ${theme.fontSize.sm};
+`;
+
+export const ActionWrappper = styled.div`
+  ${mediaDown("smTablet")} {
+    display: none;
+  }
 `;

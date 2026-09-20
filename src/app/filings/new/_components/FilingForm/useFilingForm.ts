@@ -59,8 +59,6 @@ export function useFilingForm(defaults: FilingDefaults) {
     return known.map((period) => ({ value: period.id, label: periodLabel(period) }));
   }, [periods, settings.filingFrequency]);
 
-  // Income tax is settled a year at a time, so it picks a year rather than one
-  // of the HST periods.
   const yearOptions = useMemo(() => {
     const years = new Set(periods.map((period) => period.startDate.slice(0, 4)));
     years.add(String(currentYear()));

@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { CheckIcon } from "@phosphor-icons/react/dist/ssr";
 import { AnimatedNumber } from "@/src/components/AnimatedNumber";
 import { Icon } from "@/src/components/Icon";
 import { StatTile } from "@/src/components/StatTile";
@@ -8,10 +9,10 @@ import { formatCurrency } from "@/src/lib/money";
 import { ObligationAction } from "./ObligationCard.styles";
 import type { ObligationCardProps } from "./ObligationCard.types";
 
-const TONES = {
-  collecting: "accent",
-  claimable: "accent",
-  collected: "neutral",
+const VARIANTS = {
+  collecting: "primary",
+  claimable: "primary",
+  collected: "secondary",
 } as const;
 
 export function ObligationCard({ obligation }: ObligationCardProps) {
@@ -25,7 +26,7 @@ export function ObligationCard({ obligation }: ObligationCardProps) {
 
   return (
     <StatTile
-      tone={TONES[state]}
+      variant={VARIANTS[state]}
       size="compact"
       icon={icon}
       label={label}
@@ -34,7 +35,7 @@ export function ObligationCard({ obligation }: ObligationCardProps) {
       badge={
         filingHref !== null && (
           <ObligationAction type="button" onClick={handleFile} aria-label={`File ${label}`}>
-            <Icon name="check" size={18} weight="bold" />
+            <Icon name={CheckIcon} size={18} weight="bold" />
           </ObligationAction>
         )
       }

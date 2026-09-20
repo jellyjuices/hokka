@@ -1,3 +1,4 @@
+import { AnimatedNumber } from "@/src/components/AnimatedNumber";
 import { Icon } from "@/src/components/Icon";
 import { formatAmount, roundToCents } from "@/src/lib/money";
 import {
@@ -23,7 +24,10 @@ export function FilingSummary({ amountFiled, outstanding, periodTitle }: FilingS
           <Icon name="dollar" size={26} />
           Filing
         </SummaryLabel>
-        <SummaryAmount>{formatAmount(amountFiled)}</SummaryAmount>
+        <SummaryAmount>
+          <span aria-hidden="true">$</span>
+          <AnimatedNumber value={amountFiled} format={formatAmount} />
+        </SummaryAmount>
       </SummaryRow>
       {outstanding > 0 && (
         <SummaryNote>

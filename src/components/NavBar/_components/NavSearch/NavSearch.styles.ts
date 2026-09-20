@@ -49,23 +49,6 @@ export const SearchGlyph = styled.span`
   flex: 0 0 auto;
 `;
 
-export const SearchInput = styled.input`
-  flex: 1 1 auto;
-  min-width: 0;
-  border: none;
-  background: none;
-  color: ${theme.foreground.primary};
-  font-size: 1rem;
-
-  &::placeholder {
-    color: ${theme.foreground.secondary};
-  }
-
-  &:focus-visible {
-    outline: none;
-  }
-`;
-
 export const SearchClearButton = styled.button`
   display: grid;
   place-items: center;

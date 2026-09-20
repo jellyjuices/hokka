@@ -1,10 +1,9 @@
 "use client";
 
+import { InputSizer, SizedInput } from "@/src/components/Input";
 import { Switch } from "@/src/components/Switch";
 import {
-  InputSizer,
   ModifierField,
-  ModifierInput,
   ModifierLabel,
   ModifierRow,
   ModifierValue,
@@ -40,7 +39,7 @@ export function TaxPanel({
           <ModifierValue>
             <span aria-hidden="true">$</span>
             <InputSizer data-value={tips || "0.00"}>
-              <ModifierInput
+              <SizedInput
                 value={tips}
                 placeholder="0.00"
                 size={1}
@@ -55,7 +54,7 @@ export function TaxPanel({
           <ModifierLabel>Claimable</ModifierLabel>
           <ModifierValue>
             <InputSizer data-value={claimablePct || "100"}>
-              <ModifierInput
+              <SizedInput
                 value={claimablePct}
                 placeholder="100"
                 size={1}

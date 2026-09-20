@@ -56,7 +56,7 @@ function toObligation(seed: ObligationSeed): Obligation {
   return {
     id: seed.id,
     label: seed.label,
-    value: formatCurrency(amount),
+    amount,
     caption: seed.caption,
     icon: seed.icon,
     state,
@@ -100,7 +100,7 @@ export function useDashboardTotals(year: number) {
           caption: `For ${year} taxes`,
           icon: "reserve",
           amount: yearTotals.incomeTaxSetAside,
-          taxPeriodId: period.id,
+          taxPeriodId: String(year),
           filingType: "income_tax",
           isFiled: yearFilings.some((filing) => filing.filingType === "income_tax"),
         }),

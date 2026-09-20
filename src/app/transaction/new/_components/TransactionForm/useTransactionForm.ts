@@ -22,7 +22,8 @@ function initialState(): TransactionFormState {
     categoryId: "",
     txnDate: todayIsoDate(),
     counterparty: "",
-    items: [emptyItem()],
+    items: [],
+    subtotal: null,
     isTaxed: true,
     tips: "",
     claimablePct: "100",
@@ -59,12 +60,6 @@ function categoryPatch(
   };
 }
 
-function withTrailingRow(items: TransactionItem[]) {
-  const last = items[items.length - 1];
-  if (last && last.name === "" && last.amount === "") return items;
-  return [...items, emptyItem()];
-}
-
 export function useTransactionForm() {
   const { settings } = useLedger();
   const [state, setState] = useState<TransactionFormState>(initialState);
@@ -95,20 +90,26 @@ export function useTransactionForm() {
   function setItem(id: string, field: "name" | "amount", value: string) {
     setState((current) => ({
       ...current,
-      items: withTrailingRow(
-        current.items.map((item) =>
-          item.id === id
-            ? { ...item, [field]: field === "amount" ? sanitizeAmount(value) : value }
-            : item,
-        ),
+      items: current.items.map((item) =>
+        item.id === id
+          ? { ...item, [field]: field === "amount" ? sanitizeAmount(value) : value }
+          : item,
       ),
     }));
+  }
+
+  function addSubtotal() {
+    patch({ subtotal: "", items: [] });
+  }
+
+  function addItem() {
+    setState((current) => ({ ...current, items: [...current.items, emptyItem()] }));
   }
 
   function removeItem(id: string) {
     setState((current) => ({
       ...current,
-      items: withTrailingRow(current.items.filter((item) => item.id !== id)),
+      items: current.items.filter((item) => item.id !== id),
     }));
   }
 
@@ -121,7 +122,8 @@ export function useTransactionForm() {
       txnDate: parsed.txnDate || current.txnDate,
       isTaxed: parsed.isTaxed,
       tips: parsed.tips > 0 ? parsed.tips.toFixed(2) : current.tips,
-      items: withTrailingRow(itemsFrom(parsed)),
+      items: itemsFrom(parsed),
+      subtotal: null,
     }));
   }
 
@@ -141,7 +143,10 @@ export function useTransactionForm() {
     setDirection,
     setCategory,
     setItem,
+    addItem,
     removeItem,
+    addSubtotal,
+    setSubtotal: (subtotal: string) => patch({ subtotal: sanitizeAmount(subtotal) }),
     applyParsed,
   };
 }

@@ -5,7 +5,7 @@ export type ObligationState = "collecting" | "claimable" | "collected";
 export type Obligation = {
   id: string;
   label: string;
-  value: string;
+  amount: number;
   caption: string;
   icon: IconName;
   state: ObligationState;

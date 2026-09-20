@@ -1,3 +1,4 @@
+import { AnimatedNumber } from "@/src/components/AnimatedNumber";
 import { Icon } from "@/src/components/Icon";
 import { formatAmount } from "@/src/lib/money";
 import {
@@ -22,7 +23,10 @@ export function TotalSummary({ direction, total, claimBack }: TotalSummaryProps)
           <Icon name="dollar" size={26} />
           Total
         </SummaryLabel>
-        <SummaryAmount>{formatAmount(total)}</SummaryAmount>
+        <SummaryAmount>
+          <span aria-hidden="true">$</span>
+          <AnimatedNumber value={total} format={formatAmount} />
+        </SummaryAmount>
       </SummaryRow>
       {!!claimBack && (
         <SummaryNote>

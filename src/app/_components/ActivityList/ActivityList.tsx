@@ -37,11 +37,13 @@ export function ActivityList({
           ))}
         </ActivityItems>
       )}
-      <ActivityFooter>
-        <LinkButton href={ctaHref} tone="soft" isBlock trailingIcon="arrowRight">
-          {ctaLabel}
-        </LinkButton>
-      </ActivityFooter>
+      {items.length !== 0 && (
+        <ActivityFooter>
+          <LinkButton href={ctaHref} tone="soft" isBlock trailingIcon="arrowRight">
+            {ctaLabel}
+          </LinkButton>
+        </ActivityFooter>
+      )}
     </ActivitySection>
   );
 }

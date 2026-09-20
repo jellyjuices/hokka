@@ -1,0 +1,35 @@
+/* Browsers draw their own controls inside a field: the clear cross in WebKit
+   search fields and legacy Edge, and the spinner on a number field. None of
+   them can be styled to match the fields here, and a cross beside a typed
+   amount reads as a delete for the whole row, so they are all turned off. */
+
+input::-webkit-search-cancel-button,
+input::-webkit-search-decoration {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+input::-ms-clear,
+input::-ms-reveal {
+  display: none;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  appearance: none;
+  margin: 0;
+}
+
+/* A button inherits the page font from globals.css; the other controls do not,
+   so every field would otherwise have to name the family itself. */
+input,
+textarea,
+select {
+  font-family: inherit;
+}

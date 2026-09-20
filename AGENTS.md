@@ -48,6 +48,7 @@ TypeScript, React 19, Next.js App Router, Emotion, Radix primitives, Phosphor ic
 - Categories and their claimable defaults: [src/data/categories.ts](src/data/categories.ts)
 - Navigation entries: [src/components/NavBar/NavBar.registry.ts](src/components/NavBar/NavBar.registry.ts)
 - Page grid and layout tokens: [src/components/Grid](src/components/Grid), [src/app/globals.css](src/app/globals.css)
+- Form fields: [src/components/Input](src/components/Input) — every field is a bare input inside a `SoftField` or `OutlineField` shell
 - Shell and navigation: [src/components/AppShell](src/components/AppShell), [src/components/NavBar](src/components/NavBar)
 - Icon registry: [src/components/Icon/Icon.registry.ts](src/components/Icon/Icon.registry.ts)
 - Offline mirror, outbox and queued files: [src/data/local](src/data/local)

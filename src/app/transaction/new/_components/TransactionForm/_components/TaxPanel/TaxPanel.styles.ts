@@ -1,7 +1,8 @@
 "use client";
 
 import styled from "@emotion/styled";
-import { theme, numeric } from "@/src/lib/theme";
+import { outlineField } from "@/src/components/Input";
+import { theme } from "@/src/lib/theme";
 import { mediaDown } from "@/src/lib/breakpoints";
 
 export const TaxGroup = styled.div`
@@ -37,20 +38,9 @@ export const ModifierRow = styled.div`
 `;
 
 export const ModifierField = styled.label`
-  display: flex;
-  align-items: center;
+  ${outlineField};
   justify-content: space-between;
-  gap: ${theme.space.sm};
-  min-height: 64px;
-  padding: 0 ${theme.space.lg};
-  border: 1px solid ${theme.surface.tint};
-  border-radius: ${theme.borderRadius.full};
-  color: ${theme.foreground.primary};
   cursor: text;
-
-  &:has(:focus-visible) {
-    border-color: ${theme.foreground.accent};
-  }
 `;
 
 export const ModifierLabel = styled.span`
@@ -70,45 +60,4 @@ export const ModifierValue = styled.span`
   color: ${theme.foreground.primary};
   font-size: ${theme.fontSize.md};
   font-weight: 500;
-`;
-
-export const InputSizer = styled.span`
-  ${numeric}
-  display: inline-grid;
-  min-width: 2.5rem;
-  max-width: 100%;
-  font-size: ${theme.fontSize.md};
-  font-weight: 500;
-
-  &::after {
-    content: attr(data-value);
-    grid-area: 1 / 1;
-    padding-inline-end: 1px;
-    visibility: hidden;
-    white-space: pre;
-  }
-`;
-
-export const ModifierInput = styled.input`
-  ${numeric}
-  grid-area: 1 / 1;
-  width: 100%;
-  min-width: 0;
-  max-width: 100%;
-  padding: 0;
-  border: none;
-  background: transparent;
-  color: ${theme.foreground.primary};
-  font-family: inherit;
-  font-size: inherit;
-  font-weight: inherit;
-  text-align: right;
-
-  &::placeholder {
-    color: ${theme.foreground.disabled};
-  }
-
-  &:focus-visible {
-    outline: none;
-  }
 `;

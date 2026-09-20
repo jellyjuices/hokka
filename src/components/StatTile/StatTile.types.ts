@@ -6,7 +6,7 @@ export type StatTileSize = "display" | "compact";
 
 export type StatTileProps = {
   label: string;
-  value: string;
+  value: ReactNode;
   caption?: string;
   icon?: IconName;
   tone?: StatTileTone;

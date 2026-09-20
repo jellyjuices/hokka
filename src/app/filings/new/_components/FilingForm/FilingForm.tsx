@@ -3,6 +3,7 @@
 import type { FormEvent } from "react";
 import { DatePicker } from "@/src/components/Calendar";
 import { Icon } from "@/src/components/Icon";
+import { SoftField, TextArea, TextInput } from "@/src/components/Input";
 import { Select } from "@/src/components/Select";
 import { FilingSummary } from "./_components/FilingSummary";
 import { FilingTypeToggle } from "./_components/FilingTypeToggle";
@@ -13,10 +14,7 @@ import {
   FormNotice,
   FormRoot,
   NoteField,
-  NoteInput,
   PairRow,
-  SoftField,
-  SoftInput,
   SubmitButton,
   SubmitRow,
 } from "./FilingForm.styles";
@@ -27,6 +25,7 @@ import { useFilingSave } from "./useFilingSave";
 export function FilingForm({ defaults }: FilingFormProps) {
   const form = useFilingForm(defaults);
   const { isSaving, error, save } = useFilingSave();
+  const isIncomeTax = form.state.filingType === "income_tax";
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -50,9 +49,9 @@ export function FilingForm({ defaults }: FilingFormProps) {
       <PairRow>
         <Select
           id="taxPeriodId"
-          label="Period"
+          label={isIncomeTax ? "Year" : "Period"}
           tone="soft"
-          placeholder="Select a period"
+          placeholder={isIncomeTax ? "Select a year" : "Select a period"}
           value={form.state.taxPeriodId}
           options={form.options}
           onChange={form.setPeriod}
@@ -66,7 +65,7 @@ export function FilingForm({ defaults }: FilingFormProps) {
         />
       </PairRow>
       <SoftField htmlFor="referenceNumber">
-        <SoftInput
+        <TextInput
           id="referenceNumber"
           value={form.state.referenceNumber}
           placeholder="Confirmation number"
@@ -75,7 +74,7 @@ export function FilingForm({ defaults }: FilingFormProps) {
         <Icon name="receipt" size={22} />
       </SoftField>
       <NoteField htmlFor="notes">
-        <NoteInput
+        <TextArea
           id="notes"
           value={form.state.notes}
           placeholder="Notes..."

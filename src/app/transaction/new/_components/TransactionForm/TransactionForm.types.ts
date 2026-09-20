@@ -13,6 +13,7 @@ export type TransactionFormState = {
   txnDate: string;
   counterparty: string;
   items: TransactionItem[];
+  subtotal: string | null;
   isTaxed: boolean;
   tips: string;
   claimablePct: string;

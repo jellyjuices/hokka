@@ -3,10 +3,10 @@
 import { useRef, type ChangeEvent } from "react";
 import { Button } from "@/src/components/Button";
 import { Icon } from "@/src/components/Icon";
+import { FileInput } from "@/src/components/Input";
 import {
   BarRow,
   CameraButton,
-  HiddenFileInput,
   StackButton,
   StackCount,
   StackImage,
@@ -50,14 +50,14 @@ export function AttachmentBar({ attachments, onFilesChosen, onOpenGallery }: Att
 
   return (
     <BarRow>
-      <HiddenFileInput
+      <FileInput
         ref={uploadRef}
         type="file"
         accept={UPLOAD_TYPES}
         multiple
         onChange={handleChange}
       />
-      <HiddenFileInput
+      <FileInput
         ref={cameraRef}
         type="file"
         accept="image/*"

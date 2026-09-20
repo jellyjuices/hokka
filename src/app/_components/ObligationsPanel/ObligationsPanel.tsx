@@ -1,5 +1,6 @@
 "use client";
 
+import { CardWrapper } from "@/src/components/CardWrapper";
 import { ObligationCard } from "../ObligationCard";
 import { ObligationsFiledGroup, ObligationsStack } from "./ObligationsPanel.styles";
 import type { ObligationsPanelProps } from "./ObligationsPanel.types";
@@ -10,10 +11,12 @@ export function ObligationsPanel({ obligations }: ObligationsPanelProps) {
 
   return (
     <ObligationsStack>
-      {open.map((obligation) => (
-        <ObligationCard key={obligation.id} obligation={obligation} />
-      ))}
-      <ObligationsFiledGroup>
+      <CardWrapper direction="column">
+        {open.map((obligation) => (
+          <ObligationCard key={obligation.id} obligation={obligation} />
+        ))}
+      </CardWrapper>
+      <ObligationsFiledGroup direction="column">
         {collected.map((obligation) => (
           <ObligationCard key={obligation.id} obligation={obligation} />
         ))}

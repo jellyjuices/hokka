@@ -3,10 +3,10 @@
 import { useRef, type ChangeEvent } from "react";
 import { Button } from "@/src/components/Button";
 import { Icon } from "@/src/components/Icon";
+import { FileInput } from "@/src/components/Input";
 import { Modal } from "@/src/components/Modal";
 import {
   GalleryAdd,
-  GalleryFileInput,
   GalleryGrid,
   GalleryImage,
   GalleryRemove,
@@ -61,7 +61,7 @@ export function AttachmentGallery({
             </GalleryRemove>
           </GalleryTile>
         ))}
-        <GalleryFileInput
+        <FileInput
           ref={inputRef}
           type="file"
           accept={UPLOAD_TYPES}

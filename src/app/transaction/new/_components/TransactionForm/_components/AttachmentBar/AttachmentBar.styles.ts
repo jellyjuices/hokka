@@ -13,10 +13,6 @@ export const BarRow = styled.div`
   flex: 0 0 auto;
 `;
 
-export const HiddenFileInput = styled.input`
-  display: none;
-`;
-
 export const CameraButton = styled(Button)`
   ${mediaDown("smTablet")} {
     position: fixed;

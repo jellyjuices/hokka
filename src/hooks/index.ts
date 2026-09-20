@@ -1,4 +1,5 @@
 export { useThemeMode } from "./useThemeMode";
+export { useCountUp } from "./useCountUp";
 export { useMediaQuery } from "./useMediaQuery";
 export { usePointerFocus } from "./usePointerFocus";
 export { useReducedMotion } from "./useReducedMotion";

@@ -6,6 +6,7 @@ import { LedgerProvider } from "@/src/context/Ledger";
 import { ServiceWorker } from "@/src/components/ServiceWorker";
 import "./fonts.css";
 import "./globals.css";
+import "./inputs.css";
 
 export const metadata: Metadata = {
   title: "Hokka",

@@ -1,8 +1,10 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { AnimatedNumber } from "@/src/components/AnimatedNumber";
 import { Icon } from "@/src/components/Icon";
 import { StatTile } from "@/src/components/StatTile";
+import { formatCurrency } from "@/src/lib/money";
 import { ObligationAction } from "./ObligationCard.styles";
 import type { ObligationCardProps } from "./ObligationCard.types";
 
@@ -13,7 +15,7 @@ const TONES = {
 } as const;
 
 export function ObligationCard({ obligation }: ObligationCardProps) {
-  const { label, value, caption, icon, state, filingHref } = obligation;
+  const { label, amount, caption, icon, state, filingHref } = obligation;
   const router = useRouter();
 
   function handleFile() {
@@ -27,7 +29,7 @@ export function ObligationCard({ obligation }: ObligationCardProps) {
       size="compact"
       icon={icon}
       label={label}
-      value={value}
+      value={<AnimatedNumber value={amount} format={formatCurrency} />}
       caption={caption}
       badge={
         filingHref !== null && (

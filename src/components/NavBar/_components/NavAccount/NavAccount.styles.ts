@@ -31,17 +31,21 @@ export const AccountLink = styled(Link, transientProps)<{
   }
 `;
 
-export const AccountAvatar = styled.span`
+export const AccountAvatar = styled.span<{ $isCollapsed: boolean }>`
   display: grid;
   place-items: center;
   flex: 0 0 auto;
-  width: 32px;
-  height: 32px;
+  width: ${({ $isCollapsed }) => ($isCollapsed ? "48px" : "32px")};
+  height: ${({ $isCollapsed }) => ($isCollapsed ? "48px" : "32px")};
   border-radius: ${theme.borderRadius.full};
   background: ${theme.surface.accentSecondary};
   color: ${theme.foreground.accent};
-  font-size: ${theme.fontSize.sm};
+  font-size: ${({ $isCollapsed }) => ($isCollapsed ? theme.fontSize.md : theme.fontSize.sm)};
   font-weight: 500;
+  transition:
+    width ${theme.motion.base} ease,
+    height ${theme.motion.base} ease,
+    font-size ${theme.motion.base} ease;
 `;
 
 export const AccountLabel = styled.span<{ $isCollapsed: boolean }>`

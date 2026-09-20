@@ -1,14 +1,10 @@
 "use client";
 
 import styled from "@emotion/styled";
-import { theme } from "@/src/lib/theme";
+import { CardWrapper } from "@/src/components/CardWrapper";
 import { mediaDown } from "@/src/lib/breakpoints";
 
-export const StreamStack = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${theme.space.md};
-
+export const StreamStack = styled(CardWrapper)`
   ${mediaDown("smTablet")} {
     flex: 1;
 

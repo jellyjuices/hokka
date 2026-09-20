@@ -4,13 +4,8 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import type { ChangeEvent, FormEvent } from "react";
 import { Icon } from "@/src/components/Icon";
-import {
-  SearchButton,
-  SearchClearButton,
-  SearchForm,
-  SearchGlyph,
-  SearchInput,
-} from "./NavSearch.styles";
+import { TextInput } from "@/src/components/Input";
+import { SearchButton, SearchClearButton, SearchForm, SearchGlyph } from "./NavSearch.styles";
 import type { NavSearchProps } from "./NavSearch.types";
 
 export function NavSearch({ isCollapsed, inputRef, onActivate }: NavSearchProps) {
@@ -46,7 +41,7 @@ export function NavSearch({ isCollapsed, inputRef, onActivate }: NavSearchProps)
       <SearchGlyph>
         <Icon name="search" size={24} />
       </SearchGlyph>
-      <SearchInput
+      <TextInput
         ref={inputRef}
         type="search"
         value={query}

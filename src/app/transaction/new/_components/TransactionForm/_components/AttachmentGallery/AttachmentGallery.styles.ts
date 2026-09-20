@@ -68,7 +68,3 @@ export const GalleryAdd = styled.button`
     color: ${theme.foreground.accent};
   }
 `;
-
-export const GalleryFileInput = styled.input`
-  display: none;
-`;

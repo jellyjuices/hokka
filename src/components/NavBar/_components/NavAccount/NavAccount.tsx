@@ -18,7 +18,7 @@ export function NavAccount({ initials, isCollapsed = false }: NavAccountProps) {
       aria-current={isSelected ? "page" : undefined}
       aria-label="Settings"
     >
-      <AccountAvatar>{initials.slice(0, 1)}</AccountAvatar>
+      <AccountAvatar $isCollapsed={isCollapsed}>{initials.slice(0, 1)}</AccountAvatar>
       <AccountLabel $isCollapsed={isCollapsed} aria-hidden={isCollapsed}>
         {initials}
       </AccountLabel>

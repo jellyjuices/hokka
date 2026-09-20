@@ -3,8 +3,10 @@
 import { useState, type FormEvent } from "react";
 import { useSearchParams } from "next/navigation";
 import { DatePicker } from "@/src/components/Calendar";
+import { CardWrapper } from "@/src/components/CardWrapper";
 import { DropZone } from "@/src/components/DropZone";
 import { Icon } from "@/src/components/Icon";
+import { SoftField, TextInput } from "@/src/components/Input";
 import { AttachmentBar } from "./_components/AttachmentBar";
 import { AttachmentGallery } from "./_components/AttachmentGallery";
 import { AutofillNotice } from "./_components/AutofillNotice";
@@ -12,6 +14,7 @@ import { AutofillPrompt } from "./_components/AutofillPrompt";
 import { CategoryPicker } from "./_components/CategoryPicker";
 import { DirectionToggle } from "./_components/DirectionToggle";
 import { LineItems } from "./_components/LineItems";
+import { SubtotalCard } from "./_components/SubtotalCard";
 import { TaxPanel } from "./_components/TaxPanel";
 import { TotalSummary } from "./_components/TotalSummary";
 import {
@@ -20,9 +23,6 @@ import {
   FormNotice,
   FormRoot,
   HeadRow,
-  PairRow,
-  SoftField,
-  SoftInput,
   SubmitButton,
   SubmitRow,
   TitleInput,
@@ -79,7 +79,7 @@ export function TransactionForm() {
           />
         </AttachCell>
       </HeadRow>
-      <PairRow>
+      <CardWrapper stackOnMobile>
         <DatePicker
           id="txnDate"
           name="txnDate"
@@ -88,7 +88,7 @@ export function TransactionForm() {
           onChange={form.setDate}
         />
         <SoftField htmlFor="counterparty">
-          <SoftInput
+          <TextInput
             id="counterparty"
             value={form.state.counterparty}
             placeholder="Vendor"
@@ -96,8 +96,18 @@ export function TransactionForm() {
           />
           <Icon name="vendor" size={22} />
         </SoftField>
-      </PairRow>
-      <LineItems items={form.state.items} onItemChange={form.setItem} onRemove={form.removeItem} />
+      </CardWrapper>
+      {form.state.subtotal === null ? (
+        <LineItems
+          items={form.state.items}
+          onAdd={form.addItem}
+          onAddSubtotal={form.addSubtotal}
+          onItemChange={form.setItem}
+          onRemove={form.removeItem}
+        />
+      ) : (
+        <SubtotalCard value={form.state.subtotal} onChange={form.setSubtotal} />
+      )}
       <TaxPanel
         hstRate={form.hstRate}
         isTaxed={form.state.isTaxed}

@@ -1,6 +1,8 @@
 import { clearLocal, readLocal, writeLocal } from "@/src/lib/storage/local";
 
-const CURSOR_KEY = "hokka.sync.cursor.v1";
+// The transactions rename (notes to title, counterparty to vendor) does not touch
+// updated_at, so a v1 cursor would never re-pull the renamed rows into the mirror.
+const CURSOR_KEY = "hokka.sync.cursor.v2";
 
 export function readCursor() {
   return readLocal(CURSOR_KEY);

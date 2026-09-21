@@ -39,7 +39,7 @@ function toActivityItem(transaction: Transaction): ActivityItem {
   return {
     id: transaction.id,
     meta: `${formatDate(transaction.txnDate)}${category === null ? "" : ` · ${category.label}`}`,
-    title: transaction.vendor === "" ? "Untitled entry" : transaction.vendor,
+    title: transaction.title || transaction.vendor || "Untitled entry",
     value: formatCurrency(transaction.total),
     href: "/transactions",
   };

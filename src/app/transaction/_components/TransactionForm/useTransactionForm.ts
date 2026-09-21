@@ -25,7 +25,7 @@ function initialState(): TransactionFormState {
     title: "",
     categoryId: "",
     txnDate: todayIsoDate(),
-    counterparty: "",
+    vendor: "",
     items: [],
     subtotal: null,
     isTaxed: true,
@@ -46,10 +46,10 @@ function stateFrom(transaction: Transaction, hstRate: number): TransactionFormSt
 
   return {
     direction: transaction.direction,
-    title: transaction.notes,
+    title: transaction.title,
     categoryId: transaction.category,
     txnDate: transaction.txnDate,
-    counterparty: transaction.counterparty,
+    vendor: transaction.vendor,
     items: [],
     subtotal: taxedTotal.toFixed(2),
     isTaxed,
@@ -69,7 +69,7 @@ function itemsFrom(parsed: ParsedReceipt): TransactionItem[] {
   return [
     {
       id: newId(),
-      name: parsed.counterparty || "Receipt total",
+      name: parsed.vendor || "Receipt total",
       amount: parsed.subtotal.toFixed(2),
     },
   ];
@@ -147,8 +147,8 @@ export function useTransactionForm(transaction?: Transaction) {
     setState((current) => ({
       ...current,
       ...categoryPatch(current, parsed, settings.categoryClaimablePct),
-      counterparty: parsed.counterparty || current.counterparty,
-      title: current.title === "" ? parsed.counterparty : current.title,
+      vendor: parsed.vendor || current.vendor,
+      title: current.title === "" ? parsed.vendor : current.title,
       txnDate: parsed.txnDate || current.txnDate,
       isTaxed: parsed.isTaxed,
       tips: parsed.tips > 0 ? parsed.tips.toFixed(2) : current.tips,
@@ -165,7 +165,7 @@ export function useTransactionForm(transaction?: Transaction) {
     isEmpty: !hasContent(state),
     setTitle: (title: string) => patch({ title }),
     setDate: (txnDate: string) => patch({ txnDate }),
-    setCounterparty: (counterparty: string) => patch({ counterparty }),
+    setVendor: (vendor: string) => patch({ vendor }),
     setTaxed: (isTaxed: boolean) => patch({ isTaxed }),
     setTips: (tips: string) => patch({ tips: sanitizeAmount(tips) }),
     setClaimablePct: (claimablePct: string) =>

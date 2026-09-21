@@ -13,7 +13,7 @@ export function transactionToRow(transaction: Transaction): Omit<TransactionRow,
     id: transaction.id,
     document_ids: transaction.documentIds,
     direction: transaction.direction,
-    counterparty: transaction.counterparty,
+    vendor: transaction.vendor,
     txn_date: transaction.txnDate,
     subtotal: transaction.subtotal,
     hst_amount: transaction.hstAmount,
@@ -21,7 +21,7 @@ export function transactionToRow(transaction: Transaction): Omit<TransactionRow,
     category: transaction.category,
     claimable_pct: transaction.claimablePct,
     tax_period_id: transaction.taxPeriodId,
-    notes: transaction.notes,
+    title: transaction.title,
     deleted_at: null,
   };
 }
@@ -31,7 +31,7 @@ export function transactionFromRow(row: TransactionRow): Transaction {
     id: row.id,
     documentIds: row.document_ids ?? [],
     direction: row.direction,
-    counterparty: row.counterparty,
+    vendor: row.vendor,
     txnDate: row.txn_date,
     subtotal: Number(row.subtotal),
     hstAmount: Number(row.hst_amount),
@@ -39,7 +39,7 @@ export function transactionFromRow(row: TransactionRow): Transaction {
     category: row.category,
     claimablePct: Number(row.claimable_pct),
     taxPeriodId: row.tax_period_id,
-    notes: row.notes ?? "",
+    title: row.title ?? "",
   };
 }
 

@@ -14,13 +14,13 @@ export function buildDraft(
     taxPeriodId: existing?.taxPeriodId,
     documentIds,
     direction: state.direction,
-    counterparty: state.counterparty.trim(),
+    vendor: state.vendor.trim(),
     txnDate: state.txnDate,
     subtotal: totals.subtotal,
     hstAmount: totals.hstAmount,
     total: totals.total,
     category: state.categoryId,
     claimablePct: toAmount(state.claimablePct),
-    notes: state.title.trim(),
+    title: state.title.trim(),
   };
 }

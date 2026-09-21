@@ -16,7 +16,7 @@ export type TransactionRow = SyncedRow & {
   id: string;
   document_ids: string[];
   direction: TransactionDirection;
-  counterparty: string;
+  vendor: string;
   txn_date: string;
   subtotal: number;
   hst_amount: number;
@@ -24,7 +24,7 @@ export type TransactionRow = SyncedRow & {
   category: string;
   claimable_pct: number;
   tax_period_id: string;
-  notes: string;
+  title: string;
 };
 
 export type FilingRow = SyncedRow & {

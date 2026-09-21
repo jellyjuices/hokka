@@ -30,7 +30,7 @@ export type Transaction = {
   id: string;
   documentIds: string[];
   direction: TransactionDirection;
-  counterparty: string;
+  vendor: string;
   txnDate: string;
   subtotal: number;
   hstAmount: number;
@@ -38,7 +38,7 @@ export type Transaction = {
   category: string;
   claimablePct: number;
   taxPeriodId: string;
-  notes: string;
+  title: string;
 };
 
 export type TaxPeriod = {

@@ -30,7 +30,7 @@ export function defaultClaimablePct(categoryId: string, overrides: CategoryClaim
 export function hasContent(state: TransactionFormState) {
   return (
     state.title.trim() !== "" ||
-    state.counterparty.trim() !== "" ||
+    state.vendor.trim() !== "" ||
     state.categoryId !== "" ||
     toAmount(state.subtotal ?? "") > 0 ||
     state.items.some((item) => item.name.trim() !== "" || toAmount(item.amount) > 0)

@@ -15,7 +15,7 @@ export type TransactionFormState = {
   title: string;
   categoryId: string;
   txnDate: string;
-  counterparty: string;
+  vendor: string;
   items: TransactionItem[];
   subtotal: string | null;
   isTaxed: boolean;

@@ -47,7 +47,7 @@ export function parseReceiptText(
     isCloseEnough(sumOf(items.map((item) => item.amount)), totals.subtotal, 0.05);
 
   return {
-    counterparty: vendor ?? "",
+    vendor: vendor ?? "",
     txnDate: txnDate ?? toIsoDate(today),
     subtotal: totals.subtotal,
     hstAmount: totals.hstAmount,

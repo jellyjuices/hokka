@@ -25,7 +25,7 @@ export function filterTransactions(transactions: Transaction[], filter: Transact
 }
 
 function matchesQuery(transaction: Transaction, needle: string) {
-  return [transaction.counterparty, transaction.category, transaction.notes].some((field) =>
+  return [transaction.vendor, transaction.category, transaction.title].some((field) =>
     field.toLowerCase().includes(needle),
   );
 }

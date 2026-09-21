@@ -16,7 +16,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
           icon={MagnifyingGlassIcon}
           description={
             query === ""
-              ? "Search across counterparties, categories and notes."
+              ? "Search across counterparties, categories and titles."
               : `Results for “${query}”`
           }
         />

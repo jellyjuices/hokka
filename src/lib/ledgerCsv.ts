@@ -11,7 +11,7 @@ import { summarizeTransactions } from "@/src/lib/tax";
 const COLUMNS = [
   "Date",
   "Type",
-  "Counterparty",
+  "Vendor",
   "Category",
   "Subtotal",
   "HST",
@@ -19,7 +19,7 @@ const COLUMNS = [
   "Claimable %",
   "Claimable subtotal",
   "Claimable HST",
-  "Notes",
+  "Title",
 ];
 
 function categoryLabel(categoryId: string) {
@@ -39,7 +39,7 @@ function toRow(transaction: Transaction): CsvCell[] {
   return [
     transaction.txnDate,
     transaction.direction === "income" ? "Income" : "Expense",
-    transaction.counterparty,
+    transaction.vendor,
     categoryLabel(transaction.category),
     amount(transaction.subtotal),
     amount(transaction.hstAmount),
@@ -47,7 +47,7 @@ function toRow(transaction: Transaction): CsvCell[] {
     transaction.direction === "expense" ? transaction.claimablePct : 100,
     amount(transaction.subtotal * share),
     transaction.direction === "expense" ? amount(transaction.hstAmount * share) : amount(0),
-    transaction.notes,
+    transaction.title,
   ];
 }
 

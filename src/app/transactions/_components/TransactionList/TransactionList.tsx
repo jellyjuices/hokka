@@ -70,7 +70,7 @@ export function TransactionList() {
       )}
       <ConfirmDelete
         open={actions.pending !== null}
-        title={actions.pending?.counterparty || "This transaction"}
+        title={actions.pending?.vendor || "This transaction"}
         isDeleting={actions.isDeleting}
         onOpenChange={(open) => {
           if (!open) actions.cancelDelete();

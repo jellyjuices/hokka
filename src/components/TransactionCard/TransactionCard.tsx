@@ -7,6 +7,7 @@ import {
   CardAction,
   CardAmounts,
   CardBody,
+  CardCategoryPill,
   CardGlyph,
   CardMeta,
   CardMetaBadge,
@@ -22,7 +23,7 @@ import type { TransactionCardProps } from "./TransactionCard.types";
 
 export function TransactionCard({ transaction, href, action }: TransactionCardProps) {
   const isIncome = transaction.direction === "income";
-  const title = transaction.counterparty || transaction.notes || "Untitled";
+  const title = transaction.title || transaction.vendor || "Untitled";
   const category = findCategory(transaction.category);
   const attachmentCount = transaction.documentIds.length;
 
@@ -36,7 +37,11 @@ export function TransactionCard({ transaction, href, action }: TransactionCardPr
           {href === undefined ? title : <CardLink href={href}>{title}</CardLink>}
         </CardTitle>
         <CardMeta>
-          <CardMetaText>{category?.label ?? "Uncategorised"}</CardMetaText>
+          {category ? (
+            <CardCategoryPill $color={category.color}>{category.label}</CardCategoryPill>
+          ) : (
+            <CardMetaText>Uncategorised</CardMetaText>
+          )}
           <CardMetaDot aria-hidden="true" />
           <CardMetaText>{formatDate(transaction.txnDate)}</CardMetaText>
           {transaction.claimablePct < 100 && (

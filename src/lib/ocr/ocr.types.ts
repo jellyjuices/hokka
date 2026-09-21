@@ -24,7 +24,7 @@ export type ReceiptTotals = {
 };
 
 export type ParsedReceipt = {
-  counterparty: string;
+  vendor: string;
   txnDate: string;
   subtotal: number;
   hstAmount: number;

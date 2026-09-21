@@ -6,7 +6,7 @@ const COLUMNS = [
   "id",
   "txn_date",
   "direction",
-  "counterparty",
+  "vendor",
   "category",
   "subtotal",
   "hst_amount",
@@ -14,7 +14,7 @@ const COLUMNS = [
   "claimable_pct",
   "tax_period_id",
   "document_ids",
-  "notes",
+  "title",
 ];
 
 function escapeCell(value: CsvCell) {
@@ -32,7 +32,7 @@ function toRow(transaction: Transaction): CsvCell[] {
     transaction.id,
     transaction.txnDate,
     transaction.direction,
-    transaction.counterparty,
+    transaction.vendor,
     transaction.category,
     transaction.subtotal,
     transaction.hstAmount,
@@ -40,7 +40,7 @@ function toRow(transaction: Transaction): CsvCell[] {
     transaction.claimablePct,
     transaction.taxPeriodId,
     transaction.documentIds.join(" "),
-    transaction.notes,
+    transaction.title,
   ];
 }
 

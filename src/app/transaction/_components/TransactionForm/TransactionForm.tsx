@@ -95,12 +95,12 @@ export function TransactionForm({ transaction }: TransactionFormProps) {
           onChange={form.setDate}
         />
         <Input
-          id="counterparty"
+          id="vendor"
           variant="filled"
           icon={UserIcon}
-          value={form.state.counterparty}
+          value={form.state.vendor}
           placeholder="Vendor"
-          onChange={(event) => form.setCounterparty(event.target.value)}
+          onChange={(event) => form.setVendor(event.target.value)}
         />
       </CardWrapper>
       {form.state.subtotal === null ? (

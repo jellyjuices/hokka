@@ -2,7 +2,8 @@
 
 import styled from "@emotion/styled";
 import Link from "next/link";
-import { theme, hoverFill, numeric } from "@/src/lib/theme";
+import { theme, hoverFill, numeric, categoryTint, transientProps } from "@/src/lib/theme";
+import type { CategoryColor } from "@/src/lib/theme";
 import { mediaDown } from "@/src/lib/breakpoints";
 
 export const CardShell = styled.article`
@@ -94,6 +95,17 @@ export const CardMeta = styled.div`
 
 export const CardMetaText = styled.span`
   overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+`;
+
+export const CardCategoryPill = styled("span", transientProps)<{ $color: CategoryColor }>`
+  overflow: hidden;
+  padding: 2px ${theme.space.sm};
+  border-radius: ${theme.borderRadius.full};
+  background: ${({ $color }) => categoryTint(theme.categoryColor[$color])};
+  color: ${({ $color }) => theme.categoryColor[$color]};
+  font-weight: 500;
   text-overflow: ellipsis;
   white-space: nowrap;
 `;

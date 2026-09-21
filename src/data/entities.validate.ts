@@ -92,7 +92,7 @@ const CHECKS: { [Name in EntityName]: Check<EntityRecord[Name]> } = {
     id: text,
     documentIds: listOf(text),
     direction: choice(DIRECTIONS),
-    counterparty: text,
+    vendor: text,
     txnDate: text,
     subtotal: amount,
     hstAmount: amount,
@@ -100,7 +100,7 @@ const CHECKS: { [Name in EntityName]: Check<EntityRecord[Name]> } = {
     category: text,
     claimablePct: amount,
     taxPeriodId: text,
-    notes: text,
+    title: text,
   }),
   filing: shape({
     id: text,

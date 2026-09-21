@@ -19,7 +19,7 @@ export function SearchResults({ query }: SearchResultsProps) {
       <EmptyState
         icon={<Icon name={MagnifyingGlassIcon} size={32} weight="bold" />}
         title={query === "" ? "Nothing searched yet" : "No matches"}
-        description="Search looks at counterparty, category and notes across every recorded transaction."
+        description="Search looks at vendor, category and title across every recorded transaction."
         action={
           <LinkButton href="/" variant="primary" leadingIcon={ArrowLeftIcon}>
             Back to dashboard

@@ -2,6 +2,8 @@
 
 # Workflow
 
+DO NOT ADD SUBAGENTS UNLESS EXPLICITLY REQUESTED.
+
 ## Gates
 
 Run all of these before reporting work done, repo-wide, even for a small change.
@@ -9,7 +11,7 @@ Run all of these before reporting work done, repo-wide, even for a small change.
 ```sh
 npm run typecheck
 npm run lint
-npm run format:check
+npm run format
 npm run size
 npm run build
 ```

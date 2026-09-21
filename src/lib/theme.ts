@@ -102,3 +102,40 @@ export function categoryTint(color: string) {
 export const transientProps = {
   shouldForwardProp: (prop: string) => !prop.startsWith("$") && isPropValid(prop),
 };
+
+const STACK_OUTER = theme.borderRadius.lg;
+const STACK_INNER = theme.borderRadius.sm;
+
+const STACK_CORNERS = {
+  row: {
+    first: `${STACK_OUTER} ${STACK_INNER} ${STACK_INNER} ${STACK_OUTER}`,
+    last: `${STACK_INNER} ${STACK_OUTER} ${STACK_OUTER} ${STACK_INNER}`,
+  },
+  column: {
+    first: `${STACK_OUTER} ${STACK_OUTER} ${STACK_INNER} ${STACK_INNER}`,
+    last: `${STACK_INNER} ${STACK_INNER} ${STACK_OUTER} ${STACK_OUTER}`,
+  },
+} as const;
+
+export type StackDirection = keyof typeof STACK_CORNERS;
+
+export function stackRadius(direction: StackDirection, item = "& > *", inner = "") {
+  const { first, last } = STACK_CORNERS[direction];
+  return css`
+    ${item}:only-child ${inner} {
+      border-radius: ${STACK_OUTER};
+    }
+
+    ${item}:first-child:not(:last-child) ${inner} {
+      border-radius: ${first};
+    }
+
+    ${item}:last-child:not(:first-child) ${inner} {
+      border-radius: ${last};
+    }
+
+    ${item}:not(:first-child):not(:last-child) ${inner} {
+      border-radius: ${STACK_INNER};
+    }
+  `;
+}

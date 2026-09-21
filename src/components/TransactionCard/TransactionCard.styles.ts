@@ -1,10 +1,12 @@
 "use client";
 
 import styled from "@emotion/styled";
+import Link from "next/link";
 import { theme, hoverFill, numeric } from "@/src/lib/theme";
 import { mediaDown } from "@/src/lib/breakpoints";
 
 export const CardShell = styled.article`
+  position: relative;
   display: flex;
   align-items: center;
   gap: ${theme.space.md};
@@ -15,6 +17,11 @@ export const CardShell = styled.article`
 
   &:hover {
     background: ${hoverFill(theme.surface.secondary)};
+  }
+
+  html:not([data-input-modality="mouse"]) &:has(a:focus-visible) {
+    outline: 2px solid ${theme.foreground.accent};
+    outline-offset: 2px;
   }
 
   ${mediaDown("mobile")} {
@@ -45,6 +52,25 @@ export const CardBody = styled.div`
   gap: ${theme.space.xs};
   flex: 1 1 auto;
   min-width: 0;
+`;
+
+export const CardLink = styled(Link)`
+  color: inherit;
+  text-decoration: none;
+  outline: none;
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    cursor: pointer;
+  }
+`;
+
+export const CardAction = styled.div`
+  position: relative;
+  display: flex;
+  flex: 0 0 auto;
 `;
 
 export const CardTitle = styled.h3`

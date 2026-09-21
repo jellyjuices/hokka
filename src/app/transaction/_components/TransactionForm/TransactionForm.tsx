@@ -7,6 +7,7 @@ import { DatePicker } from "@/src/components/Calendar";
 import { CardWrapper } from "@/src/components/CardWrapper";
 import { DropZone } from "@/src/components/DropZone";
 import { Input } from "@/src/components/Input";
+import type { TransactionFormProps } from "./TransactionForm.types";
 import { AttachmentBar } from "./_components/AttachmentBar";
 import { AttachmentGallery } from "./_components/AttachmentGallery";
 import { AutofillNotice } from "./_components/AutofillNotice";
@@ -33,11 +34,15 @@ import { useSharedFiles } from "./useSharedFiles";
 import { useTransactionForm } from "./useTransactionForm";
 import { useTransactionSave } from "./useTransactionSave";
 
-export function TransactionForm() {
+export function TransactionForm({ transaction }: TransactionFormProps) {
   const params = useSearchParams();
-  const form = useTransactionForm();
+  const form = useTransactionForm(transaction);
   const autofill = useAutofill(form);
-  const { attachments, add, remove } = useAttachments(params.get("documentId"), autofill.offer);
+  const { attachments, add, remove } = useAttachments(
+    params.get("documentId"),
+    autofill.offer,
+    transaction?.documentIds,
+  );
   useSharedFiles(params.get("shared") !== null, add);
   const { isSaving, error, save } = useTransactionSave();
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
@@ -49,7 +54,7 @@ export function TransactionForm() {
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    void save(form.state, form.totals, attachments, autofill.readingFor);
+    void save(form.state, form.totals, attachments, autofill.readingFor, transaction);
   }
 
   return (
@@ -131,7 +136,7 @@ export function TransactionForm() {
           trailingIcon={ArrowRightIcon}
           disabled={isSaving || autofill.isReading}
         >
-          {isSaving ? "Saving…" : "Submit"}
+          {isSaving ? "Saving…" : transaction === undefined ? "Submit" : "Save changes"}
         </SubmitButton>
       </SubmitRow>
       <AttachmentGallery

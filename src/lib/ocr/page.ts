@@ -1,7 +1,8 @@
+import { stripControlChars } from "@/src/lib/text";
 import type { OcrLine, OcrPage } from "./ocr.types";
 
 function collapseSpaces(line: string) {
-  return line
+  return stripControlChars(line)
     .replace(/[\t ]+/g, " ")
     .replace(/ {2,}/g, " ")
     .trim();

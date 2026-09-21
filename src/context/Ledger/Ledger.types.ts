@@ -7,6 +7,7 @@ import type {
   TaxSettings,
   Transaction,
 } from "@/src/data/domain.types";
+import type { OutboxEntity } from "@/src/data/local";
 import type { ReceiptReading } from "@/src/lib/ocr";
 import type { SyncStatus } from "@/src/lib/sync";
 
@@ -48,7 +49,7 @@ export type LedgerActionsValue = {
 export type SyncStateValue = {
   status: SyncStatus;
   isOnline: boolean;
-  pendingCount: number;
+  pendingCounts: Record<OutboxEntity, number>;
   lastError: string | null;
   lastSyncedAt: number | null;
   syncNow: () => Promise<void>;

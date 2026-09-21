@@ -1,13 +1,36 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useLedger } from "@/src/context/Ledger";
+import type { StoredDocument } from "@/src/data/domain.types";
 import { readPendingFile } from "@/src/data/local";
 import { documentFileUrl } from "@/src/data/remote";
 import { newId } from "@/src/lib/platform/id";
 import type { Attachment } from "./TransactionForm.types";
 
-export function useAttachments(documentId: string | null, onAdded: (added: Attachment[]) => void) {
-  const [attachments, setAttachments] = useState<Attachment[]>([]);
+function storedAttachments(documentIds: string[], documents: StoredDocument[]): Attachment[] {
+  return documentIds.map((id) => {
+    const fileKey = documents.find((document) => document.id === id)?.fileKey ?? "";
+    return {
+      id: newId(),
+      name: "Attachment",
+      previewUrl: documentFileUrl(id),
+      isImage: !fileKey.endsWith(".pdf"),
+      file: null,
+      documentId: id,
+    };
+  });
+}
+
+export function useAttachments(
+  documentId: string | null,
+  onAdded: (added: Attachment[]) => void,
+  storedIds: string[] = [],
+) {
+  const { documents } = useLedger();
+  const [attachments, setAttachments] = useState<Attachment[]>(() =>
+    storedAttachments(storedIds, documents),
+  );
   const objectUrls = useRef<string[]>([]);
   const offeredId = useRef<string | null>(null);
   const offer = useRef(onAdded);

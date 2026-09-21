@@ -1,4 +1,8 @@
-import type { TransactionDirection } from "@/src/data/domain.types";
+import type { Transaction, TransactionDirection } from "@/src/data/domain.types";
+
+export type TransactionFormProps = {
+  transaction?: Transaction;
+};
 
 export type TransactionItem = {
   id: string;

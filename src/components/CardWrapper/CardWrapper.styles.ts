@@ -3,11 +3,8 @@
 import { css } from "@emotion/react";
 import styled from "@emotion/styled";
 import { mediaDown, mediaUp } from "@/src/lib/breakpoints";
-import { theme } from "@/src/lib/theme";
+import { stackRadius, theme } from "@/src/lib/theme";
 import type { CardWrapperDirection } from "./CardWrapper.types";
-
-const OUTER = theme.borderRadius.lg;
-const INNER = theme.borderRadius.sm;
 
 const grouped: Record<CardWrapperDirection, ReturnType<typeof css>> = {
   row: css`
@@ -16,34 +13,14 @@ const grouped: Record<CardWrapperDirection, ReturnType<typeof css>> = {
       min-width: 0;
     }
 
-    & > *:first-child:not(:last-child) {
-      border-radius: ${OUTER} ${INNER} ${INNER} ${OUTER};
-    }
-
-    & > *:last-child:not(:first-child) {
-      border-radius: ${INNER} ${OUTER} ${OUTER} ${INNER};
-    }
-
-    & > *:not(:first-child):not(:last-child) {
-      border-radius: ${INNER};
-    }
+    ${stackRadius("row")}
   `,
   column: css`
     & > * {
       min-width: 0;
     }
 
-    & > *:first-child:not(:last-child) {
-      border-radius: ${OUTER} ${OUTER} ${INNER} ${INNER};
-    }
-
-    & > *:last-child:not(:first-child) {
-      border-radius: ${INNER} ${INNER} ${OUTER} ${OUTER};
-    }
-
-    & > *:not(:first-child):not(:last-child) {
-      border-radius: ${INNER};
-    }
+    ${stackRadius("column")}
   `,
 };
 
@@ -54,10 +31,6 @@ export const WrapperRoot = styled.div<{
   display: flex;
   flex-direction: ${({ $direction }) => $direction};
   gap: ${theme.space.sm};
-
-  & > *:only-child {
-    border-radius: ${OUTER};
-  }
 
   ${({ $direction, $stackOnMobile }) =>
     $stackOnMobile && $direction === "row"

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useLedgerActions } from "@/src/context/Ledger";
-import type { DocumentKind } from "@/src/data/domain.types";
+import type { DocumentKind, Transaction } from "@/src/data/domain.types";
 import type { ReceiptReading } from "@/src/lib/ocr";
 import { buildDraft } from "./TransactionForm.draft";
 import type { Attachment, TransactionFormState, TransactionTotals } from "./TransactionForm.types";
@@ -43,6 +43,7 @@ export function useTransactionSave() {
     totals: TransactionTotals,
     attachments: Attachment[],
     readingFor: (attachmentId: string) => ReceiptReading | null,
+    existing?: Transaction,
   ) {
     if (isSaving) return;
     setIsSaving(true);
@@ -50,7 +51,7 @@ export function useTransactionSave() {
     try {
       const kind: DocumentKind = state.direction === "income" ? "invoice" : "receipt";
       const documentIds = await storeAttachments(attachments, kind, captureDocument, readingFor);
-      await saveTransaction(buildDraft(state, totals, documentIds));
+      await saveTransaction(buildDraft(state, totals, documentIds, existing));
       router.push("/transactions");
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : "Could not save the transaction");

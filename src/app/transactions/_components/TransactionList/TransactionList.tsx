@@ -17,7 +17,7 @@ import { useTransactionActions } from "./useTransactionActions";
 
 export function TransactionList() {
   const { transactions, isHydrated } = useLedger();
-  const { pendingCount } = useSyncState();
+  const { pendingCounts } = useSyncState();
   const [filter, setFilter] = useState(NO_FILTER);
   const actions = useTransactionActions();
 
@@ -46,7 +46,9 @@ export function TransactionList() {
         onChange={setFilter}
         action={<ExportButton transactions={visible} range={filter.range} />}
       />
-      {pendingCount > 0 && <ListNotice>{`${pendingCount} waiting to sync`}</ListNotice>}
+      {pendingCounts.transaction > 0 && (
+        <ListNotice>{`${pendingCounts.transaction} waiting to sync`}</ListNotice>
+      )}
       {visible.length === 0 ? (
         <EmptyState
           icon={<Icon name={FunnelSimpleIcon} size={32} weight="fill" />}
@@ -59,6 +61,7 @@ export function TransactionList() {
             <li key={transaction.id}>
               <TransactionCard
                 transaction={transaction}
+                href={`/transaction/${transaction.id}`}
                 action={<Menu label="Transaction options" items={actions.itemsFor(transaction)} />}
               />
             </li>

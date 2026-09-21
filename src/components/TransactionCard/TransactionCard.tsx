@@ -4,6 +4,7 @@ import { findCategory } from "@/src/data/categories";
 import { formatCurrency } from "@/src/lib/money";
 import { formatDate } from "@/src/lib/dates";
 import {
+  CardAction,
   CardAmounts,
   CardBody,
   CardGlyph,
@@ -11,6 +12,7 @@ import {
   CardMetaBadge,
   CardMetaDot,
   CardMetaText,
+  CardLink,
   CardShell,
   CardSubAmount,
   CardTitle,
@@ -18,7 +20,7 @@ import {
 } from "./TransactionCard.styles";
 import type { TransactionCardProps } from "./TransactionCard.types";
 
-export function TransactionCard({ transaction, action }: TransactionCardProps) {
+export function TransactionCard({ transaction, href, action }: TransactionCardProps) {
   const isIncome = transaction.direction === "income";
   const title = transaction.counterparty || transaction.notes || "Untitled";
   const category = findCategory(transaction.category);
@@ -30,7 +32,9 @@ export function TransactionCard({ transaction, action }: TransactionCardProps) {
         <Icon name={isIncome ? HandCoinsIcon : CoinsIcon} size={24} />
       </CardGlyph>
       <CardBody>
-        <CardTitle>{title}</CardTitle>
+        <CardTitle>
+          {href === undefined ? title : <CardLink href={href}>{title}</CardLink>}
+        </CardTitle>
         <CardMeta>
           <CardMetaText>{category?.label ?? "Uncategorised"}</CardMetaText>
           <CardMetaDot aria-hidden="true" />
@@ -55,7 +59,7 @@ export function TransactionCard({ transaction, action }: TransactionCardProps) {
         </CardTotal>
         <CardSubAmount>{`HST ${formatCurrency(transaction.hstAmount)}`}</CardSubAmount>
       </CardAmounts>
-      {action}
+      {action !== undefined && <CardAction>{action}</CardAction>}
     </CardShell>
   );
 }

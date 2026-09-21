@@ -1,7 +1,7 @@
 "use client";
 
 import styled from "@emotion/styled";
-import { theme } from "@/src/lib/theme";
+import { stackRadius, theme } from "@/src/lib/theme";
 
 export const ListLayout = styled.div`
   display: flex;
@@ -16,6 +16,8 @@ export const ListItems = styled.ul`
   margin: 0;
   padding: 0;
   list-style: none;
+
+  ${stackRadius("column", "& > li", "> *")}
 `;
 
 export const ListNotice = styled.p`

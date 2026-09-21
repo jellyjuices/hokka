@@ -16,6 +16,7 @@ import {
   subscribeLocalStore,
   subscribeOutbox,
 } from "@/src/data/local";
+import type { OutboxEntity, OutboxOp } from "@/src/data/local";
 import { hydrateRepository } from "@/src/data/repository";
 import {
   getConnectivityServerSnapshot,
@@ -36,6 +37,18 @@ import type {
 const DataContext = createContext<LedgerDataValue | null>(null);
 const ActionsContext = createContext<LedgerActionsValue | null>(null);
 const SyncContext = createContext<SyncStateValue | null>(null);
+
+function countByEntity(outbox: OutboxOp[]): Record<OutboxEntity, number> {
+  const counts: Record<OutboxEntity, number> = {
+    transaction: 0,
+    filing: 0,
+    period: 0,
+    document: 0,
+    settings: 0,
+  };
+  for (const op of outbox) counts[op.entity] += 1;
+  return counts;
+}
 
 export function LedgerProvider({ children }: LedgerProviderProps) {
   const snapshot = useSyncExternalStore(subscribeLocalStore, getLocalSnapshot, getServerSnapshot);
@@ -88,12 +101,12 @@ export function LedgerProvider({ children }: LedgerProviderProps) {
     () => ({
       status,
       isOnline,
-      pendingCount: outbox.length,
+      pendingCounts: countByEntity(outbox),
       lastError,
       lastSyncedAt,
       syncNow: engine.syncNow,
     }),
-    [engine, isOnline, lastError, lastSyncedAt, outbox.length, status],
+    [engine, isOnline, lastError, lastSyncedAt, outbox, status],
   );
 
   return (

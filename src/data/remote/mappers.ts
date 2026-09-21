@@ -1,3 +1,4 @@
+import { stripControlCharsDeep } from "@/src/lib/text";
 import type { Filing, StoredDocument, TaxPeriod, TaxSettings, Transaction } from "../domain.types";
 import type {
   DocumentRow,
@@ -95,7 +96,7 @@ export function documentToRow(document: StoredDocument): Omit<DocumentRow, "upda
     file_key: document.fileKey,
     uploaded_at: document.uploadedAt,
     ocr_status: document.ocrStatus,
-    raw_ocr_json: document.rawOcrJson ?? null,
+    raw_ocr_json: stripControlCharsDeep(document.rawOcrJson) ?? null,
     deleted_at: null,
   };
 }

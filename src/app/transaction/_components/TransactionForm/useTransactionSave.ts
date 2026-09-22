@@ -32,6 +32,24 @@ async function storeAttachments(
   return documentIds;
 }
 
+// The category the human settled on is the only label this app ever gets, so it
+// teaches the on-device classifier what this vendor means. A failure here is
+// never worth failing a saved transaction over.
+async function learnCategory(
+  attachments: Attachment[],
+  categoryId: string,
+  readingFor: (attachmentId: string) => ReceiptReading | null,
+) {
+  if (categoryId === "") return;
+  const readings = attachments.map((attachment) => readingFor(attachment.id));
+  if (readings.every((reading) => reading === null)) return;
+  const { rememberReceipt } = await import("@/src/lib/classify");
+  for (const reading of readings) {
+    if (reading === null) continue;
+    await rememberReceipt(reading, categoryId).catch(() => undefined);
+  }
+}
+
 export function useTransactionSave() {
   const { captureDocument, saveTransaction } = useLedgerActions();
   const router = useRouter();
@@ -52,6 +70,7 @@ export function useTransactionSave() {
       const kind: DocumentKind = state.direction === "income" ? "invoice" : "receipt";
       const documentIds = await storeAttachments(attachments, kind, captureDocument, readingFor);
       await saveTransaction(buildDraft(state, totals, documentIds, existing));
+      await learnCategory(attachments, state.categoryId, readingFor);
       router.push("/transactions");
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : "Could not save the transaction");

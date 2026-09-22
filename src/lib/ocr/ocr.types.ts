@@ -33,6 +33,7 @@ export type ParsedReceipt = {
   items: ParsedReceiptItem[];
   itemsCoverSubtotal: boolean;
   categoryId: string | null;
+  categoryConfidence: number;
   isTaxed: boolean;
   confidence: number;
 };

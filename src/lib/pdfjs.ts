@@ -2,6 +2,20 @@ import type { PDFDocumentProxy, PDFPageProxy } from "pdfjs-dist";
 
 const WORKER_SRC = "/ocr/pdf.worker.min.mjs";
 const STANDARD_FONTS = "/ocr/fonts/";
+// pdf.js is served from public/ocr rather than bundled, so half a megabyte of
+// reader never lands in a route chunk and the browser caches it beside the
+// worker it already loads from there. The specifier is held in a variable so
+// the bundler cannot follow it.
+const PDFJS_SRC = "/ocr/pdf.min.mjs";
+
+let pdfjsModule: Promise<typeof import("pdfjs-dist")> | null = null;
+
+function loadPdfjs() {
+  pdfjsModule ??= import(/* turbopackIgnore: true */ PDFJS_SRC) as Promise<
+    typeof import("pdfjs-dist")
+  >;
+  return pdfjsModule;
+}
 
 export type PageRender = {
   canvas: HTMLCanvasElement;
@@ -10,7 +24,7 @@ export type PageRender = {
 };
 
 export async function openPdf(bytes: Uint8Array) {
-  const pdfjs = await import("pdfjs-dist");
+  const pdfjs = await loadPdfjs();
   pdfjs.GlobalWorkerOptions.workerSrc = WORKER_SRC;
   return pdfjs.getDocument({ data: bytes, standardFontDataUrl: STANDARD_FONTS });
 }

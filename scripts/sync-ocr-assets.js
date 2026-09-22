@@ -24,6 +24,14 @@ const assets = [
     from: path.join(modules, "pdfjs-dist", "build", "pdf.worker.min.mjs"),
     to: path.join(target, "pdf.worker.min.mjs"),
   },
+  {
+    from: path.join(modules, "pdfjs-dist", "build", "pdf.min.mjs"),
+    to: path.join(target, "pdf.min.mjs"),
+  },
+  {
+    from: path.join(modules, "pdf-lib", "dist", "pdf-lib.esm.min.js"),
+    to: path.join(target, "pdf-lib.esm.min.js"),
+  },
   ...CORE_VARIANTS.map((name) => ({
     from: path.join(modules, "tesseract.js-core", name),
     to: path.join(target, "core", name),

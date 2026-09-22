@@ -3,6 +3,10 @@ import { encodeCanvas, JPEG_TYPE } from "./canvas";
 import type { CompressedFile } from "./compress.types";
 
 export const PDF_TYPE = "application/pdf";
+// pdf-lib is served from public/ocr for the same reason pdf.js is: it is only
+// ever needed once a PDF is attached, and a variable specifier keeps it out of
+// the bundle.
+const PDF_LIB_SRC = "/ocr/pdf-lib.esm.min.js";
 const PDF_SIGNATURE = "%PDF-";
 const UNKNOWN_TYPES = ["", "application/octet-stream"];
 const TEXT_LAYER_LENGTH = 40;
@@ -12,6 +16,15 @@ const MAX_RENDER_SCALE = 2;
 const PAGE_QUALITY = 0.62;
 const PAGE_BACKGROUND = "#ffffff";
 
+let pdfLibModule: Promise<typeof import("pdf-lib")> | null = null;
+
+function loadPdfLib() {
+  pdfLibModule ??= import(/* turbopackIgnore: true */ PDF_LIB_SRC) as Promise<
+    typeof import("pdf-lib")
+  >;
+  return pdfLibModule;
+}
+
 async function looksLikePdf(file: File) {
   if (file.type === PDF_TYPE) return true;
   if (!UNKNOWN_TYPES.includes(file.type)) return false;
@@ -19,7 +32,7 @@ async function looksLikePdf(file: File) {
 }
 
 async function restructure(bytes: Uint8Array) {
-  const { PDFDocument } = await import("pdf-lib");
+  const { PDFDocument } = await loadPdfLib();
   const document = await PDFDocument.load(bytes, { updateMetadata: false });
   return document.save({ useObjectStreams: true });
 }
@@ -32,7 +45,7 @@ async function hasTextLayer(bytes: Uint8Array) {
 }
 
 async function rasterise(bytes: Uint8Array) {
-  const { PDFDocument } = await import("pdf-lib");
+  const { PDFDocument } = await loadPdfLib();
   const rebuilt = await PDFDocument.create();
 
   const drawn = await withPdf(bytes, (document) => {

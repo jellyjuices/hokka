@@ -4,11 +4,14 @@ import type { MouseEvent } from "react";
 import { Label, Shell, ShellBlock } from "./Input.styles";
 import type { InputShellProps } from "./Input.types";
 
-const ACTIVATABLE = "button, input:not([type='hidden']), textarea";
+const ACTIVATABLE = "button, input:not([type='hidden']), textarea, [contenteditable='true']";
 
 function activateControl(event: MouseEvent<HTMLDivElement>) {
   if (event.target instanceof Element && event.target.closest(ACTIVATABLE) !== null) return;
-  event.currentTarget.querySelector<HTMLElement>(ACTIVATABLE)?.click();
+  const control = event.currentTarget.querySelector<HTMLElement>(ACTIVATABLE);
+  if (control === null) return;
+  if (control.isContentEditable) control.focus();
+  else control.click();
 }
 
 export function InputShell({

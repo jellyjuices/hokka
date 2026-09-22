@@ -2,7 +2,7 @@
 
 import styled from "@emotion/styled";
 import { keyframes } from "@emotion/react";
-import { Input } from "@/src/components/Input";
+import { InputShell } from "@/src/components/Input";
 import { theme } from "@/src/lib/theme";
 
 const openFromEnd = keyframes`
@@ -10,7 +10,8 @@ const openFromEnd = keyframes`
   to { width: 100%; margin-inline-start: 0; }
 `;
 
-export const SubtotalField = styled(Input)`
+export const SubtotalShell = styled(InputShell)`
   width: 100%;
+  font-size: ${theme.fontSize.lg};
   animation: ${openFromEnd} ${theme.motion.base} ease;
 `;

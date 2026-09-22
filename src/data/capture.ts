@@ -1,7 +1,6 @@
 import { compressForUpload } from "@/src/lib/compress";
 import { newId } from "@/src/lib/platform/id";
-import { parseReceiptText, recognizeDocument } from "@/src/lib/ocr";
-import type { ReceiptReading } from "@/src/lib/ocr";
+import type { ParsedReceipt, ReceiptReading } from "@/src/lib/ocr";
 import type { DocumentKind, OcrStatus, StoredDocument } from "./domain.types";
 import { savePendingFile } from "./local";
 import { documentFileUrl } from "./remote";
@@ -60,12 +59,25 @@ export function documentHref(document: StoredDocument) {
   return documentFileUrl(document.id);
 }
 
+async function withCategory(receipt: ParsedReceipt | null, lines: string[]) {
+  if (receipt === null) return null;
+  const { guessCategory } = await import("@/src/lib/classify");
+  const guess = await guessCategory(receipt.vendor || null, receipt.items, lines);
+  if (guess === null) return receipt;
+  return { ...receipt, categoryId: guess.categoryId, categoryConfidence: guess.confidence };
+}
+
+// The reader and the classifier are the heaviest code in the app and only a
+// receipt ever needs them, so they load on the first read rather than with the
+// module that every screen imports for captureDocument.
 export async function readReceipt(blob: Blob, hstRate: number): Promise<ReceiptReading | null> {
+  const { parseReceiptText, recognizeDocument } = await import("@/src/lib/ocr");
   const page = await recognizeDocument(blob);
   if (page === null) return null;
+  const lines = page.lines.map((line) => line.text);
   return {
     text: page.text,
     confidence: page.confidence,
-    receipt: parseReceiptText(page, { hstRate }),
+    receipt: await withCategory(parseReceiptText(page, { hstRate }), lines),
   };
 }

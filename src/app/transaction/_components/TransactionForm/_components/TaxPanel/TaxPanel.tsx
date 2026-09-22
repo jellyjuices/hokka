@@ -1,7 +1,8 @@
 "use client";
 
 import { Switch } from "@/src/components/Switch";
-import { ModifierField, ModifierRow, TaxGroup, TaxRow } from "./TaxPanel.styles";
+import { AmountField } from "../AmountField";
+import { ModifierField, ModifierRow, ModifierShell, TaxGroup, TaxRow } from "./TaxPanel.styles";
 import type { TaxPanelProps } from "./TaxPanel.types";
 
 export function TaxPanel({
@@ -24,17 +25,15 @@ export function TaxPanel({
         />
       </TaxRow>
       <ModifierRow>
-        <ModifierField
-          label="Modifiers (Tips)"
-          align="end"
-          prependValue="$"
-          isAutoWidth
-          value={tips}
-          placeholder="0.00"
-          inputMode="decimal"
-          aria-label="Tips"
-          onChange={(event) => onTipsChange(event.target.value)}
-        />
+        <ModifierShell label="Modifiers (Tips)">
+          <AmountField
+            value={tips}
+            label="Tips"
+            prefix="$"
+            placeholder="0.00"
+            onChange={onTipsChange}
+          />
+        </ModifierShell>
         <ModifierField
           label="Claimable"
           align="end"

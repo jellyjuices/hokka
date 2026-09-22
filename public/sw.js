@@ -55,6 +55,7 @@ function isPrecachedAsset(url) {
     url.pathname.startsWith("/_next/static/") ||
     url.pathname.startsWith("/logo/") ||
     url.pathname.startsWith("/ocr/") ||
+    url.pathname.startsWith("/models/") ||
     url.pathname.startsWith("/icons/")
   );
 }

@@ -9,3 +9,4 @@ build/
 public/ocr/
 next-env.d.ts
 !.env.example
+public/models/

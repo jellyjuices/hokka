@@ -47,11 +47,12 @@ segmented the page.
   in a price. They are always returned, but the form only uses them as its rows when they add up to
   the parsed subtotal — `itemsCoverSubtotal`. Otherwise the form writes one row for the subtotal and
   the items stay in the document's stored reading.
-- **The category** ([classify.ts](../src/lib/ocr/classify.ts)) is scored from the keyword registry
-  in [classify.registry.ts](../src/lib/ocr/classify.registry.ts): a vendor-name hit weighs more than
-  a body hit, matching is whole-word, and a weak score returns nothing rather than a guess. Applying
-  a category also applies that category's claimable percentage, which is why a read restaurant bill
-  arrives at 50%.
+- **The category** is not the parser's job. `parseReceiptText` leaves `categoryId` null and
+  [readReceipt](../src/data/capture.ts) fills it in from
+  [src/lib/classify](../src/lib/classify), which scores the receipt on the device and returns a
+  probability alongside the id. See [docs/classification.md](classification.md). Applying a category
+  also applies that category's claimable percentage, which is why a read restaurant bill arrives at
+  50%.
 
 Confidence for a text-layer PDF starts at 96 rather than a measured score, because the characters
 were read, not guessed. Confidence is otherwise the engine's own score multiplied by how many structural checks passed — totals

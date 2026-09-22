@@ -29,3 +29,8 @@ export const ModifierField = styled(Input)`
   justify-content: space-between;
   font-weight: 500;
 `;
+
+export const ModifierShell = styled(InputShell)`
+  justify-content: space-between;
+  font-weight: 500;
+`;

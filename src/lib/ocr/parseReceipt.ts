@@ -1,4 +1,3 @@
-import { classifyReceipt } from "./classify";
 import { extractItems, extractVendor } from "./fields";
 import { extractDate } from "./receiptDate";
 import { toIsoDate } from "@/src/lib/dates";
@@ -55,7 +54,8 @@ export function parseReceiptText(
     tips: totals.tips,
     items,
     itemsCoverSubtotal: itemsMatchSubtotal,
-    categoryId: classifyReceipt(vendor, items, lines),
+    categoryId: null,
+    categoryConfidence: 0,
     isTaxed: totals.isTaxed,
     confidence: scoreOf(
       {

@@ -27,6 +27,7 @@ All dry-run by default; the `:apply` variant writes. Running twice reports nothi
 | `npm run types:extract`           | Lifts inline type declarations into the sibling `*.types.ts`                                                 |
 | `npm run components:group`        | Folds loose `Name.{tsx,styles,types}` files into a `Name/` folder with an `index.ts`                         |
 | `npm run organize`                | Both of the above, reporting only                                                                            |
+| `npm run analyze`                 | Turbopack bundle analyzer, interactive web UI. Does not build the app                                        |
 | `npm run oneliners`               | Lists one-line functions — passthroughs worth inlining, and the scaffold stubs still returning a placeholder |
 | `npm run aliases`                 | The passthrough subset only                                                                                  |
 | `npm run arrows` / `arrows:apply` | Converts arrow consts to function declarations, verifying with `tsc` after each round                        |

@@ -1,11 +1,11 @@
-import { findCategory } from "@/src/data/categories";
-import { CATEGORY_SIGNALS, type CategorySignals } from "./classify.registry";
-import type { ParsedReceiptItem } from "./ocr.types";
+import type { ParsedReceiptItem } from "@/src/lib/ocr/ocr.types";
+import type { CategoryScore } from "./classify.types";
+import { CATEGORY_SIGNALS, type CategorySignals } from "./keywords.registry";
 
 const VENDOR_WEIGHT = 4;
 const BODY_VENDOR_WEIGHT = 2;
 const MAX_TERM_HITS = 3;
-const MINIMUM_SCORE = 3;
+const CERTAIN_SCORE = 8;
 
 function normalize(text: string) {
   return ` ${text
@@ -30,22 +30,30 @@ function scoreFor(signals: CategorySignals, vendorText: string, bodyText: string
   return vendorHits * VENDOR_WEIGHT + bodyVendorHits * BODY_VENDOR_WEIGHT + termHits;
 }
 
-export function classifyReceipt(
+export function receiptText(vendor: string | null, items: ParsedReceiptItem[], lines: string[]) {
+  const body = [...lines, ...items.map((item) => item.name)].join(" ");
+  return vendor === null ? body : `${vendor}. ${body}`;
+}
+
+export function keywordReading(
   vendor: string | null,
   items: ParsedReceiptItem[],
   lines: string[],
-) {
+): { scores: CategoryScore[]; strength: number } {
   const vendorText = normalize(vendor ?? "");
   const bodyText = normalize([...lines, ...items.map((item) => item.name)].join(" "));
 
-  let best: { categoryId: string; score: number } | null = null;
-  for (const signals of CATEGORY_SIGNALS) {
-    const score = scoreFor(signals, vendorText, bodyText);
-    if (score >= MINIMUM_SCORE && (best === null || score > best.score)) {
-      best = { categoryId: signals.categoryId, score };
-    }
-  }
+  const raw = CATEGORY_SIGNALS.map((signals) => ({
+    categoryId: signals.categoryId,
+    score: scoreFor(signals, vendorText, bodyText),
+  }));
 
-  if (best === null) return null;
-  return findCategory(best.categoryId) === null ? null : best.categoryId;
+  const total = raw.reduce((running, entry) => running + entry.score, 0);
+  if (total === 0) return { scores: [], strength: 0 };
+
+  const peak = raw.reduce((running, entry) => Math.max(running, entry.score), 0);
+  return {
+    scores: raw.map((entry) => ({ categoryId: entry.categoryId, score: entry.score / total })),
+    strength: Math.min(1, peak / CERTAIN_SCORE),
+  };
 }

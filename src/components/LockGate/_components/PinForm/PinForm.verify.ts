@@ -5,8 +5,6 @@ import {
 } from "@/src/lib/devicePassword";
 import { isOnline } from "@/src/lib/platform/connectivity";
 
-const SESSION_ASK_LIMIT = 6 * 1000;
-
 async function verifyOnDevice(password: string): Promise<string | null> {
   if (!hasDevicePassword()) {
     return isOnline()
@@ -39,19 +37,4 @@ export async function verifyPassword(password: string): Promise<string | null> {
 export function warmUnlock() {
   if (!isOnline()) return;
   void fetch("/api/unlock", { cache: "no-store" }).catch(() => undefined);
-}
-
-export async function hasLiveSession(): Promise<boolean> {
-  if (!isOnline()) return true;
-  try {
-    const response = await fetch("/api/unlock", {
-      cache: "no-store",
-      signal: AbortSignal.timeout(SESSION_ASK_LIMIT),
-    });
-    if (!response.ok) return false;
-    const body = (await response.json()) as { unlocked?: unknown };
-    return body.unlocked === true;
-  } catch {
-    return true;
-  }
 }

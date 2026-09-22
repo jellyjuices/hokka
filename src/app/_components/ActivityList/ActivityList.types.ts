@@ -20,4 +20,5 @@ export type ActivityListProps = {
   ctaLabel: string;
   visibility?: ActivityVisibility;
   icon?: Icon;
+  isLoading?: boolean;
 };

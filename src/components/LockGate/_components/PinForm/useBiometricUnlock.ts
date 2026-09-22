@@ -7,7 +7,6 @@ import {
   subscribeBiometrics,
   unlockWithBiometrics,
 } from "@/src/lib/biometrics";
-import { hasLiveSession } from "./PinForm.verify";
 import type { BiometricStatus } from "./PinForm.types";
 
 export function useBiometricUnlock(onUnlocked: () => void) {
@@ -29,13 +28,13 @@ export function useBiometricUnlock(onUnlocked: () => void) {
       setError(null);
       const message = await unlockWithBiometrics();
       isBusy.current = false;
-      if (message === null && (await hasLiveSession())) {
+      if (message === null) {
         onUnlocked();
         return;
       }
       setStatus("failed");
       if (isSilent) return;
-      setError(message ?? "This session has expired. Enter your password");
+      setError(message);
     },
     [onUnlocked],
   );

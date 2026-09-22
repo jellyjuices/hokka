@@ -3,6 +3,7 @@ import { ArrowRightIcon, ReceiptIcon } from "@phosphor-icons/react/dist/ssr";
 import { EmptyState } from "@/src/components/EmptyState";
 import { Icon } from "@/src/components/Icon";
 import { ListRow } from "@/src/components/ListRow";
+import { SkeletonList } from "@/src/components/Skeleton";
 import {
   ActivityFooter,
   ActivityItems,
@@ -20,11 +21,14 @@ export function ActivityList({
   ctaLabel,
   visibility = "all",
   icon = ReceiptIcon,
+  isLoading = false,
 }: ActivityListProps) {
   return (
     <ActivitySection $visibility={visibility}>
       <ActivityTitle>{title}</ActivityTitle>
-      {items.length === 0 ? (
+      {isLoading ? (
+        <SkeletonList label={`Loading ${title.toLowerCase()}`} />
+      ) : items.length === 0 ? (
         <EmptyState
           icon={<Icon name={icon} size={32} weight="fill" />}
           title={emptyTitle}
@@ -39,7 +43,7 @@ export function ActivityList({
           ))}
         </ActivityItems>
       )}
-      {items.length !== 0 && (
+      {!isLoading && items.length !== 0 && (
         <ActivityFooter>
           <LinkButton href={ctaHref} variant="secondary" isBlock trailingIcon={ArrowRightIcon}>
             {ctaLabel}

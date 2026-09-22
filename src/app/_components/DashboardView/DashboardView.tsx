@@ -13,6 +13,7 @@ import { LinkButton } from "@/src/components/Button";
 import { Grid, GridItem } from "@/src/components/Grid";
 import { PageDots } from "@/src/components/PageDots";
 import { PageHeader } from "@/src/components/PageHeader";
+import { useLedger } from "@/src/context/Ledger";
 import { useMediaQuery, useScrollSnapIndex } from "@/src/hooks";
 import { breakpoints } from "@/src/lib/breakpoints";
 import { currentYear } from "@/src/lib/dates";
@@ -38,6 +39,7 @@ export function DashboardView() {
   const thisYear = currentYear();
   const [year, setYear] = useState(thisYear);
 
+  const { isHydrated } = useLedger();
   const isNarrow = useMediaQuery(NARROW_QUERY);
   const { trackRef, activeIndex, goTo } = useScrollSnapIndex(isNarrow ? SLIDES.length : 0);
 
@@ -107,6 +109,7 @@ export function DashboardView() {
       </GridItem>
       <GridItem span={4}>
         <ActivityList
+          isLoading={!isHydrated}
           visibility="wide"
           title="Recent invoices"
           items={incomeItems}
@@ -118,6 +121,7 @@ export function DashboardView() {
       </GridItem>
       <GridItem span={4}>
         <ActivityList
+          isLoading={!isHydrated}
           visibility="wide"
           title="Recent expenses"
           items={expenseItems}
@@ -129,6 +133,7 @@ export function DashboardView() {
       </GridItem>
       <GridItem span={4}>
         <ActivityList
+          isLoading={!isHydrated}
           visibility="wide"
           title="Filing history"
           items={filingItems}
@@ -141,6 +146,7 @@ export function DashboardView() {
 
       <GridItem>
         <ActivityList
+          isLoading={!isHydrated}
           visibility="narrow"
           title="All recent"
           items={recentItems}

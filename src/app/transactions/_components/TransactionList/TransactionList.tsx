@@ -6,6 +6,7 @@ import { LinkButton } from "@/src/components/Button";
 import { EmptyState } from "@/src/components/EmptyState";
 import { Icon } from "@/src/components/Icon";
 import { Menu } from "@/src/components/Menu";
+import { SkeletonList } from "@/src/components/Skeleton";
 import { TransactionCard } from "@/src/components/TransactionCard";
 import { useLedger, useSyncState } from "@/src/context/Ledger";
 import { NO_FILTER, filterTransactions } from "@/src/lib/filters";
@@ -23,11 +24,13 @@ export function TransactionList() {
 
   const visible = useMemo(() => filterTransactions(transactions, filter), [transactions, filter]);
 
+  if (!isHydrated) return <SkeletonList label="Loading transactions" rows={6} rowHeight={72} />;
+
   if (transactions.length === 0) {
     return (
       <EmptyState
         icon={<Icon name={CardsThreeIcon} size={32} weight="fill" />}
-        title={isHydrated ? "No transactions yet" : "Loading transactions…"}
+        title="No transactions yet"
         description="Log an invoice or a receipt."
         action={
           <LinkButton href="/transaction/new" variant="tertiary" trailingIcon={PlusIcon}>

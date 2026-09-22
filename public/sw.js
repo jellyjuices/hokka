@@ -1,4 +1,4 @@
-const CACHE_NAME = "hokka-shell-v4";
+const CACHE_NAME = "hokka-shell-v5";
 
 const SHARE_TARGET_PATH = "/share-target";
 const SHARE_LANDING = "/transaction/new?shared=1";
@@ -77,6 +77,23 @@ async function networkFirst(request) {
     if (shell) return shell;
     throw error;
   }
+}
+
+// An installed app opens from the cached shell at once and refreshes it behind the scenes, so a
+// slow or sleeping server never holds the first paint. The next open gets the fresh copy.
+async function staleWhileRevalidate(request, event) {
+  const cache = await caches.open(CACHE_NAME);
+  const cached = await cache.match(request);
+  if (!cached) return networkFirst(request);
+  event.waitUntil(
+    fetch(request)
+      .then((response) => {
+        if (response.ok) return cache.put(request, response);
+        return undefined;
+      })
+      .catch(() => undefined),
+  );
+  return cached;
 }
 
 async function cacheFirst(request) {
@@ -164,7 +181,7 @@ self.addEventListener("fetch", (event) => {
   if (url.pathname.startsWith("/api/")) return;
 
   if (request.mode === "navigate") {
-    event.respondWith(networkFirst(request));
+    event.respondWith(staleWhileRevalidate(request, event));
     return;
   }
 

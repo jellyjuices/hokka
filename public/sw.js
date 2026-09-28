@@ -1,4 +1,4 @@
-const CACHE_NAME = "hokka-shell-v5";
+const CACHE_NAME = "hokka-shell-v6";
 
 const SHARE_TARGET_PATH = "/share-target";
 const SHARE_LANDING = "/transaction/new?shared=1";
@@ -13,6 +13,7 @@ const APP_SHELL = [
   "/",
   "/transactions",
   "/transaction/new",
+  "/transaction/edit",
   "/filings",
   "/filings/new",
   "/search",
@@ -69,8 +70,9 @@ async function networkFirst(request) {
   } catch (error) {
     const cached = await cache.match(request);
     if (cached) return cached;
-    // A shared receipt lands on /transaction/new?shared=1, and offline that query string must
-    // still resolve to the precached form rather than falling back to the dashboard.
+    // A shared receipt lands on /transaction/new?shared=1 and an edit on /transaction/edit?id=…,
+    // and offline that query string must still resolve to the precached form rather than falling
+    // back to the dashboard.
     const route = await cache.match(request, { ignoreSearch: true });
     if (route) return route;
     const shell = await cache.match("/");

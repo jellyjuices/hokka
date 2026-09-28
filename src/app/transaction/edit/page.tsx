@@ -3,9 +3,7 @@ import { Grid, GridItem } from "@/src/components/Grid";
 import { PageHeader } from "@/src/components/PageHeader";
 import { EditTransaction } from "../_components/EditTransaction";
 
-export default async function EditTransactionPage(context: { params: Promise<{ id: string }> }) {
-  const { id } = await context.params;
-
+export default function EditTransactionPage() {
   return (
     <Grid>
       <GridItem>
@@ -13,7 +11,7 @@ export default async function EditTransactionPage(context: { params: Promise<{ i
       </GridItem>
       <GridItem span={10} spanTablet={12}>
         <Suspense fallback={null}>
-          <EditTransaction id={id} />
+          <EditTransaction />
         </Suspense>
       </GridItem>
     </Grid>

@@ -1,14 +1,15 @@
 "use client";
 
 import { ArrowLeftIcon, CardsThreeIcon } from "@phosphor-icons/react/dist/ssr";
+import { useSearchParams } from "next/navigation";
 import { LinkButton } from "@/src/components/Button";
 import { EmptyState } from "@/src/components/EmptyState";
 import { Icon } from "@/src/components/Icon";
 import { useLedger } from "@/src/context/Ledger";
 import { TransactionForm } from "../TransactionForm";
-import type { EditTransactionProps } from "./EditTransaction.types";
 
-export function EditTransaction({ id }: EditTransactionProps) {
+export function EditTransaction() {
+  const id = useSearchParams().get("id");
   const { transactions, isHydrated } = useLedger();
   const transaction = transactions.find((entry) => entry.id === id);
 

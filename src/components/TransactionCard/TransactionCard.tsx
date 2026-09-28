@@ -29,7 +29,7 @@ export function TransactionCard({ transaction }: TransactionCardProps) {
         title={title}
         amount={`${isIncome ? "+" : "−"}${formatCurrency(transaction.total)}`}
         isIncome={isIncome}
-        href={`/transaction/${transaction.id}`}
+        href={`/transaction/edit?id=${transaction.id}`}
         menuLabel="Transaction options"
         menuItems={actions.itemsFor(transaction)}
       />

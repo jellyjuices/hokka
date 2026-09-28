@@ -270,6 +270,38 @@ export function categoriesFor(direction: TransactionDirection) {
   return CATEGORIES.filter((category) => category.direction === direction);
 }
 
+// The order every picker and the Settings list show, most used first.
+const CATEGORY_ORDER = [
+  "client_work",
+  "meals",
+  "travel",
+  "telephone_utilities",
+  "vehicle",
+  "business_use_of_home",
+  "rent",
+  "supplies",
+  "office_expenses",
+  "capital_cost_allowance",
+  "advertising",
+  "interest_bank_charges",
+  "professional_fees",
+  "business_taxes_fees",
+  "prepaid_expenses",
+  "insurance",
+  "maintenance",
+  "bad_debts",
+  "other",
+];
+
+function orderRank(categoryId: string) {
+  const rank = CATEGORY_ORDER.indexOf(categoryId);
+  return rank === -1 ? CATEGORY_ORDER.length : rank;
+}
+
+export function orderCategories(categories: Category[]) {
+  return [...categories].sort((a, b) => orderRank(a.id) - orderRank(b.id));
+}
+
 export function clampClaimablePct(value: number) {
   return Math.min(100, Math.max(0, value));
 }

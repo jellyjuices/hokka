@@ -3,7 +3,7 @@
 import { CoinsIcon, HandCoinsIcon } from "@phosphor-icons/react/dist/ssr";
 import { EntryCard } from "@/src/components/EntryCard";
 import { findCategory } from "@/src/data/categories";
-import { formatCurrency } from "@/src/lib/money";
+import { formatCurrency, roundToCents } from "@/src/lib/money";
 import { formatDate } from "@/src/lib/dates";
 import { ConfirmDelete } from "./ConfirmDelete";
 import type { TransactionCardProps } from "./TransactionCard.types";
@@ -21,7 +21,11 @@ export function TransactionCard({ transaction }: TransactionCardProps) {
         icon={category?.icon ?? (isIncome ? HandCoinsIcon : CoinsIcon)}
         color={category?.color ?? null}
         date={formatDate(transaction.txnDate)}
-        detail={`HST ${formatCurrency(transaction.hstAmount)}`}
+        detail={
+          roundToCents(transaction.hstAmount) === 0
+            ? undefined
+            : `HST ${formatCurrency(transaction.hstAmount)}`
+        }
         title={title}
         amount={`${isIncome ? "+" : "−"}${formatCurrency(transaction.total)}`}
         isIncome={isIncome}

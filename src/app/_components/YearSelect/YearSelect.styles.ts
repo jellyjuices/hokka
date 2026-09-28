@@ -27,6 +27,7 @@ export const YearTrigger = styled(Select.Trigger)`
 export const YearMenu = styled(Select.Content)`
   z-index: 40;
   min-width: var(--radix-select-trigger-width);
+  max-height: var(--radix-select-content-available-height);
   padding: ${theme.space.xs};
   border: 1px solid ${theme.surface.tint};
   border-radius: ${theme.borderRadius.md};

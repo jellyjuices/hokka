@@ -4,6 +4,7 @@ import { useState } from "react";
 import { CalendarBlankIcon, CaretLeftIcon, CaretRightIcon } from "@phosphor-icons/react/dist/ssr";
 import * as Popover from "@radix-ui/react-popover";
 import { Icon } from "@/src/components/Icon";
+import { Takeover, useTakeover } from "@/src/components/Takeover";
 import { usePointerFocus } from "@/src/hooks";
 import {
   formatDate,
@@ -22,6 +23,7 @@ import {
   CalendarNavButton,
   CalendarPanel,
   CalendarPopover,
+  CalendarSheet,
   CalendarTrigger,
   CalendarWeekday,
   CalendarWeekdays,
@@ -111,28 +113,32 @@ export function DatePicker({
   display = "full",
 }: DatePickerProps) {
   const initial = defaultValue ? parseIsoDate(defaultValue) : null;
-  const [open, setOpen] = useState(false);
+  const { isPopoverOpen, isTakeoverOpen, setIsOpen } = useTakeover();
   const [internal, setInternal] = useState<Date | null>(initial);
   const selected = value === undefined ? internal : value === "" ? null : parseIsoDate(value);
   const [month, setMonth] = useState<Date>(selected ?? todayDate());
+  const [draft, setDraft] = useState<Date | null>(selected);
   const pointerFocus = usePointerFocus();
 
   function handleOpenChange(next: boolean) {
-    if (next) setMonth(selected ?? todayDate());
-    setOpen(next);
+    if (next) {
+      setMonth(selected ?? todayDate());
+      setDraft(selected);
+    }
+    setIsOpen(next);
   }
 
   function handleSelect(date: Date) {
     setInternal(date);
     setMonth(date);
-    setOpen(false);
+    setIsOpen(false);
     onChange?.(toIsoDate(date));
   }
 
   const label = selected === null ? placeholder : dateLabel(selected, display);
 
   return (
-    <Popover.Root open={open} onOpenChange={handleOpenChange}>
+    <Popover.Root open={isPopoverOpen} onOpenChange={handleOpenChange}>
       <Popover.Trigger asChild>
         <CalendarTrigger id={id} type="button" $variant={variant} {...pointerFocus}>
           {variant === "outlined" ? (
@@ -149,7 +155,7 @@ export function DatePicker({
         </CalendarTrigger>
       </Popover.Trigger>
       <Popover.Portal>
-        <Popover.Content asChild sideOffset={8} align="start">
+        <Popover.Content asChild sideOffset={8} align="start" collisionPadding={16}>
           <CalendarPopover>
             <Calendar
               selected={selected}
@@ -160,6 +166,18 @@ export function DatePicker({
           </CalendarPopover>
         </Popover.Content>
       </Popover.Portal>
+      <Takeover
+        open={isTakeoverOpen}
+        onOpenChange={setIsOpen}
+        title={placeholder}
+        onConfirm={() => {
+          if (draft !== null) handleSelect(draft);
+        }}
+      >
+        <CalendarSheet>
+          <Calendar selected={draft} month={month} onMonthChange={setMonth} onSelect={setDraft} />
+        </CalendarSheet>
+      </Takeover>
       <input type="hidden" name={name} value={selected ? toIsoDate(selected) : ""} />
     </Popover.Root>
   );

@@ -2,7 +2,7 @@
 
 import { css } from "@emotion/react";
 import styled from "@emotion/styled";
-import { theme } from "@/src/lib/theme";
+import { stackRadius, theme } from "@/src/lib/theme";
 import { mediaDown, mediaUp } from "@/src/lib/breakpoints";
 import type { ActivityVisibility } from "./ActivityList.types";
 
@@ -40,6 +40,8 @@ export const ActivityItems = styled.ul`
   margin: 0;
   padding: 0;
   list-style: none;
+
+  ${stackRadius("column", "& > li", "> *")}
 `;
 
 export const ActivityFooter = styled.div`

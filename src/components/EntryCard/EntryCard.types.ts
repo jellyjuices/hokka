@@ -6,7 +6,7 @@ export type EntryCardProps = {
   icon: IconName;
   color: CategoryColor | null;
   date: string;
-  detail: string;
+  detail?: string;
   title: string;
   amount: string;
   isIncome?: boolean;

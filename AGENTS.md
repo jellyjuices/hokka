@@ -50,6 +50,7 @@ TypeScript, React 19, Next.js App Router, Emotion, Radix primitives, Phosphor ic
 - Navigation entries: [src/components/NavBar/NavBar.registry.ts](src/components/NavBar/NavBar.registry.ts)
 - Page grid and layout tokens: [src/components/Grid](src/components/Grid), [src/app/globals.css](src/app/globals.css)
 - Form fields: [src/components/Input](src/components/Input) — one `Input` for every text and number field, and `InputShell` for a row holding something else
+- Pickers on a phone: [src/components/Takeover](src/components/Takeover) — at `smTablet` and below every select, date picker and filter panel opens a full-screen sheet with a title and a Done button instead of a popover, driven by `useTakeover`
 - Shell and navigation: [src/components/AppShell](src/components/AppShell), [src/components/NavBar](src/components/NavBar)
 - Icon registry: [src/components/Icon/Icon.registry.ts](src/components/Icon/Icon.registry.ts)
 - Offline mirror, outbox and queued files: [src/data/local](src/data/local)

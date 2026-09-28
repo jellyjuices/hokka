@@ -50,6 +50,7 @@ export const TriggerIcon = styled(Select.Icon)`
 export const CategoryMenu = styled(Select.Content)`
   z-index: 40;
   min-width: var(--radix-select-trigger-width);
+  max-height: var(--radix-select-content-available-height);
   padding: ${theme.space.xs};
   border: 1px solid ${theme.surface.tint};
   border-radius: ${theme.borderRadius.md};
@@ -74,10 +75,18 @@ export const CategoryOption = styled(Select.Item, transientProps)<{ $color: Cate
   }
 `;
 
-export const CategorySwatch = styled.span<{ $color: CategoryColor }>`
+export const CategoryGlyph = styled("span", transientProps)<{ $color: CategoryColor }>`
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
   flex: 0 0 auto;
-  width: 10px;
-  height: 10px;
   border-radius: ${theme.borderRadius.full};
-  background: ${({ $color }) => theme.categoryColor[$color]};
+  background: ${({ $color }) => categoryTint(theme.categoryColor[$color])};
+  color: ${({ $color }) => theme.categoryColor[$color]};
+`;
+
+export const TriggerGlyph = styled.span`
+  display: inline-flex;
+  flex: 0 0 auto;
 `;

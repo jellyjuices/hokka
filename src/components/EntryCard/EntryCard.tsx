@@ -43,7 +43,7 @@ export function EntryCard({
       <CardBody>
         <CardRow>
           <CardDetail>{date}</CardDetail>
-          <CardDetail>{detail}</CardDetail>
+          {detail && <CardDetail>{detail}</CardDetail>}
         </CardRow>
         <CardRow>
           <CardTitle>

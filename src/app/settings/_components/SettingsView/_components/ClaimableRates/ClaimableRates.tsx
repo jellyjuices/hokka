@@ -2,13 +2,13 @@
 
 import { Icon } from "@/src/components/Icon";
 import { Input } from "@/src/components/Input";
-import { categoriesFor } from "@/src/data/categories";
+import { categoriesFor, orderCategories } from "@/src/data/categories";
 import { claimableFieldName } from "../../SettingsView.patch";
 import { RateGlyph, RateLabel } from "./ClaimableRates.styles";
 import type { ClaimableRatesProps } from "./ClaimableRates.types";
 
 export function ClaimableRates({ overrides }: ClaimableRatesProps) {
-  return categoriesFor("expense").map(
+  return orderCategories(categoriesFor("expense")).map(
     ({ id, label, description, color, icon, defaultClaimablePct }) => {
       const field = claimableFieldName(id);
 
@@ -21,7 +21,7 @@ export function ClaimableRates({ overrides }: ClaimableRatesProps) {
           label={
             <RateLabel>
               <RateGlyph $color={color} aria-hidden="true">
-                <Icon name={icon} size={14} />
+                <Icon name={icon} size={14} weight="fill" />
               </RateGlyph>
               {label}
             </RateLabel>

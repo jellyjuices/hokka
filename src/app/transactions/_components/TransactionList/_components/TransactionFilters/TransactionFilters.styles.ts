@@ -120,7 +120,9 @@ export const FilterPanel = styled(Popover.Content)`
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: ${theme.space.md};
   width: min(520px, calc(100vw - 32px));
+  max-height: var(--radix-popover-content-available-height);
   padding: ${theme.space.md};
+  overflow-y: auto;
   border: 1px solid ${theme.surface.tint};
   border-radius: ${theme.borderRadius.md};
   background: ${theme.surface.primary};
@@ -154,6 +156,11 @@ export const FilterCheck = styled.button`
   gap: ${theme.space.sm};
   min-height: 36px;
   padding: 0 ${theme.space.sm};
+
+  ${mediaDown("smTablet")} {
+    min-height: 48px;
+    font-size: ${theme.fontSize.md};
+  }
   border: none;
   border-radius: ${theme.borderRadius.sm};
   background: transparent;

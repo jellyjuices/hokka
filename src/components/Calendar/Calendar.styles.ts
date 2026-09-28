@@ -71,6 +71,11 @@ export const CalendarPopover = styled.div`
   z-index: 50;
 `;
 
+export const CalendarSheet = styled.div`
+  display: flex;
+  justify-content: center;
+`;
+
 export const CalendarPanel = styled.div`
   display: flex;
   flex-direction: column;

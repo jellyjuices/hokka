@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { useLedger } from "@/src/context/Ledger";
-import { categoriesFor } from "@/src/data/categories";
+import { categoriesFor, orderCategories } from "@/src/data/categories";
 import type { ParsedReceipt } from "@/src/lib/ocr";
 import type {
   CategoryClaimablePct,
@@ -94,7 +94,10 @@ export function useTransactionForm(transaction?: Transaction) {
     transaction === undefined ? initialState() : stateFrom(transaction, settings.hstRate),
   );
 
-  const categories = useMemo(() => categoriesFor(state.direction), [state.direction]);
+  const categories = useMemo(
+    () => orderCategories(categoriesFor(state.direction)),
+    [state.direction],
+  );
   const totals = useMemo(() => computeTotals(state, settings.hstRate), [state, settings.hstRate]);
 
   function patch(next: Partial<TransactionFormState>) {

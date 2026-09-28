@@ -13,3 +13,9 @@ export type Recollection = {
   vector: number[];
   savedAt: string;
 };
+
+export type CategorySignals = {
+  categoryId: string;
+  vendors: string;
+  terms: string;
+};

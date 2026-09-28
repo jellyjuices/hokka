@@ -18,11 +18,12 @@ export const AccountLink = styled(Link, transientProps)<{
   height: 48px;
   padding: ${({ $isCollapsed }) => ($isCollapsed ? "0" : `0 ${theme.space.md}`)};
   border-radius: ${theme.borderRadius.full};
-  box-shadow: ${({ $isSelected }) =>
-    $isSelected ? `inset 0 0 0 2px ${theme.foreground.accent}` : "none"};
+  outline: ${({ $isSelected }) =>
+    $isSelected ? `2px solid ${theme.foreground.accent}` : "2px solid transparent"};
+  outline-offset: 2px;
   transition:
     background ${theme.motion.fast} ease,
-    box-shadow ${theme.motion.fast} ease,
+    outline-color ${theme.motion.fast} ease,
     width ${theme.motion.base} ease,
     padding ${theme.motion.base} ease;
 

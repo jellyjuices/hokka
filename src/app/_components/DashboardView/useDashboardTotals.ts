@@ -5,10 +5,8 @@ import { ArrowElbowDownRightIcon, PiggyBankIcon } from "@phosphor-icons/react/di
 import type { ActivityItem } from "../ActivityList";
 import type { Obligation, ObligationState } from "../ObligationCard";
 import { useLedger } from "@/src/context/Ledger";
-import { findCategory } from "@/src/data/categories";
 import type { Filing, FilingType, Transaction } from "@/src/data/domain.types";
-import { currentYear, formatDate, todayIsoDate } from "@/src/lib/dates";
-import { formatCurrency } from "@/src/lib/money";
+import { currentYear, todayIsoDate } from "@/src/lib/dates";
 import { currentPeriod, periodLabel } from "@/src/lib/periods";
 import { calculatePeriodTotals } from "@/src/lib/tax";
 
@@ -29,30 +27,12 @@ function inYear(isoDate: string, year: number) {
   return isoDate.startsWith(String(year));
 }
 
-const FILING_TYPE_LABEL: Record<FilingType, string> = {
-  hst: "HST filed",
-  income_tax: "Income tax filed",
-};
-
 function toActivityItem(transaction: Transaction): ActivityItem {
-  const category = findCategory(transaction.category);
-  return {
-    id: transaction.id,
-    meta: `${formatDate(transaction.txnDate)}${category === null ? "" : ` · ${category.label}`}`,
-    title: transaction.title || transaction.vendor || "Untitled entry",
-    value: formatCurrency(transaction.total),
-    href: `/transaction/${transaction.id}`,
-  };
+  return { kind: "transaction", transaction };
 }
 
 function toFilingItem(filing: Filing): ActivityItem {
-  return {
-    id: filing.id,
-    meta: `${formatDate(filing.filedDate)}${filing.referenceNumber === "" ? "" : ` · ${filing.referenceNumber}`}`,
-    title: FILING_TYPE_LABEL[filing.filingType],
-    value: formatCurrency(filing.amountFiled),
-    href: "/filings",
-  };
+  return { kind: "filing", filing };
 }
 
 type DatedItem = { sortDate: string; item: ActivityItem };

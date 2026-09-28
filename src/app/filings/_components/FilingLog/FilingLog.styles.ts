@@ -3,9 +3,11 @@
 import styled from "@emotion/styled";
 import { theme } from "@/src/lib/theme";
 
-export const RangeDates = styled.div`
+export const FilingItems = styled.ul`
   display: flex;
   flex-direction: column;
-  align-items: stretch;
-  gap: ${theme.space.xs};
+  gap: ${theme.space.sm};
+  margin: 0;
+  padding: 0;
+  list-style: none;
 `;

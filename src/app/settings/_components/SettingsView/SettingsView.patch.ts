@@ -35,13 +35,15 @@ function readClaimable(form: FormData, current: CategoryClaimablePct): CategoryC
 
 export function readSettingsPatch(form: FormData, current: TaxSettings): Partial<TaxSettings> {
   const hstRate = Number(toText(form.get("hstRate")));
-  const reserve = toText(form.get("incomeTaxReservePct"));
+  const reserveField = form.get("incomeTaxReservePct");
+  const reserve = toText(reserveField);
   const fiscalYearStart = toText(form.get("fiscalYearStart"));
 
   return {
     hstRate: Number.isFinite(hstRate) && hstRate > 0 ? hstRate : current.hstRate,
     filingFrequency: toFrequency(toText(form.get("filingFrequency")), current.filingFrequency),
-    incomeTaxReservePct: reserve === "" ? null : Number(reserve),
+    incomeTaxReservePct:
+      reserveField === null ? current.incomeTaxReservePct : reserve === "" ? null : Number(reserve),
     fiscalYearStart: fiscalYearStart === "" ? current.fiscalYearStart : fiscalYearStart,
     categoryClaimablePct: readClaimable(form, current.categoryClaimablePct),
   };

@@ -21,7 +21,20 @@ export const ListItems = styled.ul`
 `;
 
 export const ListNotice = styled.p`
+  display: flex;
+  align-items: center;
+  gap: ${theme.space.sm};
   margin: 0;
-  color: ${theme.foreground.secondary};
+  padding: ${theme.space.sm} ${theme.space.md};
+  border-radius: ${theme.borderRadius.md};
+  background: ${theme.surface.warning};
+  color: ${theme.foreground.warning};
   font-size: ${theme.fontSize.sm};
+  font-weight: 500;
+`;
+
+export const ListNoticeIcon = styled.span`
+  display: inline-flex;
+  flex: 0 0 auto;
+  color: ${theme.foreground.warning};
 `;

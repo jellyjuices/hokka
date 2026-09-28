@@ -5,12 +5,9 @@ import { InvoiceIcon, PlusIcon } from "@phosphor-icons/react/dist/ssr";
 import { EmptyState } from "@/src/components/EmptyState";
 import { Icon } from "@/src/components/Icon";
 import { LinkButton } from "@/src/components/Button";
-import { ListRow } from "@/src/components/ListRow";
+import { FilingCard } from "@/src/components/FilingCard";
 import { useLedger } from "@/src/context/Ledger";
-import { formatCurrency } from "@/src/lib/money";
-import { formatDate } from "@/src/lib/dates";
-
-const FILING_LABEL = { hst: "HST remittance", income_tax: "Income tax instalment" };
+import { FilingItems } from "./FilingLog.styles";
 
 export function FilingLog() {
   const { filings } = useLedger();
@@ -19,7 +16,7 @@ export function FilingLog() {
     return (
       <Card>
         <EmptyState
-          icon={<Icon name={InvoiceIcon} size={32} weight="fill" />}
+          icon={<Icon name={InvoiceIcon} size={32} weight="regular" />}
           title="No filings logged"
           description="Record remittences and the net HST claimed."
           action={
@@ -33,15 +30,12 @@ export function FilingLog() {
   }
 
   return (
-    <Card>
+    <FilingItems>
       {filings.map((filing) => (
-        <ListRow
-          key={filing.id}
-          meta={`${formatDate(filing.filedDate)} · ${filing.taxPeriodId}`}
-          title={FILING_LABEL[filing.filingType]}
-          value={formatCurrency(filing.amountFiled)}
-        />
+        <li key={filing.id}>
+          <FilingCard filing={filing} />
+        </li>
       ))}
-    </Card>
+    </FilingItems>
   );
 }

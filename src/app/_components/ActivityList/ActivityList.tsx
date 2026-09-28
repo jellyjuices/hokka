@@ -2,8 +2,9 @@ import { LinkButton } from "@/src/components/Button";
 import { ArrowRightIcon, ReceiptIcon } from "@phosphor-icons/react/dist/ssr";
 import { EmptyState } from "@/src/components/EmptyState";
 import { Icon } from "@/src/components/Icon";
-import { ListRow } from "@/src/components/ListRow";
+import { FilingCard } from "@/src/components/FilingCard";
 import { SkeletonList } from "@/src/components/Skeleton";
+import { TransactionCard } from "@/src/components/TransactionCard";
 import {
   ActivityFooter,
   ActivityItems,
@@ -37,8 +38,12 @@ export function ActivityList({
       ) : (
         <ActivityItems>
           {items.map((item) => (
-            <li key={item.id}>
-              <ListRow meta={item.meta} title={item.title} value={item.value} href={item.href} />
+            <li key={item.kind === "transaction" ? item.transaction.id : item.filing.id}>
+              {item.kind === "transaction" ? (
+                <TransactionCard transaction={item.transaction} />
+              ) : (
+                <FilingCard filing={item.filing} />
+              )}
             </li>
           ))}
         </ActivityItems>

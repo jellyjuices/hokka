@@ -1,11 +1,13 @@
 import type { ParsedReceiptItem } from "@/src/lib/ocr/ocr.types";
 import type { CategoryScore } from "./classify.types";
-import { CATEGORY_SIGNALS, type CategorySignals } from "./keywords.registry";
+import { CATEGORY_SIGNALS } from "./keywords.registry";
 
 const VENDOR_WEIGHT = 4;
 const BODY_VENDOR_WEIGHT = 2;
 const MAX_TERM_HITS = 3;
 const CERTAIN_SCORE = 8;
+
+type Needle = { categoryId: string; phrase: string; isVendor: boolean };
 
 function normalize(text: string) {
   return ` ${text
@@ -14,20 +16,25 @@ function normalize(text: string) {
     .trim()} `;
 }
 
-function matches(haystack: string, needle: string) {
-  const word = normalize(needle).trim();
-  return haystack.includes(` ${word} `) || haystack.includes(` ${word}s `);
+function phrases(list: string) {
+  return list
+    .split(/[,\n]/)
+    .map((phrase) => normalize(phrase).trim())
+    .filter((phrase) => phrase !== "");
 }
 
-function countHits(haystack: string, needles: string[]) {
-  return needles.filter((needle) => matches(haystack, needle)).length;
-}
+// Longest first, and a match is cut out of the text once counted, so "uber eats" is read as
+// a meal before "uber" can claim it as a ride, and a coworking "hot desk" never counts as a desk.
+const NEEDLES: Needle[] = CATEGORY_SIGNALS.flatMap(({ categoryId, vendors, terms }) => [
+  ...phrases(vendors).map((phrase) => ({ categoryId, phrase, isVendor: true })),
+  ...phrases(terms).map((phrase) => ({ categoryId, phrase, isVendor: false })),
+]).sort((left, right) => right.phrase.length - left.phrase.length);
 
-function scoreFor(signals: CategorySignals, vendorText: string, bodyText: string) {
-  const vendorHits = countHits(vendorText, signals.vendors);
-  const bodyVendorHits = countHits(bodyText, signals.vendors);
-  const termHits = Math.min(countHits(bodyText, signals.terms), MAX_TERM_HITS);
-  return vendorHits * VENDOR_WEIGHT + bodyVendorHits * BODY_VENDOR_WEIGHT + termHits;
+function cut(text: string, phrase: string) {
+  for (const form of [` ${phrase} `, ` ${phrase}s `]) {
+    if (text.includes(form)) return text.replace(form, " ");
+  }
+  return null;
 }
 
 export function receiptText(vendor: string | null, items: ParsedReceiptItem[], lines: string[]) {
@@ -40,20 +47,37 @@ export function keywordReading(
   items: ParsedReceiptItem[],
   lines: string[],
 ): { scores: CategoryScore[]; strength: number } {
-  const vendorText = normalize(vendor ?? "");
-  const bodyText = normalize([...lines, ...items.map((item) => item.name)].join(" "));
+  let vendorText = normalize(vendor ?? "");
+  let bodyText = normalize([...lines, ...items.map((item) => item.name)].join(" "));
+  const points = new Map<string, number>();
+  const termHits = new Map<string, number>();
 
-  const raw = CATEGORY_SIGNALS.map((signals) => ({
-    categoryId: signals.categoryId,
-    score: scoreFor(signals, vendorText, bodyText),
-  }));
+  for (const { categoryId, phrase, isVendor } of NEEDLES) {
+    let gained = 0;
+    const vendorRest = isVendor ? cut(vendorText, phrase) : null;
+    if (vendorRest !== null) {
+      vendorText = vendorRest;
+      gained += VENDOR_WEIGHT;
+    }
+    const bodyRest = cut(bodyText, phrase);
+    if (bodyRest !== null) {
+      bodyText = bodyRest;
+      const hits = termHits.get(categoryId) ?? 0;
+      if (isVendor) gained += BODY_VENDOR_WEIGHT;
+      else if (hits < MAX_TERM_HITS) {
+        termHits.set(categoryId, hits + 1);
+        gained += 1;
+      }
+    }
+    if (gained > 0) points.set(categoryId, (points.get(categoryId) ?? 0) + gained);
+  }
 
-  const total = raw.reduce((running, entry) => running + entry.score, 0);
+  const total = [...points.values()].reduce((running, score) => running + score, 0);
   if (total === 0) return { scores: [], strength: 0 };
 
-  const peak = raw.reduce((running, entry) => Math.max(running, entry.score), 0);
+  const peak = Math.max(...points.values());
   return {
-    scores: raw.map((entry) => ({ categoryId: entry.categoryId, score: entry.score / total })),
+    scores: [...points].map(([categoryId, score]) => ({ categoryId, score: score / total })),
     strength: Math.min(1, peak / CERTAIN_SCORE),
   };
 }

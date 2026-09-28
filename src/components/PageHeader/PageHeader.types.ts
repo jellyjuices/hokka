@@ -1,12 +1,12 @@
 import type { ReactNode } from "react";
-import type { IconName } from "@/src/components/Icon";
+import { Icon } from "@phosphor-icons/react";
 
 export type PageHeaderProps = {
   title: string;
   backHref?: string;
   mobileTitle?: string;
   description?: string;
-  icon?: IconName;
+  icon?: Icon;
   meta?: ReactNode;
   action?: ReactNode;
 };

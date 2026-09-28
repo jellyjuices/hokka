@@ -1,3 +1,4 @@
+import { canonicalCategoryId } from "@/src/data/categories";
 import type { Transaction, TransactionDirection } from "@/src/data/domain.types";
 import type { DateRange } from "@/src/lib/ranges";
 import { ALL_TIME, isInRange, isRangeSet } from "@/src/lib/ranges";
@@ -6,20 +7,24 @@ export const ANY = "";
 
 export type TransactionFilter = {
   direction: TransactionDirection | typeof ANY;
-  category: string;
+  categories: string[];
   range: DateRange;
 };
 
-export const NO_FILTER: TransactionFilter = { direction: ANY, category: ANY, range: ALL_TIME };
+export const NO_FILTER: TransactionFilter = { direction: ANY, categories: [], range: ALL_TIME };
 
 export function isFiltered(filter: TransactionFilter) {
-  return filter.direction !== ANY || filter.category !== ANY || isRangeSet(filter.range);
+  return filter.direction !== ANY || filter.categories.length > 0 || isRangeSet(filter.range);
 }
 
 export function filterTransactions(transactions: Transaction[], filter: TransactionFilter) {
   return transactions
     .filter((transaction) => filter.direction === ANY || transaction.direction === filter.direction)
-    .filter((transaction) => filter.category === ANY || transaction.category === filter.category)
+    .filter(
+      (transaction) =>
+        filter.categories.length === 0 ||
+        filter.categories.includes(canonicalCategoryId(transaction.category)),
+    )
     .filter((transaction) => isInRange(transaction.txnDate, filter.range))
     .sort((a, b) => b.txnDate.localeCompare(a.txnDate));
 }

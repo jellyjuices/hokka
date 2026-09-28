@@ -1,4 +1,4 @@
-import { CATEGORIES } from "@/src/data/categories";
+import { findCategory } from "@/src/data/categories";
 import type { Transaction } from "@/src/data/domain.types";
 import type { CsvCell } from "@/src/lib/csv";
 import { toCsv } from "@/src/lib/csv";
@@ -13,6 +13,7 @@ const COLUMNS = [
   "Type",
   "Vendor",
   "Category",
+  "T2125 line",
   "Subtotal",
   "HST",
   "Total",
@@ -23,7 +24,11 @@ const COLUMNS = [
 ];
 
 function categoryLabel(categoryId: string) {
-  return CATEGORIES.find((category) => category.id === categoryId)?.label ?? categoryId;
+  return findCategory(categoryId)?.label ?? categoryId;
+}
+
+function formLine(categoryId: string) {
+  return findCategory(categoryId)?.formLine ?? "";
 }
 
 function amount(value: number) {
@@ -41,6 +46,7 @@ function toRow(transaction: Transaction): CsvCell[] {
     transaction.direction === "income" ? "Income" : "Expense",
     transaction.vendor,
     categoryLabel(transaction.category),
+    formLine(transaction.category),
     amount(transaction.subtotal),
     amount(transaction.hstAmount),
     amount(transaction.total),

@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useMemo, useRef, useState } from "react";
 import { GearIcon } from "@phosphor-icons/react/dist/ssr";
 import { DatePicker } from "@/src/components/Calendar";
 import { Grid, GridItem } from "@/src/components/Grid";
@@ -8,6 +8,9 @@ import { PageHeader } from "@/src/components/PageHeader";
 import { Select } from "@/src/components/Select";
 import { Input, InputShell } from "@/src/components/Input";
 import { useLedger } from "@/src/context/Ledger";
+import { currentYear } from "@/src/lib/dates";
+import { resolveReservePct } from "@/src/lib/incomeTax";
+import { summarizeTransactions } from "@/src/lib/tax";
 import { BiometricLock } from "./_components/BiometricLock";
 import { ClaimableRates } from "./_components/ClaimableRates";
 import { CardWrapper } from "@/src/components/CardWrapper";
@@ -26,14 +29,23 @@ const FREQUENCIES = [
 ];
 
 export function SettingsView() {
-  const { settings, isHydrated } = useLedger();
+  const { settings, transactions, isHydrated } = useLedger();
+  const [isReserveTouched, setIsReserveTouched] = useState(false);
+  const derivedReservePct = useMemo(() => {
+    const year = String(currentYear());
+    const yearTransactions = transactions.filter((transaction) =>
+      transaction.txnDate.startsWith(year),
+    );
+    return resolveReservePct(summarizeTransactions(yearTransactions).netIncome, null);
+  }, [transactions]);
+  const isReserveOverridden = settings.incomeTaxReservePct !== null || isReserveTouched;
   const formRef = useRef<HTMLFormElement>(null);
-  const { isSaving, schedule, flush } = useSettingsAutosave(formRef);
+  const { schedule, flush } = useSettingsAutosave(formRef);
 
   return (
     <Grid>
       <GridItem>
-        <PageHeader title="Settings" icon={GearIcon} description={isSaving ? "Saving…" : "Saved"} />
+        <PageHeader title="Settings" icon={GearIcon} />
       </GridItem>
       <GridItem span={8} spanTablet={12}>
         <SettingsColumn>
@@ -69,14 +81,17 @@ export function SettingsView() {
               </InputShell>
               <Input
                 id="incomeTaxReservePct"
-                name="incomeTaxReservePct"
+                // An untouched field shows the estimate but posts nothing, so the rate keeps tracking income.
+                name={isReserveOverridden ? "incomeTaxReservePct" : undefined}
                 variant="filled"
-                label="Income tax reserve override"
+                label={isReserveOverridden ? "Income tax reserve override" : "Income tax reserve"}
                 align="end"
                 appendValue="%"
                 type="number"
-                defaultValue={settings.incomeTaxReservePct ?? ""}
-                aria-label="Income tax reserve override, percent"
+                step="0.1"
+                defaultValue={settings.incomeTaxReservePct ?? derivedReservePct.toFixed(1)}
+                onChange={() => setIsReserveTouched(true)}
+                aria-label="Income tax reserve, percent"
               />
               <InputShell variant="filled" label="Fiscal year start">
                 <DatePicker
@@ -89,10 +104,12 @@ export function SettingsView() {
                 />
               </InputShell>
             </CardWrapper>
-            <SectionTitle>Claimable by category</SectionTitle>
-            <CardWrapper direction="column">
-              <ClaimableRates overrides={settings.categoryClaimablePct} />
-            </CardWrapper>
+            <SettingsSection>
+              <SectionTitle>Claimable by category</SectionTitle>
+              <CardWrapper direction="column">
+                <ClaimableRates overrides={settings.categoryClaimablePct} />
+              </CardWrapper>
+            </SettingsSection>
           </SettingsStack>
           <SettingsSection>
             <SectionTitle>Device lock</SectionTitle>

@@ -1,36 +1,30 @@
+import { CATEGORIES } from "@/src/data/categories";
 import { readValue, writeValue } from "@/src/lib/storage/keyval";
-import { embed } from "./embedder";
+import { embedOne } from "./embedder";
+import { CATEGORY_EXAMPLES } from "./prototypes.registry";
 
-const PROTOTYPE_KEY = "classify.prototypes.v1";
+const PROTOTYPE_KEY = "classify.prototypes.v2";
 
 type PrototypeCache = {
   signature: string;
-  vectors: Record<string, number[]>;
+  vectors: Record<string, number[][]>;
 };
 
-export const CATEGORY_DESCRIPTIONS: Record<string, string> = {
-  client_work:
-    "An invoice billed to a client for design, development or consulting work delivered by the business.",
-  software:
-    "A recurring charge for an online tool, app, SaaS plan, seat licence, domain name, API usage or cloud compute, billed monthly or yearly and renewing automatically.",
-  hardware:
-    "A physical device or accessory: a laptop, monitor, keyboard with switches and keycaps, mouse, headphones, drive, dock, cable or charger.",
-  home_office:
-    "A desk, chair, shelf, lamp, binder, stationery or printer paper, or a bill for home internet, hydro or heating.",
-  travel:
-    "A flight, train, taxi, rideshare, fuel fill-up, parking, transit fare, car rental or hotel stay taken for work.",
-  meals:
-    "A restaurant, cafe, coffee shop, bar, food delivery or catering bill, with a server, table, tip or menu items.",
-  professional:
-    "A fee charged by a lawyer, accountant, bookkeeper, notary, insurance broker or professional association.",
-};
+type SentenceGroup = { categoryId: string; sentences: string[] };
 
-// Reword a description and the cached vectors must be thrown away, so the
+// A category is read as its example receipts plus the description a person sees in Settings.
+function sentenceGroups(): SentenceGroup[] {
+  return CATEGORIES.flatMap((category) => {
+    const examples = CATEGORY_EXAMPLES[category.id];
+    if (examples === undefined) return [];
+    return [{ categoryId: category.id, sentences: [...examples, category.description] }];
+  });
+}
+
+// Reword a sentence and the cached vectors must be thrown away, so the
 // signature hashes the wording itself rather than its length.
-function signatureOf() {
-  const text = Object.entries(CATEGORY_DESCRIPTIONS)
-    .map(([categoryId, description]) => `${categoryId}:${description}`)
-    .join("|");
+function signatureOf(groups: SentenceGroup[]) {
+  const text = groups.map((group) => `${group.categoryId}:${group.sentences.join("|")}`).join("|");
   let hash = 2166136261;
   for (let index = 0; index < text.length; index += 1) {
     hash = Math.imul(hash ^ text.charCodeAt(index), 16777619);
@@ -38,21 +32,31 @@ function signatureOf() {
   return (hash >>> 0).toString(36);
 }
 
-async function buildPrototypes(): Promise<Record<string, number[]> | null> {
-  const categoryIds = Object.keys(CATEGORY_DESCRIPTIONS);
-  const vectors = await embed(categoryIds.map((id) => CATEGORY_DESCRIPTIONS[id]));
-  if (vectors === null) return null;
-  return Object.fromEntries(categoryIds.map((id, index) => [id, vectors[index]]));
+// One sentence per call, the way a receipt is embedded. The uint8 model quantises its
+// activations per batch, so a sentence padded beside a longer one comes out shifted.
+async function buildPrototypes(groups: SentenceGroup[]) {
+  const vectors: Record<string, number[][]> = {};
+  for (const { categoryId, sentences } of groups) {
+    const list: number[][] = [];
+    for (const sentence of sentences) {
+      const vector = await embedOne(sentence);
+      if (vector === null) return null;
+      list.push(vector);
+    }
+    vectors[categoryId] = list;
+  }
+  return vectors;
 }
 
-let inFlight: Promise<Record<string, number[]> | null> | null = null;
+let inFlight: Promise<Record<string, number[][]> | null> | null = null;
 
 async function loadPrototypes() {
-  const signature = signatureOf();
+  const groups = sentenceGroups();
+  const signature = signatureOf(groups);
   const cached = await readValue<PrototypeCache>(PROTOTYPE_KEY);
   if (cached !== null && cached.signature === signature) return cached.vectors;
 
-  const vectors = await buildPrototypes();
+  const vectors = await buildPrototypes(groups);
   if (vectors === null) return null;
   await writeValue(PROTOTYPE_KEY, { signature, vectors });
   return vectors;

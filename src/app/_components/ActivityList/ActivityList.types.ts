@@ -1,15 +1,10 @@
-import type { ReactNode } from "react";
 import type { Icon } from "@phosphor-icons/react";
+import type { Filing, Transaction } from "@/src/data/domain.types";
 
 export type ActivityVisibility = "all" | "wide" | "narrow";
 
-export type ActivityItem = {
-  id: string;
-  meta: ReactNode;
-  title: string;
-  value: string;
-  href?: string;
-};
+export type ActivityItem =
+  { kind: "transaction"; transaction: Transaction } | { kind: "filing"; filing: Filing };
 
 export type ActivityListProps = {
   title: string;

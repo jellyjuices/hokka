@@ -12,9 +12,17 @@ Technology` scored zero and the form stayed blank. It also returned a tally — 
 be thresholded, because nobody knows what a 7 means.
 
 [all-MiniLM-L6-v2](https://huggingface.co/Xenova/all-MiniLM-L6-v2), quantised to uint8, is 22 MB of
-ONNX that turns a receipt into 384 numbers. Each category owns a sentence describing what belongs in
-it; the category whose sentence sits closest to the receipt wins. An unknown vendor is no longer a
-blank form, and adding a category means writing a sentence, not retraining anything.
+ONNX that turns a receipt into 384 numbers. Each category owns a few receipt-shaped sentences in
+[prototypes.registry.ts](../src/lib/classify/prototypes.registry.ts), one per kind of document it
+receives, plus the description a person reads in Settings. A category scores as its nearest
+sentence, so a gas bill and a property tax bill both land in Home office without one sentence having
+to describe both. An unknown vendor is no longer a blank form, and adding a category means writing
+sentences, not retraining anything. A category with no sentences is never guessed: a bad debt, a
+prepaid plan or a box of supplies cannot be told from the receipt alone.
+
+Every sentence is embedded on its own, the way a receipt is. The uint8 model quantises its
+activations per batch, so a sentence padded beside a longer one came out at 0.995 cosine to itself,
+which is enough to swap two close categories.
 
 The design follows [Laya](https://huggingface.co/convaiinnovations/laya), which does the same job
 with a 421M-parameter ModernBERT and a decision head: score every option in one encoder pass,
@@ -27,17 +35,27 @@ tune against real receipts rather than a derived constant.
 
 ## The three voters
 
-| Source                                             | What it knows                                              | Weight |
-| -------------------------------------------------- | ---------------------------------------------------------- | ------ |
-| [keywords.ts](../src/lib/classify/keywords.ts)     | Named vendors and terms, whole-word matched                | 1.0    |
-| [prototypes.ts](../src/lib/classify/prototypes.ts) | How close the receipt reads to each category's description | 0.8    |
-| [memory.ts](../src/lib/classify/memory.ts)         | Categories chosen by hand on receipts that read like this  | 1.4    |
+| Source                                             | What it knows                                                   | Weight |
+| -------------------------------------------------- | --------------------------------------------------------------- | ------ |
+| [keywords.ts](../src/lib/classify/keywords.ts)     | Named vendors and terms, whole-word matched                     | 1.0    |
+| [prototypes.ts](../src/lib/classify/prototypes.ts) | How close the receipt reads to each category's nearest sentence | 0.8    |
+| [memory.ts](../src/lib/classify/memory.ts)         | Categories chosen by hand on receipts that read like this       | 1.4    |
 
 Each voter also reports a strength, and its weight is multiplied by it, so a source with nothing to
 say contributes nothing rather than diluting the others. `blend` in
 [guess.ts](../src/lib/classify/guess.ts) sums the weighted votes and divides by the weight actually
 used, which leaves a distribution over categories. Below `0.45` the guess is dropped and the form
 stays blank, because a wrong category silently applies a wrong claimable percentage.
+
+## Keywords vote one way
+
+The registry holds only signals that point at one category. A name that also prints on other
+receipts stays out: `Powered by Square` sits at the foot of café receipts, Stripe signs SaaS
+receipts, and an insurer that sells car cover would file every auto policy as business insurance. A
+store that sells pens and monitors alike stays out for the same reason. Phrases are matched longest
+first and cut out of the text once counted, so `uber eats` is a meal before `uber` can call it a
+ride, a coworking `hot desk` is never a desk, and a `windshield repair` is a car cost rather than a
+repair to work gear.
 
 Memory outweighs the other two on purpose. This is a single-user ledger, so the categories chosen by
 hand are ground truth about this business, and no general model knows more about which suppliers are
@@ -58,17 +76,28 @@ never fails a save.
 
 ## Measured
 
-Eleven receipts whose vendors appear nowhere in the keyword registry, scored on the description
-vote alone with no keyword or memory help:
+A Node harness scored the classifier with the same uint8 model on 137 synthetic receipts, written in
+OCR shape with totals, tax lines and card stubs. 94 were split before tuning, half to tune the
+sentences on and half held back. 43 more came from vendors in no keyword list, nine of them traps
+such as `Powered by Square`, a PayPal purchase and car insurance from an insurer. On those 43:
 
-- 9 of 11 correct.
-- Both misses scored 0.44 and 0.47, at or under the 0.45 floor, so the form says nothing rather than
-  the wrong thing.
-- One warm encode takes about 1 ms on Apple silicon; the first call pays for loading the model.
+| Setup                                  | Model alone right | Guessed | Right of guessed | Wrong |
+| -------------------------------------- | ----------------- | ------- | ---------------- | ----- |
+| Before: seven categories, one sentence | 35%               | 60%     | 38%              | 16    |
+| One sentence per T2125 category        | 65%               | 77%     | 82%              | 6     |
+| Several sentences plus the description | 91%               | 84%     | 94%              | 2     |
 
-Two earlier misses were the descriptions' fault, not the model's: `home_office` said "workspace" and
-caught a SaaS "Workspace plan", and `software` never mentioned compute. Rewording fixed both without
-touching a weight, which is the property worth having.
+The two wrong guesses were a monitor bought at Staples and a windshield repair. After mixed stores
+left the registry and the longer vehicle phrase went in, none of the 137 is guessed wrong and 86% of
+the unseen ones get a guess; the rest stay blank, which is the intended failure. On the held-back
+half the model alone went from 62% to 90% right when one sentence per category became several.
+
+Three things did not help. The Settings description alone reads like advice, not a receipt, and
+scored below the old one-liners; as one sentence among the examples it helps a little. Averaging a
+category's sentences into one vector scored below taking the nearest. A lower temperature, or a
+floor on the total vote weight, bought no precision on unseen vendors. The receipts and the sentences
+have the same author, so these numbers flatter the app; real receipts are the next check. One warm
+encode takes about 1 ms on Apple silicon; the first call pays for loading the model.
 
 ## Engine assets
 

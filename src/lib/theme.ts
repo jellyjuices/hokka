@@ -8,6 +8,7 @@ export const theme = {
     tint: "var(--surface-tint)",
     accent: "var(--surface-accent)",
     accentSecondary: "var(--surface-accent-secondary)",
+    warning: "var(--surface-warning)",
   },
 
   foreground: {
@@ -16,6 +17,7 @@ export const theme = {
     inverse: "var(--foreground-inverse)",
     disabled: "var(--foreground-disabled)",
     accent: "var(--foreground-accent)",
+    warning: "var(--foreground-warning)",
   },
 
   categoryColor: {

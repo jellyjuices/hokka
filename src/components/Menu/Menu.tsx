@@ -6,9 +6,9 @@ import { Icon } from "@/src/components/Icon";
 import { MenuOption, MenuPanel, MenuTrigger } from "./Menu.styles";
 import type { MenuProps } from "./Menu.types";
 
-export function Menu({ label, items }: MenuProps) {
+export function Menu({ label, items, open, onOpenChange }: MenuProps) {
   return (
-    <DropdownMenu.Root>
+    <DropdownMenu.Root open={open} onOpenChange={onOpenChange}>
       <MenuTrigger aria-label={label}>
         <Icon name={DotsThreeOutlineIcon} size={22} weight="fill" />
       </MenuTrigger>

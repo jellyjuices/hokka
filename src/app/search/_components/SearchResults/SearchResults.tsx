@@ -35,7 +35,7 @@ export function SearchResults({ query }: SearchResultsProps) {
       <ResultItems>
         {matches.map((transaction) => (
           <li key={transaction.id}>
-            <TransactionCard transaction={transaction} href={`/transaction/${transaction.id}`} />
+            <TransactionCard transaction={transaction} />
           </li>
         ))}
       </ResultItems>

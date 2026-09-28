@@ -1,26 +1,27 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { FunnelSimpleIcon, PlusIcon, CardsThreeIcon } from "@phosphor-icons/react/dist/ssr";
+import {
+  FunnelSimpleIcon,
+  PlusIcon,
+  CardsThreeIcon,
+  WarningIcon,
+} from "@phosphor-icons/react/dist/ssr";
 import { LinkButton } from "@/src/components/Button";
 import { EmptyState } from "@/src/components/EmptyState";
 import { Icon } from "@/src/components/Icon";
-import { Menu } from "@/src/components/Menu";
 import { SkeletonList } from "@/src/components/Skeleton";
 import { TransactionCard } from "@/src/components/TransactionCard";
 import { useLedger, useSyncState } from "@/src/context/Ledger";
 import { NO_FILTER, filterTransactions } from "@/src/lib/filters";
-import { ConfirmDelete } from "./_components/ConfirmDelete";
 import { ExportButton } from "./_components/ExportButton";
 import { TransactionFilters } from "./_components/TransactionFilters";
-import { ListItems, ListLayout, ListNotice } from "./TransactionList.styles";
-import { useTransactionActions } from "./useTransactionActions";
+import { ListItems, ListLayout, ListNotice, ListNoticeIcon } from "./TransactionList.styles";
 
 export function TransactionList() {
   const { transactions, isHydrated } = useLedger();
   const { pendingCounts } = useSyncState();
   const [filter, setFilter] = useState(NO_FILTER);
-  const actions = useTransactionActions();
 
   const visible = useMemo(() => filterTransactions(transactions, filter), [transactions, filter]);
 
@@ -45,12 +46,16 @@ export function TransactionList() {
     <ListLayout>
       <TransactionFilters
         filter={filter}
-        resultCount={visible.length}
         onChange={setFilter}
         action={<ExportButton transactions={visible} range={filter.range} />}
       />
       {pendingCounts.transaction > 0 && (
-        <ListNotice>{`${pendingCounts.transaction} waiting to sync`}</ListNotice>
+        <ListNotice role="status">
+          <ListNoticeIcon>
+            <Icon name={WarningIcon} size={18} weight="fill" />
+          </ListNoticeIcon>
+          {`${pendingCounts.transaction} ${pendingCounts.transaction === 1 ? "change is" : "changes are"} waiting to sync`}
+        </ListNotice>
       )}
       {visible.length === 0 ? (
         <EmptyState
@@ -62,24 +67,11 @@ export function TransactionList() {
         <ListItems>
           {visible.map((transaction) => (
             <li key={transaction.id}>
-              <TransactionCard
-                transaction={transaction}
-                href={`/transaction/${transaction.id}`}
-                action={<Menu label="Transaction options" items={actions.itemsFor(transaction)} />}
-              />
+              <TransactionCard transaction={transaction} />
             </li>
           ))}
         </ListItems>
       )}
-      <ConfirmDelete
-        open={actions.pending !== null}
-        title={actions.pending?.title || actions.pending?.vendor || "This transaction"}
-        isDeleting={actions.isDeleting}
-        onOpenChange={(open) => {
-          if (!open) actions.cancelDelete();
-        }}
-        onConfirm={() => void actions.confirmDelete()}
-      />
     </ListLayout>
   );
 }

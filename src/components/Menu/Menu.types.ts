@@ -11,4 +11,6 @@ export type MenuItem = {
 export type MenuProps = {
   label: string;
   items: MenuItem[];
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
 };

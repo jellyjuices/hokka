@@ -1,9 +1,15 @@
 "use client";
 
+import Link from "next/link";
 import styled from "@emotion/styled";
 import { theme, hoverFill } from "@/src/lib/theme";
 
-export const ObligationAction = styled.button`
+export const ObligationActions = styled.div`
+  display: flex;
+  gap: ${theme.space.xs};
+`;
+
+const actionStyles = `
   display: grid;
   place-items: center;
   width: 36px;
@@ -19,4 +25,12 @@ export const ObligationAction = styled.button`
   &:hover {
     background: ${hoverFill(theme.surface.primary)};
   }
+`;
+
+export const ObligationAction = styled.button`
+  ${actionStyles}
+`;
+
+export const ObligationLink = styled(Link)`
+  ${actionStyles}
 `;

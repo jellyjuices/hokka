@@ -1,12 +1,12 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { CheckIcon } from "@phosphor-icons/react/dist/ssr";
+import { ArrowUpRightIcon, CheckIcon } from "@phosphor-icons/react/dist/ssr";
 import { AnimatedNumber } from "@/src/components/AnimatedNumber";
 import { Icon } from "@/src/components/Icon";
 import { StatTile } from "@/src/components/StatTile";
 import { formatCurrency } from "@/src/lib/money";
-import { ObligationAction } from "./ObligationCard.styles";
+import { ObligationAction, ObligationActions, ObligationLink } from "./ObligationCard.styles";
 import type { ObligationCardProps } from "./ObligationCard.types";
 
 const VARIANTS = {
@@ -16,7 +16,7 @@ const VARIANTS = {
 } as const;
 
 export function ObligationCard({ obligation }: ObligationCardProps) {
-  const { label, amount, caption, icon, state, filingHref } = obligation;
+  const { label, amount, caption, icon, state, filingHref, historyHref } = obligation;
   const router = useRouter();
 
   function handleFile() {
@@ -33,10 +33,19 @@ export function ObligationCard({ obligation }: ObligationCardProps) {
       value={<AnimatedNumber value={amount} format={formatCurrency} />}
       caption={caption}
       badge={
-        filingHref !== null && (
-          <ObligationAction type="button" onClick={handleFile} aria-label={`File ${label}`}>
-            <Icon name={CheckIcon} size={18} weight="bold" />
-          </ObligationAction>
+        (filingHref !== null || historyHref !== null) && (
+          <ObligationActions>
+            {filingHref !== null && (
+              <ObligationAction type="button" onClick={handleFile} aria-label={`File ${label}`}>
+                <Icon name={CheckIcon} size={18} weight="bold" />
+              </ObligationAction>
+            )}
+            {historyHref !== null && (
+              <ObligationLink href={historyHref} aria-label={`${label} history`}>
+                <Icon name={ArrowUpRightIcon} size={18} weight="bold" />
+              </ObligationLink>
+            )}
+          </ObligationActions>
         )
       }
     />

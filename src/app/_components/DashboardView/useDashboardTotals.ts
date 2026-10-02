@@ -21,6 +21,7 @@ type ObligationSeed = {
   taxPeriodId: string;
   filingType: FilingType;
   isFiled: boolean;
+  historyHref?: string;
 };
 
 function inYear(isoDate: string, year: number) {
@@ -63,6 +64,7 @@ function toObligation(seed: ObligationSeed): Obligation {
     icon: seed.icon,
     state,
     filingHref: state === "claimable" ? `/filings/new?${query.toString()}` : null,
+    historyHref: seed.historyHref ?? null,
   };
 }
 
@@ -115,6 +117,7 @@ export function useDashboardTotals(year: number) {
           taxPeriodId: period.id,
           filingType: "hst",
           isFiled: periodFilings.some((filing) => filing.filingType === "hst"),
+          historyHref: "/hst",
         }),
       ],
       incomeItems: income.slice(0, RECENT_LIMIT).map(toActivityItem),

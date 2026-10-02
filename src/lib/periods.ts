@@ -36,3 +36,20 @@ export function currentPeriod(frequency: FilingFrequency, isoDate: string): TaxP
     status: "open",
   };
 }
+
+export function periodFromId(id: string): TaxPeriod {
+  const year = Number(id.slice(0, 4));
+  const quarter = /^\d{4}-Q([1-4])$/.exec(id);
+  const month = /^\d{4}-(\d{2})$/.exec(id);
+  const frequency: FilingFrequency = quarter ? "quarterly" : month ? "monthly" : "annual";
+  const startMonth = quarter ? (Number(quarter[1]) - 1) * 3 : month ? Number(month[1]) - 1 : 0;
+  const span = MONTHS_PER_PERIOD[frequency];
+
+  return {
+    id,
+    periodType: frequency,
+    startDate: utcIsoDate(year, startMonth, 1),
+    endDate: utcIsoDate(year, startMonth + span, 0),
+    status: "open",
+  };
+}

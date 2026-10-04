@@ -49,7 +49,8 @@ export const TileLabel = styled.span`
 export const TileValue = styled.strong<{ $size: StatTileSize }>`
   ${numeric}
   font-family: ${theme.fontFamily.display};
-  font-size: ${({ $size }) => ($size === "display" ? theme.fontSize["4xl"] : theme.fontSize["3xl"])};
+  font-size: ${({ $size }) =>
+    $size === "display" ? theme.fontSize["4xl"] : theme.fontSize["3xl"]};
   font-weight: 500;
   line-height: 1.1;
 `;

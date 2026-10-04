@@ -19,6 +19,7 @@ export type TransactionFormState = {
   items: TransactionItem[];
   subtotal: string | null;
   isTaxed: boolean;
+  hstAmount: string;
   tips: string;
   claimablePct: string;
 };
@@ -28,6 +29,7 @@ export type TransactionTotals = {
   tipsAmount: number;
   subtotal: number;
   hstAmount: number;
+  hstAtRate: number;
   total: number;
   claimBack: number;
 };

@@ -9,7 +9,6 @@ import type {
   Transaction,
   TransactionDirection,
 } from "@/src/data/domain.types";
-import { todayIsoDate } from "@/src/lib/dates";
 import { sanitizeAmount, sanitizePercent } from "@/src/lib/money";
 import { newId } from "@/src/lib/platform/id";
 import {
@@ -18,47 +17,11 @@ import {
   hasContent,
   hstAtRate,
 } from "./TransactionForm.totals";
+import { initialState, stateFrom } from "./TransactionForm.state";
 import type { TransactionFormState, TransactionItem } from "./TransactionForm.types";
 
 function emptyItem(): TransactionItem {
   return { id: newId(), name: "", amount: "" };
-}
-
-function initialState(): TransactionFormState {
-  return {
-    direction: "expense",
-    title: "",
-    categoryId: "",
-    txnDate: todayIsoDate(),
-    vendor: "",
-    items: [],
-    subtotal: null,
-    isTaxed: true,
-    hstAmount: "",
-    tips: "",
-    claimablePct: "100",
-  };
-}
-
-function stateFrom(transaction: Transaction, hstRate: number): TransactionFormState {
-  const isTaxed = transaction.hstAmount > 0;
-  // The row stores the pre-tax total and the HST apart, and neither says how much of the
-  // subtotal was taxed, so the stored HST is carried as-is rather than re-derived.
-  const isAtRate = transaction.hstAmount === hstAtRate(transaction.subtotal, hstRate);
-
-  return {
-    direction: transaction.direction,
-    title: transaction.title,
-    categoryId: transaction.category,
-    txnDate: transaction.txnDate,
-    vendor: transaction.vendor,
-    items: [],
-    subtotal: transaction.subtotal.toFixed(2),
-    isTaxed,
-    hstAmount: isTaxed && !isAtRate ? transaction.hstAmount.toFixed(2) : "",
-    tips: "",
-    claimablePct: String(transaction.claimablePct),
-  };
 }
 
 function hstFrom(parsed: ParsedReceipt, hstRate: number) {

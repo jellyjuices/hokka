@@ -22,6 +22,7 @@ export function transactionToRow(transaction: Transaction): Omit<TransactionRow,
     claimable_pct: transaction.claimablePct,
     tax_period_id: transaction.taxPeriodId,
     title: transaction.title,
+    items: transaction.items,
     deleted_at: null,
   };
 }
@@ -40,6 +41,7 @@ export function transactionFromRow(row: TransactionRow): Transaction {
     claimablePct: Number(row.claimable_pct),
     taxPeriodId: row.tax_period_id,
     title: row.title ?? "",
+    items: (row.items ?? []).map((item) => ({ name: item.name, amount: Number(item.amount) })),
   };
 }
 

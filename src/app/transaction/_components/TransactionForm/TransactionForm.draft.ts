@@ -1,7 +1,14 @@
 import type { TransactionDraft } from "@/src/context/Ledger";
-import type { Transaction } from "@/src/data/domain.types";
-import { toAmount } from "@/src/lib/money";
+import type { LineItem, Transaction } from "@/src/data/domain.types";
+import { roundToCents, toAmount } from "@/src/lib/money";
 import type { TransactionFormState, TransactionTotals } from "./TransactionForm.types";
+
+function lineItemsFrom(state: TransactionFormState): LineItem[] {
+  if (state.subtotal !== null) return [];
+  return state.items
+    .filter((item) => item.name.trim() !== "" || toAmount(item.amount) !== 0)
+    .map((item) => ({ name: item.name.trim(), amount: roundToCents(toAmount(item.amount)) }));
+}
 
 export function buildDraft(
   state: TransactionFormState,
@@ -22,5 +29,6 @@ export function buildDraft(
     category: state.categoryId,
     claimablePct: toAmount(state.claimablePct),
     title: state.title.trim(),
+    items: lineItemsFrom(state),
   };
 }

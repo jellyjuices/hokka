@@ -26,6 +26,11 @@ export type StoredDocument = {
   rawOcrJson: unknown;
 };
 
+export type LineItem = {
+  name: string;
+  amount: number;
+};
+
 export type Transaction = {
   id: string;
   documentIds: string[];
@@ -39,6 +44,7 @@ export type Transaction = {
   claimablePct: number;
   taxPeriodId: string;
   title: string;
+  items: LineItem[];
 };
 
 export type TaxPeriod = {

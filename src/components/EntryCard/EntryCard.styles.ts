@@ -1,12 +1,19 @@
 "use client";
 
+import { keyframes } from "@emotion/react";
 import styled from "@emotion/styled";
 import Link from "next/link";
 import { theme, hoverFill, numeric, categoryTint, transientProps } from "@/src/lib/theme";
 import type { CategoryColor } from "@/src/lib/theme";
 import { mediaDown } from "@/src/lib/breakpoints";
 
-export const CardShell = styled.article`
+const spin = keyframes`
+  to {
+    transform: rotate(360deg);
+  }
+`;
+
+export const CardShell = styled("article", transientProps)<{ $isPending: boolean }>`
   position: relative;
   display: flex;
   align-items: center;
@@ -17,6 +24,8 @@ export const CardShell = styled.article`
   transition: background ${theme.motion.fast} ease;
   -webkit-touch-callout: none;
   user-select: none;
+  opacity: ${({ $isPending }) => ($isPending ? 0.5 : 1)};
+  pointer-events: ${({ $isPending }) => ($isPending ? "none" : "auto")};
 
   &:hover {
     background: ${hoverFill(theme.surface.secondary)};
@@ -43,6 +52,15 @@ export const CardGlyph = styled("span", transientProps)<{ $color: CategoryColor 
     $color === null ? theme.surface.accentSecondary : categoryTint(theme.categoryColor[$color])};
   color: ${({ $color }) =>
     $color === null ? theme.foreground.accent : theme.categoryColor[$color]};
+`;
+
+export const CardSpinner = styled.span`
+  display: inline-flex;
+  animation: ${spin} 0.9s linear infinite;
+
+  @media (prefers-reduced-motion: reduce) {
+    animation-duration: 2.4s;
+  }
 `;
 
 export const CardBody = styled.div`

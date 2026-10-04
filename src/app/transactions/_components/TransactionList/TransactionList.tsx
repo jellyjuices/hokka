@@ -1,26 +1,20 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import {
-  FunnelSimpleIcon,
-  PlusIcon,
-  CardsThreeIcon,
-  WarningIcon,
-} from "@phosphor-icons/react/dist/ssr";
+import { FunnelSimpleIcon, PlusIcon, CardsThreeIcon } from "@phosphor-icons/react/dist/ssr";
 import { LinkButton } from "@/src/components/Button";
 import { EmptyState } from "@/src/components/EmptyState";
 import { Icon } from "@/src/components/Icon";
 import { SkeletonList } from "@/src/components/Skeleton";
 import { TransactionCard } from "@/src/components/TransactionCard";
-import { useLedger, useSyncState } from "@/src/context/Ledger";
+import { useLedger } from "@/src/context/Ledger";
 import { NO_FILTER, filterTransactions } from "@/src/lib/filters";
 import { ExportButton } from "./_components/ExportButton";
 import { TransactionFilters } from "./_components/TransactionFilters";
-import { ListItems, ListLayout, ListNotice, ListNoticeIcon } from "./TransactionList.styles";
+import { ListItems, ListLayout } from "./TransactionList.styles";
 
 export function TransactionList() {
   const { transactions, isHydrated } = useLedger();
-  const { pendingCounts } = useSyncState();
   const [filter, setFilter] = useState(NO_FILTER);
 
   const visible = useMemo(() => filterTransactions(transactions, filter), [transactions, filter]);
@@ -49,14 +43,6 @@ export function TransactionList() {
         onChange={setFilter}
         action={<ExportButton transactions={visible} range={filter.range} />}
       />
-      {pendingCounts.transaction > 0 && (
-        <ListNotice role="status">
-          <ListNoticeIcon>
-            <Icon name={WarningIcon} size={18} weight="fill" />
-          </ListNoticeIcon>
-          {`${pendingCounts.transaction} ${pendingCounts.transaction === 1 ? "change is" : "changes are"} waiting to sync`}
-        </ListNotice>
-      )}
       {visible.length === 0 ? (
         <EmptyState
           icon={<Icon name={FunnelSimpleIcon} size={32} weight="fill" />}

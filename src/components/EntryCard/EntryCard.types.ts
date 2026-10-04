@@ -13,4 +13,5 @@ export type EntryCardProps = {
   href?: string;
   menuLabel: string;
   menuItems: MenuItem[];
+  isPending?: boolean;
 };

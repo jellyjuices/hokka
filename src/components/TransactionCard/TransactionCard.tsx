@@ -2,6 +2,7 @@
 
 import { CoinsIcon, HandCoinsIcon } from "@phosphor-icons/react/dist/ssr";
 import { EntryCard } from "@/src/components/EntryCard";
+import { useSyncState } from "@/src/context/Ledger";
 import { findCategory } from "@/src/data/categories";
 import { formatCurrency, roundToCents } from "@/src/lib/money";
 import { formatDate } from "@/src/lib/dates";
@@ -11,6 +12,7 @@ import { useTransactionActions } from "./useTransactionActions";
 
 export function TransactionCard({ transaction }: TransactionCardProps) {
   const actions = useTransactionActions();
+  const { pendingIds } = useSyncState();
   const isIncome = transaction.direction === "income";
   const title = transaction.title || transaction.vendor || "Untitled";
   const category = findCategory(transaction.category);
@@ -32,6 +34,7 @@ export function TransactionCard({ transaction }: TransactionCardProps) {
         href={`/transaction/edit?id=${transaction.id}`}
         menuLabel="Transaction options"
         menuItems={actions.itemsFor(transaction)}
+        isPending={pendingIds.transaction.has(transaction.id)}
       />
       <ConfirmDelete
         open={actions.pending !== null}

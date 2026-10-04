@@ -5,7 +5,13 @@ export type DateRange = { from: string; to: string };
 export type RangeUnit = "month" | "quarter" | "year";
 
 export type RangePresetId =
-  "all" | "thisMonth" | "lastMonth" | "thisQuarter" | "lastQuarter" | "thisYear" | "lastYear";
+  | "all"
+  | "thisMonth"
+  | "lastMonth"
+  | "thisQuarter"
+  | "lastQuarter"
+  | "thisYear"
+  | "lastYear";
 
 export type RangePreset = {
   id: RangePresetId;

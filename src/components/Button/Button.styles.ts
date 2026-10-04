@@ -69,14 +69,12 @@ type Variant = { $variant: ButtonVariant; $size: ButtonSize; $isBlock: boolean }
 const variant = ({ $variant, $size, $isBlock }: Variant) => css`
   ${variants[$variant]};
   ${sizes[$size]};
-  ${
-    $isBlock &&
-    css`
-      display: flex;
-      width: 100%;
-      justify-content: space-between;
-    `
-  };
+  ${$isBlock &&
+  css`
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+  `};
 `;
 
 export const ButtonBase = styled.button<Variant>`

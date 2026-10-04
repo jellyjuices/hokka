@@ -117,9 +117,12 @@ export function TransactionForm({ transaction }: TransactionFormProps) {
       <TaxPanel
         hstRate={form.hstRate}
         isTaxed={form.state.isTaxed}
+        hstAmount={form.state.hstAmount}
+        hstAtRate={form.totals.hstAtRate}
         tips={form.state.tips}
         claimablePct={form.state.claimablePct}
         onTaxedChange={form.setTaxed}
+        onHstAmountChange={form.setHstAmount}
         onTipsChange={form.setTips}
         onClaimableChange={form.setClaimablePct}
       />

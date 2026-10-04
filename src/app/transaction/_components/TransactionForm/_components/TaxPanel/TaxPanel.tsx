@@ -8,9 +8,12 @@ import type { TaxPanelProps } from "./TaxPanel.types";
 export function TaxPanel({
   hstRate,
   isTaxed,
+  hstAmount,
+  hstAtRate,
   tips,
   claimablePct,
   onTaxedChange,
+  onHstAmountChange,
   onTipsChange,
   onClaimableChange,
 }: TaxPanelProps) {
@@ -25,6 +28,17 @@ export function TaxPanel({
         />
       </TaxRow>
       <ModifierRow>
+        {isTaxed && (
+          <ModifierShell label="HST">
+            <AmountField
+              value={hstAmount}
+              label="HST amount"
+              prefix="$"
+              placeholder={hstAtRate.toFixed(2)}
+              onChange={onHstAmountChange}
+            />
+          </ModifierShell>
+        )}
         <ModifierShell label="Modifiers (Tips)">
           <AmountField
             value={tips}

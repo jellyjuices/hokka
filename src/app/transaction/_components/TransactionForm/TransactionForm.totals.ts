@@ -3,6 +3,16 @@ import type { CategoryClaimablePct } from "@/src/data/domain.types";
 import { roundToCents, toAmount } from "@/src/lib/money";
 import type { TransactionFormState, TransactionTotals } from "./TransactionForm.types";
 
+export function hstAtRate(taxedTotal: number, hstRate: number) {
+  return roundToCents(taxedTotal * (hstRate / 100));
+}
+
+// A receipt's printed tax wins over the rate: part of a bill can be zero-rated, so 13% of
+// the subtotal is only the fallback when no amount was read or typed.
+function hstFor(entered: string, atRate: number) {
+  return entered === "" ? atRate : roundToCents(toAmount(entered));
+}
+
 export function computeTotals(state: TransactionFormState, hstRate: number): TransactionTotals {
   const itemsTotal =
     state.subtotal === null
@@ -10,7 +20,8 @@ export function computeTotals(state: TransactionFormState, hstRate: number): Tra
       : roundToCents(toAmount(state.subtotal));
   const tipsAmount = roundToCents(toAmount(state.tips));
   const subtotal = roundToCents(itemsTotal + tipsAmount);
-  const hstAmount = state.isTaxed ? roundToCents(itemsTotal * (hstRate / 100)) : 0;
+  const atRate = hstAtRate(itemsTotal, hstRate);
+  const hstAmount = state.isTaxed ? hstFor(state.hstAmount, atRate) : 0;
   const claimable = toAmount(state.claimablePct) / 100;
 
   return {
@@ -18,6 +29,7 @@ export function computeTotals(state: TransactionFormState, hstRate: number): Tra
     tipsAmount,
     subtotal,
     hstAmount,
+    hstAtRate: atRate,
     total: roundToCents(subtotal + hstAmount),
     claimBack: roundToCents(state.direction === "expense" ? hstAmount * claimable : hstAmount),
   };

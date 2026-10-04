@@ -10,9 +10,14 @@ import type {
   TransactionDirection,
 } from "@/src/data/domain.types";
 import { todayIsoDate } from "@/src/lib/dates";
-import { roundToCents, sanitizeAmount, sanitizePercent } from "@/src/lib/money";
+import { sanitizeAmount, sanitizePercent } from "@/src/lib/money";
 import { newId } from "@/src/lib/platform/id";
-import { computeTotals, defaultClaimablePct, hasContent } from "./TransactionForm.totals";
+import {
+  computeTotals,
+  defaultClaimablePct,
+  hasContent,
+  hstAtRate,
+} from "./TransactionForm.totals";
 import type { TransactionFormState, TransactionItem } from "./TransactionForm.types";
 
 function emptyItem(): TransactionItem {
@@ -29,6 +34,7 @@ function initialState(): TransactionFormState {
     items: [],
     subtotal: null,
     isTaxed: true,
+    hstAmount: "",
     tips: "",
     claimablePct: "100",
   };
@@ -36,13 +42,9 @@ function initialState(): TransactionFormState {
 
 function stateFrom(transaction: Transaction, hstRate: number): TransactionFormState {
   const isTaxed = transaction.hstAmount > 0;
-  // The row stores only the pre-tax total, so the taxed part is read back off the HST
-  // amount and whatever is left of the subtotal is the untaxed tip.
-  const taxedTotal =
-    isTaxed && hstRate > 0
-      ? roundToCents(transaction.hstAmount / (hstRate / 100))
-      : transaction.subtotal;
-  const tips = roundToCents(transaction.subtotal - taxedTotal);
+  // The row stores the pre-tax total and the HST apart, and neither says how much of the
+  // subtotal was taxed, so the stored HST is carried as-is rather than re-derived.
+  const isAtRate = transaction.hstAmount === hstAtRate(transaction.subtotal, hstRate);
 
   return {
     direction: transaction.direction,
@@ -51,11 +53,19 @@ function stateFrom(transaction: Transaction, hstRate: number): TransactionFormSt
     txnDate: transaction.txnDate,
     vendor: transaction.vendor,
     items: [],
-    subtotal: taxedTotal.toFixed(2),
+    subtotal: transaction.subtotal.toFixed(2),
     isTaxed,
-    tips: tips > 0 ? tips.toFixed(2) : "",
+    hstAmount: isTaxed && !isAtRate ? transaction.hstAmount.toFixed(2) : "",
+    tips: "",
     claimablePct: String(transaction.claimablePct),
   };
+}
+
+function hstFrom(parsed: ParsedReceipt, hstRate: number) {
+  if (!parsed.isTaxed) return "";
+  return parsed.hstAmount === hstAtRate(parsed.subtotal, hstRate)
+    ? ""
+    : parsed.hstAmount.toFixed(2);
 }
 
 function itemsFrom(parsed: ParsedReceipt): TransactionItem[] {
@@ -154,6 +164,7 @@ export function useTransactionForm(transaction?: Transaction) {
       title: current.title === "" ? parsed.vendor : current.title,
       txnDate: parsed.txnDate || current.txnDate,
       isTaxed: parsed.isTaxed,
+      hstAmount: hstFrom(parsed, settings.hstRate),
       tips: parsed.tips > 0 ? parsed.tips.toFixed(2) : current.tips,
       items: itemsFrom(parsed),
       subtotal: null,
@@ -170,6 +181,7 @@ export function useTransactionForm(transaction?: Transaction) {
     setDate: (txnDate: string) => patch({ txnDate }),
     setVendor: (vendor: string) => patch({ vendor }),
     setTaxed: (isTaxed: boolean) => patch({ isTaxed }),
+    setHstAmount: (hstAmount: string) => patch({ hstAmount: sanitizeAmount(hstAmount) }),
     setTips: (tips: string) => patch({ tips: sanitizeAmount(tips) }),
     setClaimablePct: (claimablePct: string) =>
       patch({ claimablePct: sanitizePercent(claimablePct) }),

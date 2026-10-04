@@ -49,7 +49,7 @@ export type LedgerActionsValue = {
 export type SyncStateValue = {
   status: SyncStatus;
   isOnline: boolean;
-  pendingCounts: Record<OutboxEntity, number>;
+  pendingIds: Record<OutboxEntity, ReadonlySet<string>>;
   lastError: string | null;
   lastSyncedAt: number | null;
   syncNow: () => Promise<void>;

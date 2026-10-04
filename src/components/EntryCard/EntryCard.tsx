@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { CircleNotchIcon } from "@phosphor-icons/react/dist/ssr";
 import { Icon } from "@/src/components/Icon";
 import { Menu } from "@/src/components/Menu";
 import { useLongPress } from "@/src/hooks";
@@ -13,6 +14,7 @@ import {
   CardLink,
   CardRow,
   CardShell,
+  CardSpinner,
   CardTitle,
 } from "./EntryCard.styles";
 import type { EntryCardProps } from "./EntryCard.types";
@@ -28,17 +30,25 @@ export function EntryCard({
   href,
   menuLabel,
   menuItems,
+  isPending = false,
 }: EntryCardProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const hasMenu = menuItems.length > 0;
+  const isLinked = href !== undefined && !isPending;
   const longPress = useLongPress(() => {
-    if (hasMenu) setIsMenuOpen(true);
+    if (hasMenu && !isPending) setIsMenuOpen(true);
   });
 
   return (
-    <CardShell {...longPress}>
+    <CardShell {...longPress} $isPending={isPending} aria-busy={isPending}>
       <CardGlyph $color={color} aria-hidden="true">
-        <Icon name={icon} size={22} weight="fill" />
+        {isPending ? (
+          <CardSpinner>
+            <Icon name={CircleNotchIcon} size={22} weight="bold" />
+          </CardSpinner>
+        ) : (
+          <Icon name={icon} size={22} weight="fill" />
+        )}
       </CardGlyph>
       <CardBody>
         <CardRow>
@@ -46,18 +56,16 @@ export function EntryCard({
           {detail && <CardDetail>{detail}</CardDetail>}
         </CardRow>
         <CardRow>
-          <CardTitle>
-            {href === undefined ? title : <CardLink href={href}>{title}</CardLink>}
-          </CardTitle>
+          <CardTitle>{isLinked ? <CardLink href={href}>{title}</CardLink> : title}</CardTitle>
           <CardAmount $isIncome={isIncome}>{amount}</CardAmount>
         </CardRow>
       </CardBody>
       {hasMenu && (
-        <CardAction>
+        <CardAction inert={isPending}>
           <Menu
             label={menuLabel}
             items={menuItems}
-            open={isMenuOpen}
+            open={isMenuOpen && !isPending}
             onOpenChange={setIsMenuOpen}
           />
         </CardAction>

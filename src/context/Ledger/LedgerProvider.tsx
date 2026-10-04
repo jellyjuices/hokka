@@ -38,16 +38,16 @@ const DataContext = createContext<LedgerDataValue | null>(null);
 const ActionsContext = createContext<LedgerActionsValue | null>(null);
 const SyncContext = createContext<SyncStateValue | null>(null);
 
-function countByEntity(outbox: OutboxOp[]): Record<OutboxEntity, number> {
-  const counts: Record<OutboxEntity, number> = {
-    transaction: 0,
-    filing: 0,
-    period: 0,
-    document: 0,
-    settings: 0,
+function idsByEntity(outbox: OutboxOp[]): Record<OutboxEntity, ReadonlySet<string>> {
+  const ids: Record<OutboxEntity, Set<string>> = {
+    transaction: new Set(),
+    filing: new Set(),
+    period: new Set(),
+    document: new Set(),
+    settings: new Set(),
   };
-  for (const op of outbox) counts[op.entity] += 1;
-  return counts;
+  for (const op of outbox) ids[op.entity].add(op.id);
+  return ids;
 }
 
 export function LedgerProvider({ children }: LedgerProviderProps) {
@@ -101,7 +101,7 @@ export function LedgerProvider({ children }: LedgerProviderProps) {
     () => ({
       status,
       isOnline,
-      pendingCounts: countByEntity(outbox),
+      pendingIds: idsByEntity(outbox),
       lastError,
       lastSyncedAt,
       syncNow: engine.syncNow,

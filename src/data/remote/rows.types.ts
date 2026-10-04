@@ -2,6 +2,7 @@ import type {
   DocumentKind,
   FilingFrequency,
   FilingType,
+  LineItem,
   OcrStatus,
   PeriodStatus,
   TransactionDirection,
@@ -25,6 +26,7 @@ export type TransactionRow = SyncedRow & {
   claimable_pct: number;
   tax_period_id: string;
   title: string;
+  items: LineItem[] | null;
 };
 
 export type FilingRow = SyncedRow & {

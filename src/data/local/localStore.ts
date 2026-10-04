@@ -107,6 +107,8 @@ export function hydrateLocalStore(): Promise<void> {
           if (stored) Object.assign(loaded[collection], stored);
         }),
       );
+      // Transactions mirrored before line items were stored carry no list at all.
+      for (const transaction of Object.values(loaded.transactions)) transaction.items ??= [];
       tables = loaded;
 
       settings = { ...DEFAULT_SETTINGS, ...((await readValue<TaxSettings>(SETTINGS_KEY)) ?? {}) };

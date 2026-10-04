@@ -3,6 +3,7 @@ import type {
   DocumentKind,
   FilingFrequency,
   FilingType,
+  LineItem,
   OcrStatus,
   PeriodStatus,
   TransactionDirection,
@@ -49,6 +50,11 @@ function listOf<Value>(check: Check<Value>): Check<Value[]> {
   };
 }
 
+// Rows written and queued before line items were stored carry no list at all.
+function defaulted<Value>(check: Check<Value>, fallback: Value): Check<Value> {
+  return (value) => (value === undefined ? fallback : check(value));
+}
+
 function mapOf<Value>(check: Check<Value>): Check<Record<string, Value>> {
   return (value) => {
     const row = fields(value);
@@ -85,6 +91,8 @@ const FREQUENCIES: readonly FilingFrequency[] = ["monthly", "quarterly", "annual
 const PERIOD_STATUSES: readonly PeriodStatus[] = ["open", "filed"];
 const FILING_TYPES: readonly FilingType[] = ["hst", "income_tax"];
 
+const lineItem: Check<LineItem> = shape({ name: text, amount });
+
 const claimableMap: Check<CategoryClaimablePct> = mapOf(amount);
 
 const CHECKS: { [Name in EntityName]: Check<EntityRecord[Name]> } = {
@@ -101,6 +109,7 @@ const CHECKS: { [Name in EntityName]: Check<EntityRecord[Name]> } = {
     claimablePct: amount,
     taxPeriodId: text,
     title: text,
+    items: defaulted(listOf(lineItem), []),
   }),
   filing: shape({
     id: text,

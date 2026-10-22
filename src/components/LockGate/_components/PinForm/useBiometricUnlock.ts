@@ -9,12 +9,13 @@ import {
 } from "@/src/lib/biometrics";
 import type { BiometricStatus } from "./PinForm.types";
 
-export function useBiometricUnlock(onUnlocked: () => void) {
+export function useBiometricUnlock(onUnlocked: () => void, isLapsed: boolean) {
   const isEnrolled = useSyncExternalStore(
     subscribeBiometrics,
     getBiometricsSnapshot,
     getBiometricsServerSnapshot,
   );
+  const isOffered = isEnrolled && !isLapsed;
   const [status, setStatus] = useState<BiometricStatus>("idle");
   const [error, setError] = useState<string | null>(null);
   const isBusy = useRef(false);
@@ -40,10 +41,16 @@ export function useBiometricUnlock(onUnlocked: () => void) {
   );
 
   useEffect(() => {
-    if (!isEnrolled || hasTried.current || document.visibilityState === "hidden") return;
-    hasTried.current = true;
-    void attempt(true);
-  }, [attempt, isEnrolled]);
+    if (!isOffered) return;
+    function raiseOnArrival() {
+      if (hasTried.current || document.visibilityState === "hidden") return;
+      hasTried.current = true;
+      void attempt(true);
+    }
+    raiseOnArrival();
+    document.addEventListener("visibilitychange", raiseOnArrival);
+    return () => document.removeEventListener("visibilitychange", raiseOnArrival);
+  }, [attempt, isOffered]);
 
-  return { isEnrolled, status, error, attempt };
+  return { isOffered, status, error, attempt };
 }

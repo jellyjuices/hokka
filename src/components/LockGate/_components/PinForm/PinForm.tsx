@@ -1,25 +1,37 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useState, useSyncExternalStore, type FormEvent } from "react";
 import { EyeIcon, EyeSlashIcon } from "@phosphor-icons/react/dist/ssr";
 import { Button } from "@/src/components/Button";
 import { Icon } from "@/src/components/Icon";
 import { Input } from "@/src/components/Input";
+import {
+  getSessionLapsedServerSnapshot,
+  isSessionLapsed,
+  subscribeUnlocked,
+} from "@/src/lib/platform/unlocked";
 import { PinChoice, PinError, PinMark, PinPanel, PinReveal, PinScreen } from "./PinForm.styles";
 import { verifyPassword } from "./PinForm.verify";
 import { useBiometricUnlock } from "./useBiometricUnlock";
 import { useUnlockWarmup } from "./useUnlockWarmup";
 import type { PinFormProps } from "./PinForm.types";
 
+const LAPSED_MESSAGE = "This session has expired. Enter your password";
+
 export function PinForm({ onUnlocked }: PinFormProps) {
   useUnlockWarmup();
-  const biometrics = useBiometricUnlock(onUnlocked);
+  const isLapsed = useSyncExternalStore(
+    subscribeUnlocked,
+    isSessionLapsed,
+    getSessionLapsedServerSnapshot,
+  );
+  const biometrics = useBiometricUnlock(onUnlocked, isLapsed);
   const [password, setPassword] = useState("");
   const [isRevealed, setIsRevealed] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isChecking, setIsChecking] = useState(false);
 
-  const message = error ?? biometrics.error;
+  const message = error ?? biometrics.error ?? (isLapsed ? LAPSED_MESSAGE : null);
 
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -66,7 +78,7 @@ export function PinForm({ onUnlocked }: PinFormProps) {
           <Button type="submit" isBlock disabled={isChecking || password === ""}>
             {isChecking ? "Checking" : "Unlock"}
           </Button>
-          {biometrics.isEnrolled && (
+          {biometrics.isOffered && (
             <Button
               type="button"
               variant="secondary"

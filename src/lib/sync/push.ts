@@ -10,6 +10,7 @@ import {
 import type { OutboxOp } from "@/src/data/local";
 import {
   isRetryable,
+  isUnauthorized,
   pushEntity,
   pushTransactionDeletion,
   requestUploadTicket,
@@ -69,6 +70,7 @@ export async function pushOutbox(): Promise<PushResult> {
       await removeOp(op);
       pushed += 1;
     } catch (error) {
+      if (isUnauthorized(error)) throw error;
       const message = error instanceof Error ? error.message : "Sync failed";
       if (isRetryable(error)) {
         await recordOpFailure(op, message);

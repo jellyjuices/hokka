@@ -1,7 +1,9 @@
+import { clearLocal, readLocal, writeLocal } from "@/src/lib/storage/local";
 import { clearSession, readSession, writeSession } from "@/src/lib/storage/session";
 import { createSubscribers } from "./subscribers";
 
 const STORAGE_KEY = "hokka:unlocked-until";
+const LAPSED_KEY = "hokka:session-lapsed";
 
 export const LOCK_AFTER_MINUTES = 5;
 
@@ -90,5 +92,27 @@ export function writeUnlocked() {
 export function clearUnlocked() {
   clearSession(STORAGE_KEY);
   stopTimer();
+  subscribers.publish();
+}
+
+export function isSessionLapsed() {
+  return readLocal(LAPSED_KEY) !== null;
+}
+
+export function getSessionLapsedServerSnapshot() {
+  return false;
+}
+
+// A biometric pass opens the screen without asking the server, so it cannot renew a lapsed
+// cookie: it would reopen the ledger straight into the next 401, over and over. Once a 401 says
+// the cookie is gone, only the password opens the ledger again. The mark sits in localStorage,
+// unlike the stamp, because the cookie it describes outlives the tab.
+export function expireSession() {
+  writeLocal(LAPSED_KEY, "true");
+  clearUnlocked();
+}
+
+export function renewSession() {
+  clearLocal(LAPSED_KEY);
   subscribers.publish();
 }

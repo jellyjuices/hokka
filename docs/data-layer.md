@@ -39,7 +39,9 @@ up before it reaches the network, and a pulled change shows up without a refresh
 
 The queue is strictly ordered and stops at the first retryable failure, so a document always reaches
 R2 before the transaction that references it. A non-retryable failure (a 4xx) is recorded against
-the op and dropped after five attempts rather than blocking everything behind it.
+the op and dropped after five attempts rather than blocking everything behind it. A 401 is the
+exception: it says the session lapsed, not that the op is wrong, so the run stops with every op
+still queued and untouched, and the lock screen asks for the password.
 
 ## Receipts
 

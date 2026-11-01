@@ -7,5 +7,5 @@ export {
   requestUploadTicket,
   uploadFile,
 } from "./api";
-export { ApiError, NetworkError, isRetryable } from "./apiClient";
+export { ApiError, NetworkError, isRetryable, isUnauthorized } from "./apiClient";
 export type { SyncCollection, SyncPullResult, UploadTicket } from "./sync.types";

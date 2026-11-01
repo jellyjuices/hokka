@@ -1,4 +1,5 @@
 import { hydrateLocalStore, hydrateOutbox, readOutbox, subscribeOutbox } from "@/src/data/local";
+import { isUnauthorized } from "@/src/data/remote";
 import { isOnline } from "@/src/lib/platform/connectivity";
 import type { SyncEngine, SyncEngineDeps, SyncEvent } from "./engine.types";
 import { pullIntoLocal } from "./pull";
@@ -45,6 +46,7 @@ export function createSyncEngine(deps: SyncEngineDeps): SyncEngine {
   }
 
   function waitForNetwork() {
+    if (!isStarted) return;
     isWaitingForNetwork = true;
     if (reconnectId !== null) return;
     reconnectId = window.setInterval(() => {
@@ -84,6 +86,10 @@ export function createSyncEngine(deps: SyncEngineDeps): SyncEngine {
       hasReportedFailure = false;
       stopWaitingForNetwork();
     } catch (error) {
+      if (isUnauthorized(error)) {
+        deps.onStatusChanged("idle");
+        return;
+      }
       const message = error instanceof Error ? error.message : "Sync failed";
       deps.onErrorChanged(message);
       deps.onStatusChanged(isOnline() ? "error" : "offline");

@@ -4,6 +4,7 @@ import {
   rememberDevicePassword,
 } from "@/src/lib/devicePassword";
 import { isOnline } from "@/src/lib/platform/connectivity";
+import { renewSession } from "@/src/lib/platform/unlocked";
 
 async function verifyOnDevice(password: string): Promise<string | null> {
   if (!hasDevicePassword()) {
@@ -24,6 +25,7 @@ export async function verifyPassword(password: string): Promise<string | null> {
       body: JSON.stringify({ password }),
     });
     if (response.ok) {
+      renewSession();
       void rememberDevicePassword(password);
       return null;
     }

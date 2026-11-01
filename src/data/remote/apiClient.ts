@@ -1,4 +1,4 @@
-import { clearUnlocked } from "@/src/lib/platform/unlocked";
+import { expireSession } from "@/src/lib/platform/unlocked";
 
 const NOT_IMPLEMENTED = 501;
 const UNAUTHORIZED = 401;
@@ -39,7 +39,7 @@ export async function apiRequest<T>(path: string, init: RequestInit = {}): Promi
   }
 
   if (!response.ok) {
-    if (response.status === UNAUTHORIZED) clearUnlocked();
+    if (response.status === UNAUTHORIZED) expireSession();
     const message = await response.text().catch(() => response.statusText);
     throw new ApiError(message || response.statusText, response.status);
   }
@@ -60,6 +60,10 @@ export async function putBinary(url: string, blob: Blob, contentType: string): P
     throw new NetworkError(error instanceof Error ? error.message : "Upload failed");
   }
   if (!response.ok) throw new ApiError(`Upload failed with ${response.status}`, response.status);
+}
+
+export function isUnauthorized(error: unknown) {
+  return error instanceof ApiError && error.status === UNAUTHORIZED;
 }
 
 export function isRetryable(error: unknown) {

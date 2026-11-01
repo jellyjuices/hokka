@@ -24,8 +24,11 @@ read or write. Adding a policy would open the tables to anyone holding the publi
 ## Keeping the project awake
 
 The free tier pauses a project after roughly seven days of no activity. `GET /api/health` runs a
-`count` against `tax_settings`. Point any weekly cron at it — a Cloudflare Worker cron trigger, a
-GitHub Actions schedule, or an uptime pinger.
+`count` against `tax_settings`, and [keep-alive.yml](../.github/workflows/keep-alive.yml) calls it
+every day. It reads the deployed origin from the `HOKKA_URL` repository secret, such as
+`https://hokka.example.com`; without it every run fails before it reaches the app. Daily rather
+than weekly, because GitHub starts a schedule hours late or skips it, and a late weekly run is
+already past the seven days.
 
 ## No foreign keys
 

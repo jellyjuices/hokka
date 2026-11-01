@@ -24,10 +24,26 @@ export const GalleryTile = styled.figure`
 
 export const GalleryImage = styled(Image)`
   object-fit: cover;
+  pointer-events: none;
+`;
+
+export const GalleryOpen = styled.button`
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border: none;
+  background: transparent;
+  cursor: zoom-in;
+  transition: background ${theme.motion.fast} ease;
+
+  &:hover {
+    background: ${hoverFill("transparent")};
+  }
 `;
 
 export const GalleryRemove = styled.button`
   position: absolute;
+  z-index: 2;
   top: ${theme.space.sm};
   right: ${theme.space.sm};
   display: inline-flex;

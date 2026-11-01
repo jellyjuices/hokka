@@ -5,7 +5,7 @@ import { ArrowElbowDownRightIcon, PiggyBankIcon } from "@phosphor-icons/react/di
 import type { ActivityItem } from "../ActivityList";
 import type { Obligation, ObligationState } from "../ObligationCard";
 import { useLedger } from "@/src/context/Ledger";
-import type { Filing, FilingType, Transaction } from "@/src/data/domain.types";
+import type { Filing, Transaction } from "@/src/data/domain.types";
 import { currentYear, todayIsoDate } from "@/src/lib/dates";
 import { currentPeriod, periodLabel } from "@/src/lib/periods";
 import { calculatePeriodTotals } from "@/src/lib/tax";
@@ -18,10 +18,8 @@ type ObligationSeed = {
   caption: string;
   icon: Obligation["icon"];
   amount: number;
-  taxPeriodId: string;
-  filingType: FilingType;
   isFiled: boolean;
-  historyHref?: string;
+  href: string;
 };
 
 function inYear(isoDate: string, year: number) {
@@ -49,22 +47,15 @@ function obligationState(amount: number, isFiled: boolean): ObligationState {
 
 function toObligation(seed: ObligationSeed): Obligation {
   const state = obligationState(seed.amount, seed.isFiled);
-  const amount = Math.abs(seed.amount);
-  const query = new URLSearchParams({
-    period: seed.taxPeriodId,
-    type: seed.filingType,
-    amount: amount.toFixed(2),
-  });
 
   return {
     id: seed.id,
     label: seed.label,
-    amount,
+    amount: Math.abs(seed.amount),
     caption: seed.caption,
     icon: seed.icon,
     state,
-    filingHref: state === "claimable" ? `/filings/new?${query.toString()}` : null,
-    historyHref: seed.historyHref ?? null,
+    href: seed.href,
   };
 }
 
@@ -91,6 +82,12 @@ export function useDashboardTotals(year: number) {
     const yearTotals = calculatePeriodTotals(yearTransactions, yearFilings, settings);
     const periodTotals = calculatePeriodTotals(periodTransactions, periodFilings, settings);
     const periodTitle = periodLabel(period);
+    // Unclaimed ITCs and unremitted HST from earlier periods still count against what is owed now.
+    const owingTotals = calculatePeriodTotals(
+      transactions.filter((transaction) => transaction.txnDate <= period.endDate),
+      filings.filter((filing) => filing.filingType === "hst"),
+      settings,
+    );
 
     return {
       period,
@@ -104,20 +101,17 @@ export function useDashboardTotals(year: number) {
           caption: `For ${year} taxes`,
           icon: PiggyBankIcon,
           amount: yearTotals.incomeTaxSetAside,
-          taxPeriodId: String(year),
-          filingType: "income_tax",
           isFiled: yearFilings.some((filing) => filing.filingType === "income_tax"),
+          href: "/filings",
         }),
         toObligation({
           id: `hst-${period.id}`,
-          label: periodTotals.netHstOwing < 0 ? "Claim HST" : "HST owed",
-          caption: `This period (${periodTitle})`,
+          label: owingTotals.netHstOwing < 0 ? "Claim HST" : "HST owed",
+          caption: `All periods to ${periodTitle}`,
           icon: ArrowElbowDownRightIcon,
-          amount: periodTotals.netHstOwing,
-          taxPeriodId: period.id,
-          filingType: "hst",
-          isFiled: periodFilings.some((filing) => filing.filingType === "hst"),
-          historyHref: "/hst",
+          amount: owingTotals.netHstOwing,
+          isFiled: false,
+          href: "/hst",
         }),
       ],
       incomeItems: income.slice(0, RECENT_LIMIT).map(toActivityItem),

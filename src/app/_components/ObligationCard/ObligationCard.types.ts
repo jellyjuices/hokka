@@ -9,8 +9,7 @@ export type Obligation = {
   caption: string;
   icon: IconName;
   state: ObligationState;
-  filingHref: string | null;
-  historyHref: string | null;
+  href: string;
 };
 
 export type ObligationCardProps = {

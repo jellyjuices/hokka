@@ -1,15 +1,18 @@
 "use client";
 
-import { useRef, type ChangeEvent } from "react";
+import { useRef, useState, type ChangeEvent } from "react";
 import { PlusIcon, ReceiptIcon, TrashIcon } from "@phosphor-icons/react/dist/ssr";
 import { Button } from "@/src/components/Button";
 import { Icon } from "@/src/components/Icon";
 import { FileInput } from "@/src/components/Input";
 import { Modal } from "@/src/components/Modal";
+import type { Attachment } from "../../TransactionForm.types";
+import { AttachmentLightbox } from "../AttachmentLightbox";
 import {
   GalleryAdd,
   GalleryGrid,
   GalleryImage,
+  GalleryOpen,
   GalleryRemove,
   GalleryTile,
 } from "./AttachmentGallery.styles";
@@ -25,6 +28,7 @@ export function AttachmentGallery({
   onRemove,
 }: AttachmentGalleryProps) {
   const inputRef = useRef<HTMLInputElement>(null);
+  const [previewing, setPreviewing] = useState<Attachment | null>(null);
 
   function handleChange(event: ChangeEvent<HTMLInputElement>) {
     onFilesChosen(Array.from(event.target.files ?? []));
@@ -42,6 +46,11 @@ export function AttachmentGallery({
       <GalleryGrid>
         {attachments.map((attachment) => (
           <GalleryTile key={attachment.id}>
+            <GalleryOpen
+              type="button"
+              aria-label={`Preview ${attachment.name}`}
+              onClick={() => setPreviewing(attachment)}
+            />
             {attachment.isImage ? (
               <GalleryImage
                 src={attachment.previewUrl}
@@ -74,6 +83,7 @@ export function AttachmentGallery({
           Add more
         </GalleryAdd>
       </GalleryGrid>
+      <AttachmentLightbox attachment={previewing} onClose={() => setPreviewing(null)} />
     </Modal>
   );
 }

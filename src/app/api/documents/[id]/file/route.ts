@@ -20,6 +20,17 @@ export async function GET(request: Request, context: { params: Promise<{ id: str
       expiresIn: DOWNLOAD_EXPIRY_SECONDS,
     });
 
-    return Response.redirect(url, 302);
+    // A redirect to R2 is cross-origin, so fetch() needs CORS on the bucket and
+    // reading it into pdf.js fails without it. ?inline streams it same-origin.
+    if (!new URL(request.url).searchParams.has("inline")) return Response.redirect(url, 302);
+
+    const upstream = await fetch(url);
+    if (!upstream.ok || !upstream.body) return jsonError("Document file unavailable", 502);
+    return new Response(upstream.body, {
+      headers: {
+        "Content-Type": upstream.headers.get("Content-Type") ?? "application/octet-stream",
+        "Cache-Control": "private, no-store",
+      },
+    });
   });
 }

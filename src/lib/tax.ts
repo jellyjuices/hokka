@@ -3,6 +3,7 @@ import { resolveReservePct } from "@/src/lib/incomeTax";
 
 export type PeriodTotals = {
   incomeTotal: number;
+  revenue: number;
   expenseTotal: number;
   hstCollected: number;
   itcClaimed: number;
@@ -16,6 +17,7 @@ export type PeriodTotals = {
 
 export type TransactionSums = {
   incomeTotal: number;
+  revenue: number;
   expenseTotal: number;
   hstCollected: number;
   itcClaimed: number;
@@ -25,6 +27,7 @@ export type TransactionSums = {
 export function summarizeTransactions(transactions: Transaction[]): TransactionSums {
   const sums: TransactionSums = {
     incomeTotal: 0,
+    revenue: 0,
     expenseTotal: 0,
     hstCollected: 0,
     itcClaimed: 0,
@@ -34,6 +37,7 @@ export function summarizeTransactions(transactions: Transaction[]): TransactionS
   for (const transaction of transactions) {
     if (transaction.direction === "income") {
       sums.incomeTotal += transaction.total;
+      sums.revenue += transaction.subtotal;
       sums.hstCollected += transaction.hstAmount;
       sums.netIncome += transaction.subtotal;
       continue;
@@ -73,6 +77,7 @@ export function calculatePeriodTotals(
 
   return {
     incomeTotal: sums.incomeTotal,
+    revenue: sums.revenue,
     expenseTotal: sums.expenseTotal,
     hstCollected: sums.hstCollected,
     itcClaimed: sums.itcClaimed,

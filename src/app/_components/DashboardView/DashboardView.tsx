@@ -75,7 +75,7 @@ export function DashboardView() {
           <StreamPanel
             label="Income"
             icon={MoneyIcon}
-            value={yearTotals.incomeTotal}
+            value={yearTotals.revenue}
             caption="This year"
             metricLabel="HST collected"
             metricValue={formatCurrency(yearTotals.hstCollected)}
